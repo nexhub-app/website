@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" data-i18n="meta.description" content="NexHub 是一款基于 Flutter 的四合一媒体聚合客户端（动漫 / 漫画 / 小说 / 影视），采用「源即插件」的共创式架构，解析能力全部来自可导入的源文件。" />
+  <title data-i18n="pageTitle.home">NexHub · 四合一媒体聚合客户端</title>
+  <meta property="og:title" data-i18n="pageTitle.home" content="NexHub" />
+  <meta property="og:description" data-i18n="meta.description" content="NexHub 四合一媒体聚合客户端" />
+  <meta property="og:type" content="website" />
+  <link rel="icon" href="./assets/app-icon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="./assets/css/style.css" />
+</head>
+<body data-page="home">
+  <header class="site-header" id="siteHeader"></header>
+
+  <main>
+    <!-- ===== Hero ===== -->
+    <section class="hero" id="home">
+      <div class="hero-bg" aria-hidden="true"></div>
+      <div class="container hero-inner">
+        <img class="hero-logo" src="./assets/app-icon.svg" width="96" height="96" alt="NexHub" />
+        <span class="badge" data-i18n="hero.badge">Flutter · 四合一 · 开源</span>
+        <h1 class="hero-title">
+          <span data-i18n="hero.title1">一个应用，</span>
+          <span class="grad" data-i18n="hero.title2">看遍动漫漫画小说影视</span>
+        </h1>
+        <p class="hero-sub" data-i18n="hero.subtitle">
+          NexHub 是一款基于 Flutter 的四合一媒体聚合客户端。它只提供引擎，解析能力全部来自可导入的「源」——别人写、你导入，不改一行应用代码。
+        </p>
+        <div class="hero-cta">
+          <a class="btn btn-primary" href="download.html" data-i18n="hero.ctaDownload">立即下载</a>
+          <a class="btn btn-outline" id="heroGithub" href="https://github.com/YOUR_USERNAME/nexhub" target="_blank" rel="noopener" data-i18n="hero.ctaGithub">在 GitHub 查看</a>
+        </div>
+        <p class="hero-note" data-i18n="hero.note">支持 Android / iOS / Windows / macOS / Linux · 完全开源免费</p>
+      </div>
+    </section>
+
+    <!-- ===== 首页亮点 ===== -->
+    <section class="section">
+      <div class="container">
+        <div class="section-head">
+          <h2 data-i18n="home.why">为什么选择 NexHub</h2>
+          <p data-i18n="home.whySub">把选择权和扩展权交还给用户。</p>
+        </div>
+        <div class="grid grid-3" id="homeGrid"></div>
+        <div class="center" style="margin-top:34px; display:flex; gap:14px; justify-content:center; flex-wrap:wrap;">
+          <a class="btn btn-primary" href="features.html" data-i18n="home.allFeatures">查看全部功能</a>
+          <a class="btn btn-outline" href="sources.html" data-i18n="home.browseSources">浏览源仓库</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer" id="siteFooter"></footer>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="./assets/js/i18n.js"></script>
+  <script src="./assets/js/sources.js"></script>
+  <script src="./assets/js/app.js"></script>
+</body>
+</html>
