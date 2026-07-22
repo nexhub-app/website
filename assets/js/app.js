@@ -8,7 +8,7 @@
   "use strict";
 
   /* GitHub 仓库地址（源导入链接、下载、GitHub 按钮都基于它） */
-  var REPO = "https://github.com/nexhub-app/website";
+  var REPO = "https://github.com/nexhub-app/nexhub";
   var RAW_BASE = window.NEXHUB_REPO_RAW || (REPO + "/raw/main/plugins/builtin/");
 
   var I18N = window.I18N;
