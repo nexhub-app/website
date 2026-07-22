@@ -1,0 +1,71 @@
+{
+  "id": "pms_m233",
+  "version": 1,
+  "name": "233动漫",
+  "type": "animeSource",
+  "responseType": "json",
+  "useWebview": false,
+  "site": {
+    "domain": "cn.233dm.com",
+    "baseUrl": "https://cn.233dm.com",
+    "mirrors": [
+      { "name": "主站", "domain": "cn.233dm.com", "baseUrl": "https://cn.233dm.com" }
+    ]
+  },
+  "parser": {
+    "type": "hybrid",
+    "overrides": {
+      "latest": { "type": "builtin" },
+      "search": { "type": "builtin" },
+      "detail": { "type": "builtin" },
+      "episodes": { "type": "builtin" },
+      "video": { "type": "builtin" }
+    }
+  },
+  "routes": {
+    "latest": { "url": "/index.php/ajax/data/?mid=1&page={page}&limit=20", "method": "get", "responseType": "json" },
+    "search": { "url": "/index.php/ajax/data/?mid=1&wd={keyword}&page={page}&limit=20", "method": "get", "responseType": "json" },
+    "detail": { "url": "/index.php/ajax/data/?mid=1&ac=detail&ids={id}", "method": "get", "responseType": "json" },
+    "episodes": { "url": "{detailUrl}", "method": "get", "responseType": "html" },
+    "video": { "url": "{url}", "method": "get", "responseType": "html" }
+  },
+  "selectors": {
+    "list": "$.list",
+    "id": "$.vod_id",
+    "title": "$.vod_name",
+    "cover": "$.vod_pic",
+    "detail": {
+      "id": "$.list[0].vod_id",
+      "title": "$.list[0].vod_name",
+      "cover": "$.list[0].vod_pic",
+      "description": "$.list[0].vod_content",
+      "director": "$.list[0].vod_director",
+      "actors": "$.list[0].vod_actor",
+      "status": "$.list[0].vod_remarks",
+      "year": "$.list[0].vod_year",
+      "tags": "$.list[0].vod_tag",
+      "detailUrl": "$.list[0].detail_link"
+    },
+    "episodes": "ul.play-list-content li a, a[href*='/play/']",
+    "video": "//video/@src"
+  },
+  "category": {
+    "dynamicCategories": false,
+    "categoryEntries": [
+      { "id": "all", "title": "全部" },
+      { "id": "1", "title": "动漫" },
+      { "id": "2", "title": "剧场版" },
+      { "id": "3", "title": "国产" },
+      { "id": "4", "title": "日韩" },
+      { "id": "5", "title": "欧美" }
+    ]
+  },
+  "homeSections": [
+    { "id": "latest", "title": "最新更新", "route": "latest", "style": "grid", "limit": 18, "more": true }
+  ],
+  "stealthMode": true,
+  "antiHotlinking": { "referer": "https://cn.233dm.com" },
+  "enabled": true,
+  "enabledExplore": true,
+  "migrationMessage": "列表/搜索/详情可用；选集需把详情页真实地址(detailUrl)传给选集路由（当前 episodes 路由仅收到 id，而本站的详情页是哈希地址 /anime/{hash}.html，无法由 id 拼出）。需在 MediaApiService.fetchEpisodes 的 vars 中补传 detailUrl 后选集才可用。"
+}
