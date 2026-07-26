@@ -18,7 +18,7 @@
   /* 页面 → 文件 映射 */
   var PAGES = [
     { key: "home", href: "index.html" },
-    { key: "features", href: "features.html" },
+    { key: "features", href: "docs-features.html" },
     { key: "download", href: "download.html" },
     { key: "docs", href: "docs.html" },
     { key: "sources", href: "sources.html" }
@@ -193,17 +193,130 @@
     });
   }
 
-  /* ---------- 渲染：源编写教程（RSSHub 风格文档布局） ---------- */
+  /* ---------- 渲染：文档中心统一导航（左侧板块） ---------- */
+  function renderDocsNav() {
+    var tree = document.getElementById("docNavTree");
+    if (!tree) return;
+    var dict = I18N[state.lang] || I18N.zh;
+    var sections = [
+      { id: "intro", href: "docs.html", titleKey: "docs.centerTitle" },
+      { id: "features", href: "docs-features.html", titleKey: "features.title" },
+      { id: "faq", href: "docs-faq.html", titleKey: "docs.faqTitle" },
+      { id: "tutorial", href: "docs-tutorial.html", titleKey: "docs.tutorialTitle" }
+    ];
+    var currentPage = window.location.pathname.split("/").pop() || "docs.html";
+    if (!currentPage || currentPage === "index.html") currentPage = "docs.html";
+
+    tree.innerHTML = '<div class="doc-nav-group">' +
+      '<div class="doc-nav-group-title">文档</div>' +
+      sections.map(function (s) {
+        var active = currentPage === s.href ? " active" : "";
+        return '<a class="doc-nav-link' + active + '" href="' + esc(s.href) + '">' + esc(dict[s.titleKey] || s.id) + '</a>';
+      }).join("") +
+      '</div>';
+  }
+
+  /* ---------- 渲染：文档首页 ---------- */
+  function renderDocsIntro() {
+    var body = document.getElementById("docsBody");
+    var toc = document.getElementById("docsToc");
+    if (!body) return;
+    var dict = I18N[state.lang] || I18N.zh;
+
+    body.innerHTML = '<section class="doc-section" id="docs-welcome">' +
+      '<h2 class="doc-h2">' + esc(dict["docs.centerTitle"] || "文档中心") + '<a class="doc-anchor" href="#docs-welcome" aria-hidden="true">#</a></h2>' +
+      '<div class="doc-section-body"><p>' + esc(dict["docs.centerSubtitle"]) + '</p></div>' +
+      '<div class="grid doc-cards">' +
+        '<a class="card doc-card" href="docs-features.html"><div class="f-icon">✨</div><h3>' + esc(dict["docs.cardFeaturesTitle"]) + '</h3><p>' + esc(dict["docs.cardFeaturesDesc"]) + '</p><span class="card-link" aria-hidden="true">→</span></a>' +
+        '<a class="card doc-card" href="docs-faq.html"><div class="f-icon">❓</div><h3>' + esc(dict["docs.cardFaqTitle"]) + '</h3><p>' + esc(dict["docs.cardFaqDesc"]) + '</p><span class="card-link" aria-hidden="true">→</span></a>' +
+        '<a class="card doc-card" href="docs-tutorial.html"><div class="f-icon">📝</div><h3>' + esc(dict["docs.cardTutTitle"]) + '</h3><p>' + esc(dict["docs.cardTutDesc"]) + '</p><span class="card-link" aria-hidden="true">→</span></a>' +
+      '</div></section>';
+
+    if (toc) {
+      toc.innerHTML = '<a class="doc-toc-link" href="#docs-welcome">' + esc(dict["docs.centerTitle"]) + '</a>';
+    }
+
+    initDocScrollSpy(["docs-welcome"]);
+  }
+
+  /* ---------- 渲染：功能文档页 ---------- */
+  function renderDocsFeatures() {
+    var body = document.getElementById("featuresBody");
+    var toc = document.getElementById("featuresToc");
+    if (!body || !toc) return;
+    var dict = I18N[state.lang] || I18N.zh;
+    var features = (CONTENT.features && CONTENT.features[state.lang]) || CONTENT.features.zh;
+    var guide = (CONTENT.guide && CONTENT.guide[state.lang]) || CONTENT.guide.zh;
+    var order = ["novel", "video", "manga"];
+
+    // 核心功能
+    var core = '<section class="doc-section" id="features-core">' +
+      '<h2 class="doc-h2">' + esc(dict["features.title"] || "核心功能") + '<a class="doc-anchor" href="#features-core" aria-hidden="true">#</a></h2>' +
+      '<div class="doc-grid-2">' + features.map(function (f) {
+        return '<div class="doc-card"><div class="doc-card-icon">' + f.icon + '</div><h3>' + esc(f.title) + '</h3><p>' + esc(f.desc) + '</p></div>';
+      }).join("") + '</div></section>';
+
+    // 使用指南（各阅读器）
+    var guides = order.map(function (k) {
+      var item = guide[k];
+      var feats = item.features.map(function (f) { return "<li>" + esc(f) + "</li>"; }).join("");
+      var how = item.howto.map(function (h) { return "<li>" + esc(h) + "</li>"; }).join("");
+      var ctrls = (item.controls || []).map(function (c) {
+        return '<li class="ctrl-item"><span class="ctrl-key">' + esc(c.key) + '</span><span class="ctrl-desc">' + esc(c.desc) + '</span></li>';
+      }).join("");
+      var sets = (item.settings || []).map(function (s) {
+        return '<li class="ctrl-item"><span class="ctrl-key">' + esc(s.key) + '</span><span class="ctrl-desc">' + esc(s.desc) + '</span></li>';
+      }).join("");
+      return '<section class="doc-section" id="guide-' + k + '">' +
+        '<h2 class="doc-h2">' + esc(item.title) + '<a class="doc-anchor" href="#guide-' + k + '" aria-hidden="true">#</a></h2>' +
+        '<div class="guide-block"><div class="guide-label">' + esc(dict["guide.features"]) + '</div><ul class="guide-list">' + feats + '</ul></div>' +
+        '<div class="guide-block"><div class="guide-label">' + esc(dict["guide.howto"]) + '</div><ol class="guide-list guide-ol">' + how + '</ol></div>' +
+        (ctrls ? '<div class="guide-block"><div class="guide-label">' + esc(dict["guide.controls"]) + '</div><ul class="guide-list guide-ctrls">' + ctrls + '</ul></div>' : "") +
+        (sets ? '<div class="guide-block"><div class="guide-label">' + esc(dict["guide.settings"]) + '</div><ul class="guide-list guide-ctrls">' + sets + '</ul></div>' : "") +
+        '</section>';
+    }).join("");
+
+    body.innerHTML = core + guides;
+
+    // 右侧大纲
+    toc.innerHTML = '<a class="doc-toc-link" href="#features-core">' + esc(dict["features.title"] || "核心功能") + '</a>' +
+      order.map(function (k) {
+        return '<a class="doc-toc-link" href="#guide-' + k + '">' + esc(guide[k].title) + '</a>';
+      }).join("");
+
+    initDocScrollSpy(["features-core"].concat(order.map(function (k) { return "guide-" + k; })));
+  }
+
+  /* ---------- 渲染：常见问题文档页 ---------- */
+  function renderDocsFaq() {
+    var body = document.getElementById("faqBody");
+    var toc = document.getElementById("faqToc");
+    if (!body || !toc) return;
+    var arr = (CONTENT.docs && CONTENT.docs[state.lang]) || CONTENT.docs.zh;
+
+    body.innerHTML = arr.map(function (d, i) {
+      return '<section class="doc-section" id="faq-' + i + '">' +
+        '<h2 class="doc-h2">' + esc(d.q) + '<a class="doc-anchor" href="#faq-' + i + '" aria-hidden="true">#</a></h2>' +
+        '<div class="doc-section-body"><p>' + esc(d.a) + '</p></div></section>';
+    }).join("");
+
+    toc.innerHTML = arr.map(function (d, i) {
+      return '<a class="doc-toc-link" href="#faq-' + i + '">' + esc(d.q) + '</a>';
+    }).join("");
+
+    initDocScrollSpy(arr.map(function (_, i) { return "faq-" + i; }));
+  }
+
+  /* ---------- 渲染：源编写教程（右侧章节） ---------- */
   function renderTutorial() {
     var body = document.getElementById("tutorialBody");
-    var navTree = document.getElementById("docNavTree");
     var tocTree = document.getElementById("docTocTree");
-    if (!body || !navTree || !tocTree) return;
+    if (!body || !tocTree) return;
 
     var arr = (CONTENT.tutorial && CONTENT.tutorial[state.lang]) || CONTENT.tutorial.zh;
     var dict = I18N[state.lang] || I18N.zh;
 
-    // 按 group 分组
+    // 按 group 分组（右侧大纲）
     var groupOrder = ["basic", "modules", "syntax", "practice"];
     var groups = {};
     groupOrder.forEach(function (g) { groups[g] = []; });
@@ -213,24 +326,18 @@
       groups[g].push(m);
     });
 
-    // 左侧导航树
-    navTree.innerHTML = groupOrder.map(function (g) {
+    tocTree.innerHTML = groupOrder.map(function (g) {
       var items = groups[g];
       if (!items || !items.length) return "";
-      return '<div class="doc-nav-group">' +
-        '<div class="doc-nav-group-title">' + esc(dict["tutorial.group." + g] || g) + '</div>' +
+      return '<div class="doc-toc-group">' +
+        '<div class="doc-toc-group-title">' + esc(dict["tutorial.group." + g] || g) + '</div>' +
         items.map(function (m) {
-          return '<a class="doc-nav-link" href="#tut-' + esc(m.id) + '">' + esc(m.title) + '</a>';
+          return '<a class="doc-toc-link" href="#tut-' + esc(m.id) + '">' + esc(m.title) + '</a>';
         }).join("") +
         '</div>';
     }).join("");
 
-    // 右侧页面大纲
-    tocTree.innerHTML = arr.map(function (m) {
-      return '<a class="doc-toc-link" href="#tut-' + esc(m.id) + '">' + esc(m.title) + '</a>';
-    }).join("");
-
-    // 中间正文：连续文章
+    // 中间正文
     body.innerHTML = arr.map(function (m) {
       var fields = "";
       if (m.fields && m.fields.length) {
@@ -249,8 +356,7 @@
         '<div class="doc-section-body">' + paragraphs + '</div>' + fields + code + '</section>';
     }).join("");
 
-    initDocNav();
-    initDocScrollSpy(arr);
+    initDocScrollSpy(arr.map(function (m) { return "tut-" + m.id; }));
   }
 
   function initDocNav() {
@@ -285,17 +391,17 @@
     });
   }
 
-  function initDocScrollSpy(items) {
-    var links = document.querySelectorAll(".doc-nav-link, .doc-toc-link");
-    var sections = items.map(function (m) { return document.getElementById("tut-" + m.id); }).filter(Boolean);
+  function initDocScrollSpy(sections) {
+    var links = document.querySelectorAll(".doc-toc-link");
+    var secEls = sections.map(function (id) { return document.getElementById(id); }).filter(Boolean);
     function onScroll() {
       var scrollPos = window.scrollY + 120;
       var activeId = null;
-      for (var i = sections.length - 1; i >= 0; i--) {
-        var sec = sections[i];
+      for (var i = secEls.length - 1; i >= 0; i--) {
+        var sec = secEls[i];
         if (sec && sec.offsetTop <= scrollPos) { activeId = sec.id; break; }
       }
-      if (!activeId && sections.length) activeId = sections[0].id;
+      if (!activeId && secEls.length) activeId = secEls[0].id;
       links.forEach(function (link) {
         var href = link.getAttribute("href");
         link.classList.toggle("active", href === "#" + activeId);
@@ -389,7 +495,9 @@
     state.lang = lang;
     localStorage.setItem("nexhub_lang", lang);
     applyI18n();
-    renderHome(); renderFeatures(); renderDownloads(); renderGuide(); renderDocs(); renderTutorial(); renderSourceFilter(); renderSources();
+    renderHome(); renderFeatures(); renderDownloads(); renderGuide();
+    renderDocsNav(); renderDocsIntro(); renderDocsFeatures(); renderDocsFaq(); renderTutorial();
+    renderSourceFilter(); renderSources();
     if (window.NEXHUB_SOURCES_PROMISE) {
       window.NEXHUB_SOURCES_PROMISE.then(function () {
         SOURCES = window.NEXHUB_SOURCES || [];

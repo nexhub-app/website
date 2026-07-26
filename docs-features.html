@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" data-i18n="meta.description" content="NexHub 文档中心：常见问题与「源即插件」源编写教程。支持影视/动漫、漫画、小说等分类。" />
+  <meta name="description" data-i18n="meta.description" content="NexHub 核心功能：四合一聚合、源即插件、漫画/视频/小说阅读器、跨平台、开源免费。" />
   <title data-i18n="pageTitle.docs">文档 · NexHub</title>
   <link rel="icon" href="./assets/app-icon.svg" type="image/svg+xml" />
   <link rel="stylesheet" href="./assets/css/style.css" />
@@ -18,7 +18,7 @@
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
       </button>
       <div class="doc-nav-scroll" id="docNavScroll">
-        <a class="doc-back" href="index.html" data-i18n="nav.home">← 首页</a>
+        <a class="doc-back" href="docs.html" data-i18n="docs.backToDocs">← 返回文档中心</a>
         <nav class="doc-nav-tree" id="docNavTree"></nav>
       </div>
     </aside>
@@ -27,19 +27,21 @@
       <nav class="doc-breadcrumb" aria-label="breadcrumb">
         <a href="index.html">NexHub</a>
         <span class="doc-bc-sep">/</span>
-        <span data-i18n="docs.centerTitle">文档中心</span>
+        <a href="docs.html" data-i18n="docs.centerTitle">文档中心</a>
+        <span class="doc-bc-sep">/</span>
+        <span data-i18n="features.title">功能</span>
       </nav>
       <header class="doc-header">
-        <h1 class="doc-title" data-i18n="docs.centerTitle">文档中心</h1>
-        <p class="doc-lead" data-i18n="docs.centerSubtitle">这里汇总了 NexHub 的全部文档：从功能介绍、高频常见问题，到「源即插件」的编写教程。</p>
+        <h1 class="doc-title" data-i18n="features.title">核心功能</h1>
+        <p class="doc-lead" data-i18n="features.subtitle">为「聚合」而生，把选择权和扩展权交还给用户。</p>
       </header>
-      <div class="doc-content" id="docsBody"></div>
+      <div class="doc-content" id="featuresBody"></div>
     </article>
 
     <aside class="doc-sidebar doc-toc" id="docToc" aria-label="页面大纲">
       <div class="doc-toc-scroll" id="docTocScroll">
         <div class="doc-toc-title" data-i18n="docs.tocTitle">本页内容</div>
-        <nav class="doc-toc-tree" id="docsToc"></nav>
+        <nav class="doc-toc-tree" id="featuresToc"></nav>
       </div>
     </aside>
   </main>
