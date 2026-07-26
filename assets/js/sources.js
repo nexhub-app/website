@@ -9,30 +9,56 @@
  *
  * 关键点：
  *  - index.json 中每条 id 已含分类路径（如 "manga/manga_goda"），
- *    配合下面的 NEXHUB_REPO_RAW，app.js 里的 RAW_BASE + id + ".json"
+ *    配合 NEXHUB_REPO_RAW，app.js 里的 RAW_BASE + id + ".json"
  *    会自动拼出正确的原始文件地址，app.js 的导入链接逻辑无需改动。
- *  - 本文件改为异步加载。app.js 需要等 NEXHUB_SOURCES_PROMISE 完成后再渲染
- *    一次源列表（见同目录 APPJS_CHANGE.md 的一次性改动说明）。
+ *  - 本文件改为异步加载（NEXHUB_SOURCES_PROMISE），app.js 等其完成后再渲染。
+ *
+ * 国内可达性：raw.githubusercontent.com 在国内常被屏蔽，因此这里优先走
+ *   jsDelivr CDN，失败再回退 ghproxy 镜像。不管最终用哪个源，导入链接
+ *   (NEXHUB_REPO_RAW) 都会改写为当前真正可达的地址，保证「导入」也能用。
  * ============================================================ */
 
 (function () {
   "use strict";
 
-  var INDEX_URL =
-    "https://raw.githubusercontent.com/nexhub-app/sources/main/index.json";
+  var REPO = "nexhub-app/sources";
+  var BRANCH = "main";
 
-  // 导入链接前缀。index.json 的 id 形如 "manga/manga_goda"，
-  // 故 RAW_BASE + id + ".json" => .../main/sources/manga/manga_goda.json
-  window.NEXHUB_REPO_RAW =
-    "https://raw.githubusercontent.com/nexhub-app/sources/main/sources/";
+  // 候选数据源（按优先级）。每条对应一个「根地址」，拼 "index.json" / "sources/<id>.json" 即用。
+  var CANDIDATES = [
+    "https://cdn.jsdelivr.net/gh/" + REPO + "@" + BRANCH + "/",
+    "https://ghproxy.net/https://raw.githubusercontent.com/" + REPO + "/" + BRANCH + "/",
+    "https://raw.githubusercontent.com/" + REPO + "/" + BRANCH + "/"
+  ];
 
-  window.NEXHUB_SOURCES_PROMISE = fetch(INDEX_URL)
-    .then(function (res) {
-      if (!res.ok) throw new Error("HTTP " + res.status);
-      return res.json();
-    })
-    .then(function (data) {
-      var list = (data && data.sources) || [];
+  // 默认导入链接前缀（jsDelivr）。若最终从其它镜像加载成功，下方会改写为该镜像地址。
+  window.NEXHUB_REPO_RAW = CANDIDATES[0] + "sources/";
+
+  function tryLoad(idx) {
+    if (idx >= CANDIDATES.length) {
+      return Promise.reject(new Error("所有数据源均不可达"));
+    }
+    var base = CANDIDATES[idx];
+    return fetch(base + "index.json")
+      .then(function (res) {
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        return res.json();
+      })
+      .then(function (data) {
+        return { base: base, data: data };
+      })
+      .catch(function (err) {
+        console.warn("[sources] 数据源不可达，尝试下一个：" + base, err);
+        return tryLoad(idx + 1);
+      });
+  }
+
+  window.NEXHUB_SOURCES_PROMISE = tryLoad(0)
+    .then(function (ok) {
+      var base = ok.base;
+      window.NEXHUB_REPO_RAW = base + "sources/"; // 让导入链接指向真正可达的镜像
+
+      var list = (ok.data && ok.data.sources) || [];
       var arr = list.map(function (s) {
         return {
           id: s.id,
@@ -42,7 +68,8 @@
           baseUrl: s.baseUrl,
           builtin: true, // 源库中的源均可导入
           format: s.format, // nexhub | legado（仅信息展示用）
-          desc: s.desc || {}
+          desc: s.desc || {},
+          rawUrl: base + "sources/" + s.id + ".json"
         };
       });
       window.NEXHUB_SOURCES = arr;
