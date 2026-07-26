@@ -296,6 +296,15 @@
     renderSourceFilter();
     renderSources();
 
+    // 源数据来自源库 index.json，异步加载完成后重渲染一次源列表
+    if (window.NEXHUB_SOURCES_PROMISE) {
+      window.NEXHUB_SOURCES_PROMISE.then(function () {
+        SOURCES = window.NEXHUB_SOURCES || [];
+        renderSourceFilter();
+        renderSources();
+      });
+    }
+
     var langBtn = document.getElementById("langToggle");
     if (langBtn) langBtn.addEventListener("click", function () { setLang(state.lang === "zh" ? "en" : "zh"); });
 
