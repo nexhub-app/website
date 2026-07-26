@@ -234,8 +234,11 @@ a { color: inherit; text-decoration: none; }
 .tut-fields td { border: 1px solid var(--border); padding: 7px 10px; vertical-align: top; }
 .tut-k { font-weight: 800; color: var(--primary); white-space: nowrap; width: 38%; background: var(--bg-soft); }
 .tut-v { color: var(--text); }
-.tut-code { margin: 14px 0 0; background: #0f1b22; color: #d7e6ec; border-radius: var(--radius-sm); padding: 14px 16px; overflow-x: auto; font-size: 12.5px; line-height: 1.55; }
-.tut-code code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; white-space: pre; }
+/* 代码块：明暗双主题都清晰可读，字号放大，移动端可横向滚动 */
+.tut-code { margin: 14px 0 0; background: var(--surface-2); color: var(--text); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px 16px; overflow-x: auto; font-size: 13.5px; line-height: 1.6; }
+.tut-code code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Courier New", monospace; white-space: pre; tab-size: 2; }
+/* 深色主题下给代码块一点独立底色，避免与页面背景糊在一起 */
+[data-theme="dark"] .tut-code { background: #11151f; color: #e6edf3; border-color: #2a3142; }
 
 /* ===== Sources ===== */
 .filter-row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 30px; }
@@ -289,4 +292,18 @@ a { color: inherit; text-decoration: none; }
   .hero { padding: 72px 0 56px; }
   .hero-logo { width: 112px; height: 112px; margin-bottom: 22px; }
   .tutorial { grid-template-columns: 1fr; }
+  /* 源编写教程：移动端字号与间距放大，方便不同设备阅读 */
+  .card.tut { padding: 18px 16px; }
+  .tut-title { font-size: 17px; }
+  .tut-body p { font-size: 14.5px; line-height: 1.75; }
+  .tut-fields table { font-size: 13.5px; }
+  .tut-fields td { padding: 8px 10px; }
+  .tut-code { font-size: 13px; padding: 12px 14px; -webkit-text-size-adjust: 100%; }
+}
+
+/* 小屏手机：进一步放宽字号与字段列宽，避免挤压换行 */
+@media (max-width: 480px) {
+  .tut-fields td { white-space: normal; }
+  .tut-k { width: 42%; }
+  .tut-code { font-size: 12.5px; }
 }
