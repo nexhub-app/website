@@ -193,24 +193,116 @@
     });
   }
 
-  /* ---------- 渲染：源编写教程 ---------- */
+  /* ---------- 渲染：源编写教程（RSSHub 风格文档布局） ---------- */
   function renderTutorial() {
-    var box = document.getElementById("tutorialGrid");
-    if (!box) return;
+    var body = document.getElementById("tutorialBody");
+    var navTree = document.getElementById("docNavTree");
+    var tocTree = document.getElementById("docTocTree");
+    if (!body || !navTree || !tocTree) return;
+
     var arr = (CONTENT.tutorial && CONTENT.tutorial[state.lang]) || CONTENT.tutorial.zh;
-    box.innerHTML = arr.map(function (m) {
+    var dict = I18N[state.lang] || I18N.zh;
+
+    // 按 group 分组
+    var groupOrder = ["basic", "modules", "syntax", "practice"];
+    var groups = {};
+    groupOrder.forEach(function (g) { groups[g] = []; });
+    arr.forEach(function (m) {
+      var g = m.group || "basic";
+      if (!groups[g]) groups[g] = [];
+      groups[g].push(m);
+    });
+
+    // 左侧导航树
+    navTree.innerHTML = groupOrder.map(function (g) {
+      var items = groups[g];
+      if (!items || !items.length) return "";
+      return '<div class="doc-nav-group">' +
+        '<div class="doc-nav-group-title">' + esc(dict["tutorial.group." + g] || g) + '</div>' +
+        items.map(function (m) {
+          return '<a class="doc-nav-link" href="#tut-' + esc(m.id) + '">' + esc(m.title) + '</a>';
+        }).join("") +
+        '</div>';
+    }).join("");
+
+    // 右侧页面大纲
+    tocTree.innerHTML = arr.map(function (m) {
+      return '<a class="doc-toc-link" href="#tut-' + esc(m.id) + '">' + esc(m.title) + '</a>';
+    }).join("");
+
+    // 中间正文：连续文章
+    body.innerHTML = arr.map(function (m) {
       var fields = "";
       if (m.fields && m.fields.length) {
-        fields = '<div class="tut-fields"><table><tbody>' +
-          m.fields.map(function (f) { return '<tr><td class="tut-k">' + esc(f.k) + '</td><td class="tut-v">' + esc(f.v) + '</td></tr>'; }).join("") +
+        fields = '<div class="doc-table-wrap"><table class="doc-table"><tbody>' +
+          m.fields.map(function (f) {
+            return '<tr><td class="doc-table-k">' + esc(f.k) + '</td><td class="doc-table-v">' + esc(f.v) + '</td></tr>';
+          }).join("") +
           '</tbody></table></div>';
       }
-      var code = m.code ? '<pre class="tut-code"><code>' + esc(m.code) + '</code></pre>' : '';
-      var body = (m.body || "").split("\n").map(function (p) { return '<p>' + esc(p) + '</p>'; }).join("");
-      return '<div class="card tut" id="tut-' + esc(m.id) + '">' +
-        '<h3 class="tut-title">' + esc(m.title) + '</h3>' +
-        '<div class="tut-body">' + body + '</div>' + fields + code + '</div>';
+      var code = m.code ? '<pre class="doc-code"><code>' + esc(m.code) + '</code></pre>' : '';
+      var paragraphs = (m.body || "").split("\n").map(function (p) {
+        return '<p>' + esc(p) + '</p>';
+      }).join("");
+      return '<section class="doc-section" id="tut-' + esc(m.id) + '">' +
+        '<h2 class="doc-h2">' + esc(m.title) + '<a class="doc-anchor" href="#tut-' + esc(m.id) + '" aria-hidden="true">#</a></h2>' +
+        '<div class="doc-section-body">' + paragraphs + '</div>' + fields + code + '</section>';
     }).join("");
+
+    initDocNav();
+    initDocScrollSpy(arr);
+  }
+
+  function initDocNav() {
+    var toggle = document.getElementById("docNavToggle");
+    var nav = document.getElementById("docNav");
+    if (!toggle || !nav) return;
+    toggle.addEventListener("click", function (e) {
+      e.stopPropagation();
+      var open = nav.classList.contains("open");
+      nav.classList.toggle("open", !open);
+      toggle.setAttribute("aria-expanded", String(!open));
+    });
+    nav.querySelectorAll(".doc-nav-link").forEach(function (link) {
+      link.addEventListener("click", function () {
+        if (window.innerWidth <= 900) {
+          nav.classList.remove("open");
+          toggle.setAttribute("aria-expanded", "false");
+        }
+      });
+    });
+    document.addEventListener("click", function (e) {
+      if (!nav.classList.contains("open")) return;
+      if (nav.contains(e.target)) return;
+      nav.classList.remove("open");
+      toggle.setAttribute("aria-expanded", "false");
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && nav.classList.contains("open")) {
+        nav.classList.remove("open");
+        toggle.setAttribute("aria-expanded", "false");
+      }
+    });
+  }
+
+  function initDocScrollSpy(items) {
+    var links = document.querySelectorAll(".doc-nav-link, .doc-toc-link");
+    var sections = items.map(function (m) { return document.getElementById("tut-" + m.id); }).filter(Boolean);
+    function onScroll() {
+      var scrollPos = window.scrollY + 120;
+      var activeId = null;
+      for (var i = sections.length - 1; i >= 0; i--) {
+        var sec = sections[i];
+        if (sec && sec.offsetTop <= scrollPos) { activeId = sec.id; break; }
+      }
+      if (!activeId && sections.length) activeId = sections[0].id;
+      links.forEach(function (link) {
+        var href = link.getAttribute("href");
+        link.classList.toggle("active", href === "#" + activeId);
+      });
+    }
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
   }
 
   /* ---------- 渲染：源筛选 + 列表 ---------- */
