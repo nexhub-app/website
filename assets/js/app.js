@@ -9,7 +9,7 @@
 
   /* GitHub 仓库地址（源导入链接、下载、GitHub 按钮都基于它） */
   var REPO = "https://github.com/nexhub-app/nexhub";
-  var RAW_BASE = window.NEXHUB_REPO_RAW || "https://cdn.jsdelivr.net/gh/nexhub-app/sources@main/sources/";
+  var RAW_BASE = window.NEXHUB_REPO_RAW || (REPO + "/raw/main/plugins/builtin/");
 
   var I18N = window.I18N;
   var CONTENT = window.CONTENT;
@@ -152,10 +152,18 @@
       var item = g[k];
       var feats = item.features.map(function (f) { return "<li>" + esc(f) + "</li>"; }).join("");
       var how = item.howto.map(function (h) { return "<li>" + esc(h) + "</li>"; }).join("");
+      var ctrls = (item.controls || []).map(function (c) {
+        return '<li class="ctrl-item"><span class="ctrl-key">' + esc(c.key) + '</span><span class="ctrl-desc">' + esc(c.desc) + '</span></li>';
+      }).join("");
+      var sets = (item.settings || []).map(function (s) {
+        return '<li class="ctrl-item"><span class="ctrl-key">' + esc(s.key) + '</span><span class="ctrl-desc">' + esc(s.desc) + '</span></li>';
+      }).join("");
       return '<div class="card guide">' +
         '<h3 class="guide-title">' + esc(item.title) + "</h3>" +
         '<div class="guide-block"><div class="guide-label">' + esc(dict["guide.features"]) + '</div><ul class="guide-list">' + feats + "</ul></div>" +
         '<div class="guide-block"><div class="guide-label">' + esc(dict["guide.howto"]) + '</div><ol class="guide-list guide-ol">' + how + "</ol></div>" +
+        (ctrls ? '<div class="guide-block"><div class="guide-label">' + esc(dict["guide.controls"]) + '</div><ul class="guide-list guide-ctrls">' + ctrls + "</ul></div>" : "") +
+        (sets ? '<div class="guide-block"><div class="guide-label">' + esc(dict["guide.settings"]) + '</div><ul class="guide-list guide-ctrls">' + sets + "</ul></div>" : "") +
         "</div>";
     }).join("");
   }
@@ -183,6 +191,26 @@
         if (!isOpen) { item.classList.add("open"); panel.style.maxHeight = panel.scrollHeight + "px"; }
       });
     });
+  }
+
+  /* ---------- 渲染：源编写教程 ---------- */
+  function renderTutorial() {
+    var box = document.getElementById("tutorialGrid");
+    if (!box) return;
+    var arr = (CONTENT.tutorial && CONTENT.tutorial[state.lang]) || CONTENT.tutorial.zh;
+    box.innerHTML = arr.map(function (m) {
+      var fields = "";
+      if (m.fields && m.fields.length) {
+        fields = '<div class="tut-fields"><table><tbody>' +
+          m.fields.map(function (f) { return '<tr><td class="tut-k">' + esc(f.k) + '</td><td class="tut-v">' + esc(f.v) + '</td></tr>'; }).join("") +
+          '</tbody></table></div>';
+      }
+      var code = m.code ? '<pre class="tut-code"><code>' + esc(m.code) + '</code></pre>' : '';
+      var body = (m.body || "").split("\n").map(function (p) { return '<p>' + esc(p) + '</p>'; }).join("");
+      return '<div class="card tut" id="tut-' + esc(m.id) + '">' +
+        '<h3 class="tut-title">' + esc(m.title) + '</h3>' +
+        '<div class="tut-body">' + body + '</div>' + fields + code + '</div>';
+    }).join("");
   }
 
   /* ---------- 渲染：源筛选 + 列表 ---------- */
@@ -233,7 +261,7 @@
     box.querySelectorAll("[data-import]").forEach(function (btn) {
       btn.addEventListener("click", function () {
         var id = btn.getAttribute("data-import");
-        copyText((window.NEXHUB_REPO_RAW || RAW_BASE) + id + ".json");
+        copyText(RAW_BASE + id + ".json");
         showToast(dict["copied"]);
       });
     });
@@ -269,7 +297,7 @@
     state.lang = lang;
     localStorage.setItem("nexhub_lang", lang);
     applyI18n();
-    renderHome(); renderFeatures(); renderDownloads(); renderGuide(); renderDocs(); renderSourceFilter(); renderSources();
+    renderHome(); renderFeatures(); renderDownloads(); renderGuide(); renderDocs(); renderTutorial(); renderSourceFilter(); renderSources();
   }
   function setTheme(theme) {
     state.theme = theme;
@@ -293,17 +321,9 @@
     renderDownloads();
     renderGuide();
     renderDocs();
+    renderTutorial();
     renderSourceFilter();
     renderSources();
-
-    // 源数据来自源库 index.json，异步加载完成后重渲染一次源列表
-    if (window.NEXHUB_SOURCES_PROMISE) {
-      window.NEXHUB_SOURCES_PROMISE.then(function () {
-        SOURCES = window.NEXHUB_SOURCES || [];
-        renderSourceFilter();
-        renderSources();
-      });
-    }
 
     var langBtn = document.getElementById("langToggle");
     if (langBtn) langBtn.addEventListener("click", function () { setLang(state.lang === "zh" ? "en" : "zh"); });
