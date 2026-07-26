@@ -14,9 +14,11 @@ NexHub 的官方站点（产品介绍 + 下载 + 文档 + 源仓库），**纯�
 ```
 website/                         ← 整个静态站（也是 GitHub Pages 的源目录）
 ├── index.html              # 首页（Hero + 软件图标 + 亮点 + 跳转）
-├── features.html           # 功能 + 使用指南（小说/视频/漫画）
 ├── download.html           # 下载
-├── docs.html               # 文档 / FAQ
+├── docs.html               # 文档中心（首页：功能 / 常见问题 / 源编写教程 入口）
+├── docs-features.html      # 文档：功能 + 使用指南（小说/视频/漫画）
+├── docs-faq.html           # 文档：常见问题
+├── docs-tutorial.html      # 文档：源编写教程
 ├── sources.html            # 源仓库（影视/动漫 · 漫画 · 小说 栏目）
 ├── assets/
 │   ├── app-icon.svg        # 软件图标（品牌 / 首页大图 / 浏览器 tab 共用）

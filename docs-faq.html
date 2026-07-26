@@ -11,17 +11,39 @@
 <body data-page="docs">
   <header class="site-header" id="siteHeader"></header>
 
-  <main>
-    <section class="section">
-      <div class="container">
-        <a class="back-link" href="docs.html" data-i18n="docs.backToDocs">← 返回文档中心</a>
-        <div class="section-head">
-          <h2 data-i18n="docs.faqTitle">常见问题</h2>
-          <p data-i18n="docs.faqSubtitle">快速上手、导入源、共创式架构与数据隐私的常见疑问。</p>
-        </div>
-        <div class="accordion" id="docAccordion"></div>
+  <main class="doc-layout">
+    <aside class="doc-sidebar doc-nav" id="docNav" aria-label="文档导航">
+      <button class="doc-nav-toggle" id="docNavToggle" aria-expanded="false" aria-controls="docNavTree">
+        <span data-i18n="docs.tocToggle">目录</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+      <div class="doc-nav-scroll" id="docNavScroll">
+        <a class="doc-back" href="docs.html" data-i18n="docs.backToDocs">← 返回文档中心</a>
+        <nav class="doc-nav-tree" id="docNavTree"></nav>
       </div>
-    </section>
+    </aside>
+
+    <article class="doc-main" id="docMain">
+      <nav class="doc-breadcrumb" aria-label="breadcrumb">
+        <a href="index.html">NexHub</a>
+        <span class="doc-bc-sep">/</span>
+        <a href="docs.html" data-i18n="docs.centerTitle">文档中心</a>
+        <span class="doc-bc-sep">/</span>
+        <span data-i18n="docs.faqTitle">常见问题</span>
+      </nav>
+      <header class="doc-header">
+        <h1 class="doc-title" data-i18n="docs.faqTitle">常见问题</h1>
+        <p class="doc-lead" data-i18n="docs.faqSubtitle">快速上手、导入源、共创式架构与数据隐私的常见疑问。</p>
+      </header>
+      <div class="doc-content" id="faqBody"></div>
+    </article>
+
+    <aside class="doc-sidebar doc-toc" id="docToc" aria-label="页面大纲">
+      <div class="doc-toc-scroll" id="docTocScroll">
+        <div class="doc-toc-title" data-i18n="docs.tocTitle">本页内容</div>
+        <nav class="doc-toc-tree" id="faqToc"></nav>
+      </div>
+    </aside>
   </main>
 
   <footer class="site-footer" id="siteFooter"></footer>
