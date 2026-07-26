@@ -18,7 +18,6 @@
   /* 页面 → 文件 映射 */
   var PAGES = [
     { key: "home", href: "index.html" },
-    { key: "features", href: "docs-features.html" },
     { key: "download", href: "download.html" },
     { key: "docs", href: "docs.html" },
     { key: "sources", href: "sources.html" }
@@ -166,31 +165,6 @@
         (sets ? '<div class="guide-block"><div class="guide-label">' + esc(dict["guide.settings"]) + '</div><ul class="guide-list guide-ctrls">' + sets + "</ul></div>" : "") +
         "</div>";
     }).join("");
-  }
-
-  /* ---------- 渲染：文档手风琴 ---------- */
-  function renderDocs() {
-    var box = document.getElementById("docAccordion");
-    if (!box) return;
-    var arr = (CONTENT.docs && CONTENT.docs[state.lang]) || CONTENT.docs.zh;
-    box.innerHTML = arr.map(function (d, i) {
-      return '<div class="acc-item' + (i === 0 ? " open" : "") + '">' +
-        '<button class="acc-q" type="button">' + esc(d.q) + '<span class="chev">▾</span></button>' +
-        '<div class="acc-a"><div class="inner">' + esc(d.a) + "</div></div></div>";
-    }).join("");
-    box.querySelectorAll(".acc-item.open .acc-a").forEach(function (a) { a.style.maxHeight = a.scrollHeight + "px"; });
-    box.querySelectorAll(".acc-q").forEach(function (btn) {
-      btn.addEventListener("click", function () {
-        var item = btn.parentElement;
-        var panel = item.querySelector(".acc-a");
-        var isOpen = item.classList.contains("open");
-        box.querySelectorAll(".acc-item.open").forEach(function (it) {
-          it.classList.remove("open");
-          it.querySelector(".acc-a").style.maxHeight = null;
-        });
-        if (!isOpen) { item.classList.add("open"); panel.style.maxHeight = panel.scrollHeight + "px"; }
-      });
-    });
   }
 
   /* ---------- 渲染：文档中心统一导航（左侧板块） ---------- */
@@ -527,8 +501,12 @@
     renderFeatures();
     renderDownloads();
     renderGuide();
-    renderDocs();
+    renderDocsNav();
+    renderDocsIntro();
+    renderDocsFeatures();
+    renderDocsFaq();
     renderTutorial();
+    initDocNav();
     renderSourceFilter();
     renderSources();
 
