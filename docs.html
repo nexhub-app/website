@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" data-i18n="meta.description" content="NexHub 文档与常见问题：快速开始、导入源、自己写源（共创式架构）、数据安全与隐私。" />
+  <meta name="description" data-i18n="meta.description" content="NexHub 文档中心：常见问题与「源即插件」源编写教程。支持影视/动漫、漫画、小说等分类。" />
   <title data-i18n="pageTitle.docs">文档 · NexHub</title>
   <link rel="icon" href="./assets/app-icon.svg" type="image/svg+xml" />
   <link rel="stylesheet" href="./assets/css/style.css" />
@@ -15,21 +15,25 @@
     <section class="section">
       <div class="container">
         <div class="section-head">
-          <h2 data-i18n="docs.title">文档与常见问题</h2>
-          <p data-i18n="docs.subtitle">快速上手、导入源，以及「源即插件」共创式架构说明。</p>
+          <h2 data-i18n="docs.centerTitle">文档中心</h2>
+          <p data-i18n="docs.centerSubtitle">这里汇总了 NexHub 的全部文档：从高频常见问题，到「源即插件」的编写教程。</p>
         </div>
-        <div class="accordion" id="docAccordion"></div>
-      </div>
-    </section>
 
-    <!-- ===== 源编写教程 ===== -->
-    <section class="section section-soft">
-      <div class="container">
-        <div class="section-head">
-          <h2 data-i18n="docs.tutorialTitle">源编写教程</h2>
-          <p data-i18n="docs.tutorialSubtitle">从零开始写一个属于你自己的「源」。每个模块都有说明、字段表与代码示例。</p>
+        <div class="grid doc-cards">
+          <a class="card doc-card" href="docs-faq.html">
+            <div class="f-icon">❓</div>
+            <h3 data-i18n="docs.cardFaqTitle">常见问题</h3>
+            <p data-i18n="docs.cardFaqDesc">快速上手、导入源、自己写源与数据隐私等高频疑问的解答。</p>
+            <span class="card-link" aria-hidden="true">→</span>
+          </a>
+
+          <a class="card doc-card" href="docs-tutorial.html">
+            <div class="f-icon">📝</div>
+            <h3 data-i18n="docs.cardTutTitle">源编写教程</h3>
+            <p data-i18n="docs.cardTutDesc">从零开始写一个属于你的「源」：每个模块都有说明、字段表与代码示例。</p>
+            <span class="card-link" aria-hidden="true">→</span>
+          </a>
         </div>
-        <div class="tutorial" id="tutorialGrid"></div>
       </div>
     </section>
   </main>

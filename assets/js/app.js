@@ -298,6 +298,13 @@
     localStorage.setItem("nexhub_lang", lang);
     applyI18n();
     renderHome(); renderFeatures(); renderDownloads(); renderGuide(); renderDocs(); renderTutorial(); renderSourceFilter(); renderSources();
+    if (window.NEXHUB_SOURCES_PROMISE) {
+      window.NEXHUB_SOURCES_PROMISE.then(function () {
+        SOURCES = window.NEXHUB_SOURCES || [];
+        renderSourceFilter();
+        renderSources();
+      });
+    }
   }
   function setTheme(theme) {
     state.theme = theme;
@@ -324,6 +331,14 @@
     renderTutorial();
     renderSourceFilter();
     renderSources();
+
+    if (window.NEXHUB_SOURCES_PROMISE) {
+      window.NEXHUB_SOURCES_PROMISE.then(function () {
+        SOURCES = window.NEXHUB_SOURCES || [];
+        renderSourceFilter();
+        renderSources();
+      });
+    }
 
     var langBtn = document.getElementById("langToggle");
     if (langBtn) langBtn.addEventListener("click", function () { setLang(state.lang === "zh" ? "en" : "zh"); });
