@@ -270,6 +270,8 @@ window.CONTENT = {
           "弹幕（bullet comments）支持",
           "多播放线路一键切换",
           "清晰度、倍速、手势控制",
+          "单击显隐控制栏；双击中间播放/暂停、双击左右快退/快进；长按自定义倍速",
+          "缓冲加载动画 + 解析进度条",
           "追番进度与续播记忆"
         ],
         howto: [
@@ -277,15 +279,16 @@ window.CONTENT = {
           "进入「影视 / 动漫」分类浏览或搜索",
           "点开番剧 → 选集",
           "播放页可切线路、开关弹幕、调节倍速",
-          "手势快进 / 长按进度条定位"
+          "单击显隐控制栏；双击中间播放/暂停、双击左右快退/快进；长按临时加速；横滑定位"
         ],
         controls: [
-          { key: "⏯ 播放 / 暂停", desc: "点击画面中央或此按钮在播放与暂停间切换；暂停时显示进度条与功能菜单。" },
-          { key: "⏪ ⏩ 快退 / 快进", desc: "点击两侧箭头按固定秒数（如 10/30 秒）跳转；长按则连续快进。" },
-          { key: "📊 进度条", desc: "拖动定位播放位置；松手前显示时间预览，便于精准定位。" },
+          { key: "⏯ 播放 / 暂停", desc: "双击画面中间或此按钮在播放与暂停间切换；单击画面任意处显隐控制栏；暂停时显示进度条与功能菜单。" },
+          { key: "⏪ ⏩ 快退 / 快进", desc: "双击画面左半屏快退 10 秒、右半屏快进 10 秒；长按则临时切到自定义倍速加速，松手恢复。" },
+          { key: "📊 进度条", desc: "拖动定位播放位置；松手前显示时间预览，便于精准定位。左右横滑亦可拖动定位（可在设置调倍率）。" },
           { key: "🔊 音量", desc: "点击音量图标后拖动调节；也可在屏幕右侧上下滑动控制音量。" },
           { key: "🔎 清晰度", desc: "在菜单中选择 480P / 720P / 1080P 等，切换后从当前位置继续播放。" },
-          { key: "⏩ 倍速", desc: "0.5× ~ 2× 调节播放速度，追番倍速或慢放细节都行。" },
+          { key: "⏩ 倍速", desc: "0.5× ~ 3× 调节播放速度；长按画面可临时切到自定义倍速（默认 2.0×，可在设置改）。" },
+          { key: "⏳ 缓冲 / 解析进度", desc: "播放中缓冲时画面中央显示转圈动画；点开一集「找视频地址」时顶部显示细进度条。" },
           { key: "🔀 线路 / 源切换", desc: "当某集卡顿或失效，一键切换到备用解析线路，无需退出播放页。" },
           { key: "💬 弹幕开关", desc: "开/关弹幕显示；长按可进一步设置弹幕区域、透明度、字号与速度。" },
           { key: "⛶ 全屏 / 小窗", desc: "切换全屏沉浸，或缩小为可拖动的小窗边看边做别的事。" },
@@ -394,6 +397,8 @@ window.CONTENT = {
           "Danmaku (bullet comments) support",
           "One-tap switch between play sources",
           "Quality, playback speed and gesture control",
+          "Tap to toggle UI; double-tap center play/pause, left/right rewind/forward; long-press custom speed boost",
+          "Buffering spinner & resolve progress bar",
           "Episode progress & resume memory"
         ],
         howto: [
@@ -401,15 +406,16 @@ window.CONTENT = {
           "Open the Video/Anime category to browse or search",
           "Open a show → pick an episode",
           "In player: switch source, toggle danmaku, change speed",
-          "Swipe to seek / long-press the bar to scrub"
+          "Tap to toggle UI; double-tap center play/pause, left/right rewind/forward; long-press to boost; swipe to seek"
         ],
         controls: [
-          { key: "⏯ Play / Pause", desc: "Tap the center or this button to toggle play/pause; the progress bar and menu show while paused." },
-          { key: "⏪ ⏩ Rewind / Forward", desc: "Tap the side arrows to jump by a fixed amount (e.g. 10/30s); long-press for continuous seek." },
-          { key: "📊 Progress bar", desc: "Drag to seek; a time preview appears before release for precise positioning." },
+          { key: "⏯ Play / Pause", desc: "Double-tap the center or this button to toggle play/pause; single tap toggles the control bar; the progress bar and menu show while paused." },
+          { key: "⏪ ⏩ Rewind / Forward", desc: "Double-tap the left half to rewind 10s, the right half to forward 10s; long-press to temporarily switch to a custom speed boost, release to restore." },
+          { key: "📊 Progress bar", desc: "Drag to seek; a time preview appears before release. Horizontal drag also scrubs (multiplier adjustable in settings)." },
           { key: "🔊 Volume", desc: "Tap the volume icon then drag; or swipe up/down on the right edge to control volume." },
           { key: "🔎 Quality", desc: "Pick 480P / 720P / 1080P etc. in the menu; playback continues from the current position after switching." },
-          { key: "⏩ Speed", desc: "0.5× ~ 2× playback speed for binge-watching or slow-motion detail." },
+          { key: "⏩ Speed", desc: "0.5× ~ 3× playback speed; long-press the screen to temporarily boost to a custom speed (default 2.0×, configurable)." },
+          { key: "⏳ Buffer / Resolve", desc: "A spinner shows in the center while buffering; a thin top progress bar shows while resolving the video URL." },
           { key: "🔀 Source / line", desc: "When an episode lags or fails, switch to a backup解析 line with one tap without leaving the player." },
           { key: "💬 Danmaku toggle", desc: "Show/hide bullet comments; long-press to further set region, opacity, font size and speed." },
           { key: "⛶ Fullscreen / PiP", desc: "Toggle immersive fullscreen, or shrink to a draggable picture-in-picture window." },
