@@ -178,7 +178,11 @@ window.CONTENT = {
       { icon: "▶️", title: "视频播放 + 弹幕", desc: "基于 media_kit 的播放器，支持弹幕与多线路切换，追番更带感。" },
       { icon: "📖", title: "小说阅读器", desc: "字体、行距、主题、翻页等样式自由组合，设置即时生效并持久保存。" },
       { icon: "💻", title: "跨平台", desc: "同一套 Flutter 代码覆盖 Android / iOS / Windows / macOS / Linux。" },
-      { icon: "🌟", title: "开源免费", desc: "代码公开、无广告、无内购，隐私友好。" }
+      { icon: "🌟", title: "开源免费", desc: "代码公开、无广告、无内购，隐私友好。" },
+      { icon: "📊", title: "Bangumi 同步", desc: "一键将看番进度、收藏与评分同步到 Bangumi（bgm.tv），多端共享你的动画清单。" },
+      { icon: "🌐", title: "网络配置", desc: "自定义代理、镜像站与请求头，应对部分站点被 SNI/ECH 阻断或限流的情况。" },
+      { icon: "💬", title: "收藏分组与评论", desc: "本地收藏支持分组、评分与备注评论，跨媒体统一管理你的追更清单。" },
+      { icon: "🔑", title: "源登录鉴权", desc: "源可声明登录需求，保存 Cookie / 登录态后访问需登录的站点，凭据仅存本地。" }
     ],
     en: [
       { icon: "🧩", title: "All-in-One", desc: "Anime / manga / novel / video in a single app, with unified search, favorites and history." },
@@ -188,12 +192,16 @@ window.CONTENT = {
       { icon: "▶️", title: "Video + Danmaku", desc: "A media_kit based player with danmaku (bullet comments) and multi-source switching." },
       { icon: "📖", title: "Novel Reader", desc: "Freely combine fonts, spacing, themes and page-turn styles; settings apply instantly and persist." },
       { icon: "💻", title: "Cross-Platform", desc: "One Flutter codebase across Android / iOS / Windows / macOS / Linux." },
-      { icon: "🌟", title: "Open & Free", desc: "Public code, no ads, no in-app purchases, privacy friendly." }
+      { icon: "🌟", title: "Open & Free", desc: "Public code, no ads, no in-app purchases, privacy friendly." },
+      { icon: "📊", title: "Bangumi Sync", desc: "One-tap sync your watch progress, collections and ratings to Bangumi (bgm.tv) — share your anime list across devices." },
+      { icon: "🌐", title: "Network Config", desc: "Set custom proxies, mirrors and request headers to handle sites blocked or rate-limited via SNI/ECH." },
+      { icon: "💬", title: "Favorites & Comments", desc: "Group, rate and annotate your local favorites; manage your tracking list across all media types." },
+      { icon: "🔑", title: "Source Auth", desc: "Sources can require login; save cookies / session to access member-only sites — credentials stay local only." }
     ]
   },
   downloads: {
     zh: [
-      { id: "android", icon: "🤖", name: "Android", desc: "适用于手机与平板（Android 5.0+）。", btn: "下载 APK", note: "安装时需在系统设置中允许「未知来源」。" },
+      { id: "android", icon: "🤖", name: "Android", desc: "适用于手机与平板（Android 5.0+）。提供按架构分包：arm64-v8a / armeabi-v7a / x86_64，按设备选择。", btn: "下载 APK", note: "安装时需在系统设置中允许「未知来源」。" },
       { id: "ios", icon: "🍎", name: "iOS", desc: "适用于 iPhone / iPad。", btn: "获取（TestFlight）", note: "通过 TestFlight 或自签安装；企业证书版请留意有效期。" },
       { id: "windows", icon: "🪟", name: "Windows", desc: "Windows 10 / 11 桌面客户端。", btn: "下载 EXE / ZIP", note: "若被 SmartScreen 拦截，选择「仍要运行」。" },
       { id: "macos", icon: "🍏", name: "macOS", desc: "支持 Intel 与 Apple 芯片。", btn: "下载 DMG", note: "首次打开需在「系统设置 - 隐私与安全性」中允许。" },
@@ -212,13 +220,15 @@ window.CONTENT = {
       { q: "快速开始", a: "下载安装后打开应用，内置源已随包提供。如需更多内容，前往「源仓库」导入社区源，即可在对应分类中浏览。" },
       { q: "如何导入源", a: "在应用内进入「源管理 / 导入源」，粘贴源文件内容或选择文件即可。同名源以版本号较高者覆盖，旧版本不会被误装，安全升级。" },
       { q: "自己写源（共创式架构）", a: "源是一个 JSON 文件，可包含声明式选择器（xpath / css / jsonpath）或内嵌 JS 解析脚本。应用通过 JS 沙箱执行脚本，不把任何站点写死在代码里——这正是「源即插件」的含义。往下滚动可查看完整《源编写教程》。" },
-      { q: "数据安全与隐私", a: "NexHub 不收集个人信息，不托管任何媒体内容；所有请求直连第三方源站。请遵守所在地法律法规使用。" }
+      { q: "数据安全与隐私", a: "NexHub 不收集个人信息，不托管任何媒体内容；所有请求直连第三方源站。请遵守所在地法律法规使用。" },
+      { q: "v0.4.0 是大版本更新，数据安全吗？", a: "v0.4.0 是一次较大的功能更新（新增 Bangumi 同步、网络配置、收藏分组与评论、源登录鉴权、详情页重构等）。数据格式向后兼容，旧版本收藏与导入的源无需重新导入；建议升级前备份应用数据以防意外。新版本稳定性仍在打磨，遇到问题可在 GitHub 反馈。" }
     ],
     en: [
       { q: "Getting Started", a: "Install and open the app — built-in sources ship with it. For more content, import community sources from the Source Repository and browse them in the matching category." },
       { q: "How to import a source", a: "In the app, open 'Source Management / Import Source', then paste the source JSON or pick a file. Same-id sources upgrade by the higher version; older versions won't overwrite — safe upgrades." },
       { q: "Write your own source", a: "A source is a JSON file with declarative selectors (xpath / css / jsonpath) or embedded JS. The app runs it in a JS sandbox and hardcodes no site — that is exactly what 'source = plugin' means. Scroll down for the full Source Authoring Tutorial." },
-      { q: "Data & privacy", a: "NexHub collects no personal data and hosts no content; all requests go directly to third-party sources. Please use it in compliance with local laws." }
+      { q: "Data & privacy", a: "NexHub collects no personal data and hosts no content; all requests go directly to third-party sources. Please use it in compliance with local laws." },
+      { q: "v0.4.0 is a major update — is my data safe?", a: "v0.4.0 is a large feature update (Bangumi sync, network config, favorites grouping & comments, source auth, detail-page rebuild). Data is backward-compatible — your existing favorites and imported sources need no re-import. We recommend backing up app data before upgrading. Stability is still being polished; report issues on GitHub." }
     ]
   },
   guide: {
