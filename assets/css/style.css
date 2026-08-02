@@ -33,6 +33,12 @@
   --border: #232838;
   --shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
   --shadow-hover: 0 16px 44px rgba(0, 0, 0, 0.55);
+  --doc-callout-border: rgba(255, 255, 255, 0.12);
+  --doc-callout-bg: rgba(255, 255, 255, 0.04);
+  --doc-callout-warn-border: rgba(245, 158, 11, 0.5);
+  --doc-callout-warn-bg: rgba(245, 158, 11, 0.14);
+  --doc-callout-info-border: rgba(59, 130, 246, 0.5);
+  --doc-callout-info-bg: rgba(59, 130, 246, 0.14);
 }
 
 * { box-sizing: border-box; }
@@ -499,4 +505,27 @@ a { color: inherit; text-decoration: none; }
   .tut-fields td { white-space: normal; }
   .tut-k { width: 42%; }
   .tut-code { font-size: 12.5px; }
+}
+
+/* 网络设置文档：提示/警告 callout */
+.doc-callout {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: 8px;
+  margin: 12px 0;
+  font-size: 0.92em;
+  line-height: 1.6;
+  border: 1px solid var(--doc-callout-border, rgba(0,0,0,0.12));
+  background: var(--doc-callout-bg, rgba(0,0,0,0.03));
+}
+.doc-callout .doc-callout-icon { flex: 0 0 auto; line-height: 1.6; }
+.doc-callout.warn {
+  border-color: var(--doc-callout-warn-border, rgba(217, 119, 6, 0.45));
+  background: var(--doc-callout-warn-bg, rgba(245, 158, 11, 0.10));
+}
+.doc-callout.info {
+  border-color: var(--doc-callout-info-border, rgba(37, 99, 235, 0.35));
+  background: var(--doc-callout-info-bg, rgba(59, 130, 246, 0.08));
 }
