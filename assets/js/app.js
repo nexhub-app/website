@@ -175,6 +175,7 @@
     var sections = [
       { id: "intro", href: "docs.html", titleKey: "docs.centerTitle" },
       { id: "features", href: "docs-features.html", titleKey: "features.title" },
+      { id: "network", href: "docs-network.html", titleKey: "network.title" },
       { id: "faq", href: "docs-faq.html", titleKey: "docs.faqTitle" },
       { id: "tutorial", href: "docs-tutorial.html", titleKey: "docs.tutorialTitle" }
     ];
@@ -202,6 +203,7 @@
       '<div class="doc-section-body"><p>' + esc(dict["docs.centerSubtitle"]) + '</p></div>' +
       '<div class="grid doc-cards">' +
         '<a class="card doc-card" href="docs-features.html"><div class="f-icon">✨</div><h3>' + esc(dict["docs.cardFeaturesTitle"]) + '</h3><p>' + esc(dict["docs.cardFeaturesDesc"]) + '</p><span class="card-link" aria-hidden="true">→</span></a>' +
+        '<a class="card doc-card" href="docs-network.html"><div class="f-icon">🌐</div><h3>' + esc(dict["docs.cardNetworkTitle"]) + '</h3><p>' + esc(dict["docs.cardNetworkDesc"]) + '</p><span class="card-link" aria-hidden="true">→</span></a>' +
         '<a class="card doc-card" href="docs-faq.html"><div class="f-icon">❓</div><h3>' + esc(dict["docs.cardFaqTitle"]) + '</h3><p>' + esc(dict["docs.cardFaqDesc"]) + '</p><span class="card-link" aria-hidden="true">→</span></a>' +
         '<a class="card doc-card" href="docs-tutorial.html"><div class="f-icon">📝</div><h3>' + esc(dict["docs.cardTutTitle"]) + '</h3><p>' + esc(dict["docs.cardTutDesc"]) + '</p><span class="card-link" aria-hidden="true">→</span></a>' +
       '</div></section>';
@@ -259,6 +261,55 @@
       }).join("");
 
     initDocScrollSpy(["features-core"].concat(order.map(function (k) { return "guide-" + k; })));
+  }
+
+  /* ---------- 渲染：网络设置文档页 ---------- */
+  function renderDocsNetwork() {
+    var body = document.getElementById("networkBody");
+    var toc = document.getElementById("networkToc");
+    if (!body || !toc) return;
+    var dict = I18N[state.lang] || I18N.zh;
+    var data = (CONTENT.network && CONTENT.network[state.lang]) || CONTENT.network.zh;
+    if (!data || !data.sections) { body.innerHTML = ""; toc.innerHTML = ""; return; }
+
+    function renderBlock(b) {
+      if (b.type === "p") {
+        // 支持 \n\n 分段与 \n 单换行
+        return (b.text || "").split("\n").map(function (line) {
+          return '<p>' + esc(line) + '</p>';
+        }).join("");
+      }
+      if (b.type === "table") {
+        var rows = (b.rows || []).map(function (r) {
+          return '<tr><td class="doc-table-k">' + esc(r.k) + '</td><td class="doc-table-v">' + esc(r.v) + '</td></tr>';
+        }).join("");
+        return '<div class="doc-table-wrap"><table class="doc-table"><tbody>' + rows + '</tbody></table></div>';
+      }
+      if (b.type === "callout") {
+        var cls = b.variant === "warn" ? "doc-callout warn" : "doc-callout info";
+        var icon = b.variant === "warn" ? "⚠️" : "💡";
+        return '<div class="' + cls + '"><span class="doc-callout-icon" aria-hidden="true">' + icon + '</span><span>' + esc(b.text || "") + '</span></div>';
+      }
+      if (b.type === "steps") {
+        var title = b.title ? '<div class="guide-label">' + esc(b.title) + '</div>' : '';
+        var items = (b.items || []).map(function (it) { return '<li>' + esc(it) + '</li>'; }).join("");
+        return '<div class="guide-block">' + title + '<ol class="guide-list guide-ol">' + items + '</ol></div>';
+      }
+      return "";
+    }
+
+    body.innerHTML = data.sections.map(function (s) {
+      var blocksHtml = (s.blocks || []).map(renderBlock).join("");
+      return '<section class="doc-section" id="' + esc(s.id) + '">' +
+        '<h2 class="doc-h2">' + esc(s.title) + '<a class="doc-anchor" href="#' + esc(s.id) + '" aria-hidden="true">#</a></h2>' +
+        '<div class="doc-section-body">' + blocksHtml + '</div></section>';
+    }).join("");
+
+    toc.innerHTML = data.sections.map(function (s) {
+      return '<a class="doc-toc-link" href="#' + esc(s.id) + '">' + esc(s.title) + '</a>';
+    }).join("");
+
+    initDocScrollSpy(data.sections.map(function (s) { return s.id; }));
   }
 
   /* ---------- 渲染：常见问题文档页 ---------- */
@@ -470,7 +521,7 @@
     localStorage.setItem("nexhub_lang", lang);
     applyI18n();
     renderHome(); renderFeatures(); renderDownloads(); renderGuide();
-    renderDocsNav(); renderDocsIntro(); renderDocsFeatures(); renderDocsFaq(); renderTutorial();
+    renderDocsNav(); renderDocsIntro(); renderDocsFeatures(); renderDocsNetwork(); renderDocsFaq(); renderTutorial();
     renderSourceFilter(); renderSources();
     if (window.NEXHUB_SOURCES_PROMISE) {
       window.NEXHUB_SOURCES_PROMISE.then(function () {
@@ -504,6 +555,7 @@
     renderDocsNav();
     renderDocsIntro();
     renderDocsFeatures();
+    renderDocsNetwork();
     renderDocsFaq();
     renderTutorial();
     initDocNav();
