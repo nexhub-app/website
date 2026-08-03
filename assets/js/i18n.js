@@ -1033,7 +1033,11 @@ window.CONTENT = {
           { k: "常见错误", v: "JSON 语法错误、选择器返回空、相对链接未补 baseUrl、脚本抛出异常。" },
           { k: "版本升级", v: "提高 version，同名源导入时自动覆盖旧版。" }
         ],
-        code: null }
+        code: null },
+      { id: "roadmap", title: "十四、路线规划（规划中 · 欢迎参与）",
+        group: "practice",
+        body: "以下功能尚未实现，是后续版本的重点方向。设计同样存在大量取舍，欢迎到 GitHub Discussions 或 Issues 提意见：\\n1. 接入 AI 能力：AI 辅助搜源、内容摘要、看番 / 看书助手、自然语言检索等。\\n2. 小说翻译：机翻管线，原文 / 译文对照、按需段落翻译与缓存。\\n3. 漫画翻译（MTL）：漫画图片机翻嵌字 / 气泡替换，降低跨语言漫画阅读门槛。\\n4. 视频实时翻译：影视字幕 / 实时字幕翻译，支持外挂与内嵌字幕的语言切换。\\n5. 增加其他同步方式：在现有 Bangumi 同步之外，接入 AniList、MyAnimeList、Trakt、SIMKL、MDList 等更多后端，并支持跨后端双向同步与可配置冲突策略。",
+        fields: null, code: null }
     ],
     en: [
       { id: "overview", title: "1. What is a Source",
@@ -1157,7 +1161,11 @@ window.CONTENT = {
           { k: "Common errors", v: "JSON syntax error, selector returns empty, relative link not joined to baseUrl, script throws." },
           { k: "Upgrade", v: "Bump version; same-id sources auto-overwrite the old one on import." }
         ],
-        code: null }
+        code: null },
+      { id: "roadmap", title: "14. Roadmap (planned · community input welcome)",
+        group: "practice",
+        body: "The following are not yet implemented and are the focus areas for upcoming versions. Their design involves many trade-offs — share your thoughts on GitHub Discussions or Issues:\\n1. AI integration: AI-assisted source search, content summarization, watch/read assistants, natural-language search, etc.\\n2. Novel translation: a machine-translation pipeline with original/translated side-by-side, on-demand paragraph translation and caching.\\n3. Manga translation (MTL): machine-translated inset text / speech-bubble replacement to lower the barrier for cross-language manga.\\n4. Real-time video translation: subtitle / live-subtitle translation for video, with language switching for both external and embedded subtitles.\\n5. More sync backends: beyond the current Bangumi sync, integrate AniList, MyAnimeList, Trakt, SIMKL, MDList and more, with configurable cross-backend two-way sync and conflict policies.",
+        fields: null, code: null }
     ]
   }
 };
