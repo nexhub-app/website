@@ -66,10 +66,9 @@ window.I18N = {
     "docs.faqTitle": "常见问题",
     "docs.faqSubtitle": "快速上手、导入源、共创式架构与数据隐私的常见疑问。",
     "docs.backToDocs": "← 返回文档中心",
-    "tutorial.group.basic": "基础概念",
-    "tutorial.group.modules": "核心模块",
-    "tutorial.group.syntax": "语法与脚本",
-    "tutorial.group.practice": "实战与调试",
+    "tutorial.group.basic": "基础（入门必读）",
+    "tutorial.group.intermediate": "中级（功能与解析）",
+    "tutorial.group.advanced": "高级（脚本与实战）",
     "docs.tocTitle": "本页内容",
     "docs.tocToggle": "目录",
     "sources.title": "源仓库",
@@ -147,9 +146,8 @@ window.I18N = {
     "docs.faqSubtitle": "Common questions on getting started, importing sources, the plugin architecture and privacy.",
     "docs.backToDocs": "\u2190 Back to Docs Center",
     "tutorial.group.basic": "Basics",
-    "tutorial.group.modules": "Core Modules",
-    "tutorial.group.syntax": "Syntax & Scripts",
-    "tutorial.group.practice": "Practice & Debug",
+    "tutorial.group.intermediate": "Intermediate",
+    "tutorial.group.advanced": "Advanced",
     "docs.tocTitle": "On this page",
     "docs.tocToggle": "Contents",
     "sources.title": "Source Repository",
@@ -911,331 +909,1128 @@ window.CONTENT = {
   },
   /* ===== 源编写教程（模块化、双语） ===== */
   tutorial: {
-    zh: [
-      { id: "overview", title: "一、源文件是什么",
-        group: "basic",
-        body: "源（Source）是一个 JSON 文件，它描述了「如何去某个网站抓取动漫 / 漫画 / 小说 / 影视」。NexHub 只提供通用引擎，所有站点专属的解析逻辑都写在这个文件里——这就是「源即插件」。\n\n应用内置一个 JS 沙箱：能用声明式选择器（jsonpath / css / xpath）直接抽取字段，也能在源里内嵌 JavaScript 处理复杂页面。你写的源文件，别人一键就能导入使用，无需更新整个 App。",
-        fields: null, code: null },
-      { id: "basic", title: "二、基础字段（每个源都有）",
-        group: "basic",
-        body: "每个源的「头部」都是这些通用字段。填好后 App 才能识别、管理与升级你的源。\n\n注意：源模型不会读取 author / lang / builtin 这三个键——写进文件也会被忽略，请勿把它们当作功能字段。",
-        fields: [
-          { k: "id", v: "唯一标识，如 manga_goda。同名源按 version 决定升级/跳过，请避免与他人重复。" },
-          { k: "name", v: "显示名称，如「GoDa漫画」。" },
-          { k: "version", v: "整数版本号（会被强制转为整数，默认 1）。同名源按版本号升级/跳过，规则见「调试与导入」一节。" },
-          { k: "type", v: "媒体类型：animeSource（影视/动漫）/ mangaSource（漫画）/ novelSource（小说）。" },
-          { k: "site", v: "站点信息对象（必填）：domain、baseUrl（站点根地址，用于拼接相对链接）、mirrors 镜像站列表，可选 userAgent / cookies / headers。" },
-          { k: "parser", v: "解析配置：{ type, overrides?, script? }。type 取 builtin / hybrid / script，详见第九、十节。" },
-          { k: "enabled", v: "可选，是否启用（默认 true）。" }
-        ],
-        code: "{\n  \"id\": \"demo_anime\",\n  \"name\": \"演示动漫\",\n  \"version\": 1,\n  \"type\": \"animeSource\",\n  \"site\": {\n    \"domain\": \"example.com\",\n    \"baseUrl\": \"https://example.com\",\n    \"mirrors\": [ { \"name\": \"主站\", \"domain\": \"example.com\", \"baseUrl\": \"https://example.com\" } ]\n  },\n  \"parser\": { \"type\": \"hybrid\", \"overrides\": { \"latest\": { \"type\": \"builtin\" } } }\n}" },
-      { id: "search", title: "三、搜索模块（search / ruleSearch）",
-        group: "modules",
-        body: "用户点击搜索框输入关键词时触发。两种范式：\n· 影视/漫画（范式A）：在 routes 里定义 search 的 url（含 {keyword} 占位），selectors 或 script 把结果列表抽出来。\n· 小说（范式B，Legado 兼容）：用 ruleSearch 字段以 CSS 选择器声明每条结果的书名、作者、封面、详情链接。\n返回字段通常含：id（详情页标识）、title、cover、detailUrl。",
-        fields: [
-          { k: "routes.search.url", v: "范式A：搜索接口，{keyword} 为关键词、{page} 为页码。" },
-          { k: "selectors.list / bookList", v: "结果容器选择器（jsonpath 或 css）。" },
-          { k: "selectors.title / bookName", v: "书名/标题字段。" },
-          { k: "selectors.cover / bookCoverUrl", v: "封面图地址，相对路径会自动拼接 baseUrl。" },
-          { k: "selectors.id / bookUrl", v: "用于后续打开详情页的标识或链接。" }
-        ],
-        code: "// 范式A：routes + selectors（影视）\n\"routes\": {\n  \"search\": { \"url\": \"/s?wd={keyword}&page={page}\", \"method\": \"get\", \"responseType\": \"json\" }\n},\n\"selectors\": {\n  \"list\": \"$.list\",\n  \"title\": \"$.vod_name\",\n  \"cover\": \"$.vod_pic\",\n  \"id\": \"$.vod_id\"\n}\n\n// 范式B：小说 ruleSearch（Legado 兼容）\n\"ruleSearch\": {\n  \"bookList\": \".bookbox\",\n  \"bookName\": \".bookname a@text\",\n  \"bookAuthor\": \".author@text\",\n  \"bookCoverUrl\": \".bookimg img@src\",\n  \"bookUrl\": \".bookname a@href\"\n}" },
-      { id: "discovery", title: "四、发现 / 分类模块（discovery / ruleExplore）",
-        group: "modules",
-        body: "「首页」与「按分类浏览」使用此模块。范式A 用 latest/explore/category 路由 + categoryEntries 分类表；范式B 用 ruleExplore + exploreUrl（每行「分类名::链接」）。\n首页板块由 homeSections 定义（标题、路由、样式 grid/list、数量）。",
-        fields: [
-          { k: "category.categoryEntries", v: "范式A：分类数组，每项 {id, title}，点击后拼接进 category 路由。" },
-          { k: "homeSections", v: "首页展示的板块（最新更新、热门等），引用某个路由并限制条数。" },
-          { k: "exploreUrl", v: "范式B：换行分隔的「分类名::URL」，用于发现页。" }
-        ],
-        code: "\"category\": {\n  \"categoryEntries\": [\n    { \"id\": \"all\", \"title\": \"全部\" },\n    { \"id\": \"1\", \"title\": \"动漫\" },\n    { \"id\": \"2\", \"title\": \"剧场版\" }\n  ]\n},\n\"homeSections\": [\n  { \"id\": \"latest\", \"title\": \"最新更新\", \"route\": \"latest\", \"style\": \"grid\", \"limit\": 18 }\n]" },
-      { id: "detail", title: "五、详情 / 目录模块（detail / ruleBookInfo）",
-        group: "modules",
-        body: "点开一部作品时加载。负责：标题、封面、简介、作者/主演、标签、状态、目录（章节/话数）列表。\n范式A 用 detail 路由 + selectors.detail 与 episodes 选择器；范式B 用 ruleBookInfo（作品信息）+ ruleToc（章节列表，含 chapterList / chapterName / chapterUrl）。",
-        fields: [
-          { k: "selectors.detail", v: "范式A：对象，逐字段抽取标题/封面/简介/演员等。" },
-          { k: "selectors.episodes", v: "范式A：章节链接选择器，如 ul li a。" },
-          { k: "ruleBookInfo.tocUrl", v: "范式B：进入目录页的链接；留空则详情页本身即目录。" },
-          { k: "ruleToc.chapterList", v: "范式B：章节项选择器；nextTocUrl 支持目录分页。" }
-        ],
-        code: "// 范式A\n\"selectors\": {\n  \"detail\": {\n    \"title\": \"$.list[0].vod_name\",\n    \"cover\": \"$.list[0].vod_pic\",\n    \"description\": \"$.list[0].vod_content\"\n  },\n  \"episodes\": \"ul.anthology-list-play li a\"\n}\n\n// 范式B（小说）\n\"ruleToc\": {\n  \"chapterList\": \".chapter li a\",\n  \"chapterName\": \"@text\",\n  \"chapterUrl\": \"@href\",\n  \"nextTocUrl\": \"a:contains(下一页)@href\"\n}" },
-      { id: "content", title: "六、正文 / 章节内容模块（content / ruleContent）",
-        group: "modules",
-        body: "打开具体一章时加载：\n· 小说（范式B）：ruleContent.content 抽取正文文本（可用 @textNodes 取干净文本，nextContentUrl 支持正文分页）。\n· 漫画：先由 chapters 路由/脚本拿到话列表，再由 images 模块解析出该话的图片地址数组。\n· 影视：由 video 模块解析出可播放的视频地址。",
-        fields: [
-          { k: "ruleContent.content", v: "小说正文选择器，常用 #content@textNodes 取段落文本。" },
-          { k: "ruleContent.nextContentUrl", v: "正文「下一页」链接，自动连读。" },
-          { k: "chapters（漫画）", v: "返回话列表，每项含 id 与详情链接，供 images 使用。" },
-          { k: "images（漫画）", v: "返回该话的图片 URL 数组，支持解密函数。" }
-        ],
-        code: "\"ruleContent\": {\n  \"content\": \"#nr1@textNodes\",\n  \"title\": \"#nr_title@text\",\n  \"nextContentUrl\": \"a:contains(下一页)@href\"\n}\n\n// 漫画 images（脚本返回图片数组）\n\"images\": {\n  \"type\": \"script\",\n  \"function\": \"parseImages\",\n  \"script\": \"function parseImages(html, context){ /* 解析并解密图片URL */ return [url1, url2]; }\"\n}" },
-      { id: "player", title: "七、视频解析模块（player / video）",
-        group: "modules",
-        body: "影视源的核心。由 video 路由拿到播放页 HTML，再用选择器 / 脚本 / WebView 抽出真实视频地址（m3u8 / mp4）。\n三种解析方式：声明式选择器（如 //video/@src）、内嵌 JS（overrides.type:\"script\"）、或 WebView 渲染后抽取（overrides.type:\"webview\"，常用于 m3u8 或需要执行页面 JS 才能拿到地址的场景）。\n弹幕（danmaku）若源站提供，可在 video 模块额外返回弹幕接口地址。多线路：在 episodes 里若同一集有多个解析地址，App 会自动提供「线路切换」。",
-        fields: [
-          { k: "routes.video.url", v: "播放页地址（通常为 episodes 取出的链接）。" },
-          { k: "overrides.video.type", v: "该接口解析方式：builtin / css / xpath / jsonpath / script / webview。视频常用 webview 提取 m3u8。" },
-          { k: "selectors.video", v: "视频地址选择器，如 //video/@src 或 jsonpath 抽取（声明式时）。" },
-          { k: "__meta 异步", v: "需先请求接口再解析时，脚本返回 {__meta:true,__fetchUrl,...}，由引擎预取后再调用处理函数（详见第十节）。" }
-        ],
-        code: "// 方式一：声明式\n\"routes\": { \"video\": { \"url\": \"{url}\", \"method\": \"get\", \"responseType\": \"html\" } },\n\"parser\": { \"type\": \"hybrid\", \"overrides\": { \"video\": { \"type\": \"webview\" } } }\n\n// 方式二：脚本先抓取接口再解析\nfunction parseVideo(html, context){\n  var api = extractApi(html);\n  return { __meta: true, __fetchUrl: api, __processor: \"__processVideo\" };\n}\nfunction __processVideo(json, context){\n  return json.url; // 返回真实播放地址\n}" },
-      { id: "images", title: "八、漫画图片解析（images）",
-        group: "modules",
-        body: "漫画源最常用的脚本模块。站点常对图片地址加密，需要在脚本里解密。images 函数接收详情页/接口数据，返回该话的图片 URL 数组。\n注意：很多韩漫/国漫站把图片地址用自定义算法混淆，解密逻辑就写在这里。",
-        fields: [
-          { k: "function", v: "入口函数名，如 parseImages，与 overrides.images.function 对应。" },
-          { k: "返回", v: "字符串数组，每个元素是一张图片的完整 URL。" },
-          { k: "context.baseUrl", v: "脚本内可用的站点 baseUrl，用于补全相对路径。" }
-        ],
-        code: "function parseImages(raw, context){\n  var baseUrl = (context.baseUrl || '').replace(/\\/$/, '');\n  // 解密 raw 得到真实地址列表\n  var urls = decrypt(raw);\n  return urls.map(function(u){ return u.indexOf('/')===0 ? baseUrl+u : u; });\n}" },
-      { id: "selector", title: "九、选择器语法速查",
-        group: "syntax",
-        body: "解析方式分「顶层 parser.type」与「每个 API 的 overrides.type」两层：\n· 顶层 parser.type 只取三种：builtin（纯声明式）、hybrid（声明式 + 按 API 用 overrides 覆盖，最常用）、script（全部走 JS 沙箱）。\n· 每个 API 可在 overrides 里指定 overrides.type，决定该接口实际怎么解析：builtin / xpath / jsonpath / css（四种声明式子类型，归入同一套抽取引擎）/ script（JS 沙箱）/ webview（用内嵌浏览器渲染后抽取，常用于 m3u8 提取）/ webview-html（WebView 取回 HTML 再走解析，常用于反爬搜索）。\n\n声明式选择器语法按 overrides.type 选一种：\n· jsonpath：以 $ 开头，适合 JSON 接口（如 $.list[0].vod_name）。\n· css：标准 CSS 选择器，适合 HTML（如 .bookname a）。\n· xpath：以 // 或 ./ 开头，适合 HTML（如 //video/@src）。\n小说源（Legado 兼容）额外支持「自定义语法」：@text 取文本、@href/@src 取属性、@textNodes 取干净正文、|| 为回退选择器、a:contains(文字) 按文本筛选、用 .0/.1/-1 取第 N 个。",
-        fields: [
-          { k: "顶层 parser.type", v: "builtin / hybrid / script 三选一，决定整源默认解析方式。" },
-          { k: "overrides.<api>.type", v: "每个 API 单独指定：builtin / xpath / jsonpath / css / script / webview / webview-html。" },
-          { k: "$.field", v: "jsonpath，抽取 JSON 字段。" },
-          { k: ".class a@text", v: "css + @text 取元素文本。" },
-          { k: "//video/@src", v: "xpath 取属性值。" },
-          { k: "a:contains(下一页)@href", v: "小说源：按可见文本筛选链接。" }
-        ],
-        code: "// 顶层：hybrid + 各 API 指定解析方式\n\"parser\": { \"type\": \"hybrid\", \"overrides\": {\n  \"search\": { \"type\": \"jsonpath\" },\n  \"video\": { \"type\": \"webview\" },\n  \"detail\": { \"type\": \"css\" }\n} }\n// jsonpath\n\"title\": \"$.vod_name\"\n// css（HTML）\n\"bookName\": \".bookname a@text\"\n// xpath（HTML）\n\"video\": \"//video/@src\"" },
-      { id: "script", title: "十、内嵌 JS 脚本约定",
-        group: "syntax",
-        body: "当声明式选择器搞不定时，用 parser.overrides 写 JS。每个模块可指定 type:\"script\" 并给出 function 名与 script 源码。\n\n重要约定：\n1. 函数签名固定为 parseXxx(html, context)，html 为页面字符串，context 含 baseUrl、log 等。\n2. 必须同步返回结果（数组或对象）。\n3. 需要异步数据时，返回 {__meta:true, __fetchUrl, __processor} 协议对象，引擎会先预取该 URL，再调用 __processor 同步处理函数——这是唯一安全的异步通道。\n4. 不要写死任何站点常量到 App，全部留在源文件。",
-        fields: [
-          { k: "function", v: "入口函数名，与 overrides.<module>.function 对应。" },
-          { k: "context.baseUrl", v: "当前源的主站地址，补全相对链接用。" },
-          { k: "context.log", v: "可选日志函数，便于调试（context.log('msg')）。" },
-          { k: "__meta 协议", v: "异步预取：返回该对象，引擎取数后回调 __processor。" }
-        ],
-        code: "\"parser\": {\n  \"type\": \"hybrid\",\n  \"overrides\": {\n    \"search\": {\n      \"type\": \"script\",\n      \"function\": \"parseList\",\n      \"script\": \"function parseList(html, context){ /* 解析并返回数组 */ return []; }\"\n    }\n  }\n}" },
-      { id: "example", title: "十一、完整示例（影视源骨架）",
-        group: "practice",
-        body: "下面是一份最小可运行的影视源骨架，把各模块串起来（注意 anime 源必须包含 latest 路由）。把 example.com 换成真实站点、选择器换成真实规则即可导入使用。",
-        fields: null,
-        code: "{\n  \"id\": \"demo_anime\",\n  \"name\": \"演示动漫\",\n  \"version\": 1,\n  \"type\": \"animeSource\",\n  \"site\": {\n    \"domain\": \"example.com\",\n    \"baseUrl\": \"https://example.com\",\n    \"mirrors\": [ { \"name\": \"主站\", \"domain\": \"example.com\", \"baseUrl\": \"https://example.com\" } ]\n  },\n  \"parser\": { \"type\": \"hybrid\", \"overrides\": {\n    \"latest\": { \"type\": \"builtin\" },\n    \"search\": { \"type\": \"builtin\" },\n    \"detail\": { \"type\": \"builtin\" },\n    \"video\": { \"type\": \"webview\" }\n  } },\n  \"routes\": {\n    \"latest\": { \"url\": \"/api/latest?page={page}\", \"method\": \"get\", \"responseType\": \"json\" },\n    \"search\": { \"url\": \"/s?wd={keyword}&page={page}\", \"method\": \"get\", \"responseType\": \"json\" },\n    \"detail\": { \"url\": \"/detail/{id}\", \"method\": \"get\", \"responseType\": \"json\" },\n    \"video\": { \"url\": \"{url}\", \"method\": \"get\", \"responseType\": \"html\" }\n  },\n  \"selectors\": {\n    \"list\": \"$.list\",\n    \"title\": \"$.vod_name\",\n    \"cover\": \"$.vod_pic\",\n    \"id\": \"$.vod_id\",\n    \"detail\": { \"title\": \"$.vod_name\", \"cover\": \"$.vod_pic\" },\n    \"episodes\": \"ul li a\"\n  },\n  \"category\": { \"categoryEntries\": [ { \"id\": \"all\", \"title\": \"全部\" } ] },\n  \"homeSections\": [ { \"id\": \"latest\", \"title\": \"最新更新\", \"route\": \"latest\", \"style\": \"grid\", \"limit\": 18 } ]\n}" },
-      { id: "advanced", title: "十二、进阶：源级网络 / 评论 / 登录（v0.4.0）",
-        group: "modules",
-        body: "v0.4.0 起，源还能声明一些「站点级」能力，让 App 在不改引擎的前提下适配更复杂的站点：\n· network（可选）：源级网络覆盖。子键 proxy / dns / hosts / sni / ech，逐项选「继承全局」或「单独覆盖」。缺省即继承全局设置，非法值只告警、不会让源无法启用。\n· comments（可选）：声明该源的评论能力。provider 默认 source（评论来自源站）；routes 声明 list / replies / post / reply / like / report 等路由（未声明的按钮不渲染）；selectors 用同一套 JSONPath/CSS/XPath 引擎抽取内容；login 可声明 WebView 登录页与登录态校验（checkCookie / checkUrl）。\n· 源登录鉴权：对需登录的站点，可用 WebView 捕获会话 Cookie 或手动粘贴 Cookie，凭据仅存本地。",
-        fields: [
-          { k: "network", v: "源级代理 / DNS / Hosts / SNI / ECH 覆盖；缺省继承全局设置。" },
-          { k: "comments.provider / routes / selectors", v: "声明源站评论；routes.list 为必需（声明 comments 时），其余按需。" },
-          { k: "comments.login", v: "需登录时的 WebView 登录页与登录态校验（checkCookie / checkUrl）。" },
-          { k: "生效优先级", v: "用户覆盖 > 源 network 块 > 全局设置 > 默认值；改完即时生效，无需重启。" }
-        ],
-        code: "\"network\": { \"proxy\": \"direct\", \"dns\": \"system\" },\n\"comments\": {\n  \"provider\": \"source\",\n  \"routes\": { \"list\": { \"url\": \"/api/comments?book={id}\", \"responseType\": \"json\" } },\n  \"selectors\": { \"items\": \"$.list\", \"content\": \"$.content\", \"author\": \"$.user\" }\n}" },
-      { id: "debug", title: "十三、调试与导入",
-        group: "practice",
-        body: "写好后如何验证？\n1. 用浏览器开发者工具（F12）核对真实页面的 HTML/JSON 结构与选择器是否匹配。\n2. 在 App 内「导入源」粘贴 JSON，若解析失败，检查 JSON 格式（注意转义引号与换行）。\n3. 脚本类源可在 overrides 里用 context.log() 打印中间结果辅助定位。\n4. 先在本地用一份最小数据源跑通一个模块（如 search），再逐步补全 detail / video / images。\n5. 分享：把 JSON 文件发给朋友，或提交到社区源仓库，别人一键导入即可。",
-        fields: [
-          { k: "导入方式", v: "App 内「源管理 / 导入源」→ 粘贴或选文件。" },
-          { k: "常见错误", v: "JSON 语法错误、选择器返回空、相对链接未补 baseUrl、脚本抛出异常。" },
-          { k: "版本升级", v: "提高 version，同名源导入时自动覆盖旧版。" }
-        ],
-        code: null },
-      { id: "roadmap", title: "十四、路线规划（规划中 · 欢迎参与）",
-        group: "practice",
-        body: "以下功能尚未实现，是后续版本的重点方向。设计同样存在大量取舍，欢迎到 GitHub Discussions 或 Issues 提意见：\\n1. 接入 AI 能力：AI 辅助搜源、内容摘要、看番 / 看书助手、自然语言检索等。\\n2. 小说翻译：机翻管线，原文 / 译文对照、按需段落翻译与缓存。\\n3. 漫画翻译（MTL）：漫画图片机翻嵌字 / 气泡替换，降低跨语言漫画阅读门槛。\\n4. 视频实时翻译：影视字幕 / 实时字幕翻译，支持外挂与内嵌字幕的语言切换。\\n5. 增加其他同步方式：在现有 Bangumi 同步之外，接入 AniList、MyAnimeList、Trakt、SIMKL、MDList 等更多后端，并支持跨后端双向同步与可配置冲突策略。",
-        fields: null, code: null },
-      { id: "fields", title: "十五、源字段完整参考",
-        group: "practice",
-        body: "下面按「顶层字段 / site / parser / routes / 选择器 / 高级块」给出一份较完整的字段速查。除 id、name、type、site、parser 外，其余字段均可选；源模型会忽略未知键（如 author / lang / builtin），请勿把它们当功能字段使用。\n\n完整约束以仓库源码 lib/core/models/plugin_config.dart 为准，本表覆盖日常编写最常用的字段。",
-        fields: [
-          { k: "id", v: "必填。源唯一标识（建议 域名_类型 之类，避免与他人重复）；同名源按 version 升级/跳过。" },
-          { k: "name", v: "必填。展示名称。" },
-          { k: "version", v: "整数版本号（默认 1）。导入时 ≥ 已装版本才覆盖，< 已装版本不覆盖（防误装旧版冲掉新源）。" },
-          { k: "type", v: "必填。animeSource（影视/动漫）/ mangaSource（漫画）/ novelSource（小说）。" },
-          { k: "responseType", v: "可选。json | html，决定默认解析引擎；可被各路由的 responseType 覆盖。" },
-          { k: "useWebview", v: "可选布尔。true 时该源整体用 WebView 渲染后抽取（适合强反爬站）。" },
-          { k: "site.domain", v: "必填。站点主域名。" },
-          { k: "site.baseUrl", v: "必填。站点根地址，用于拼接相对链接。" },
-          { k: "site.userAgent / cookies / headers", v: "可选。全局请求 UA / Cookie / 自定义头。" },
-          { k: "site.mirrors[]", v: "可选。镜像站列表，每项 {name, domain, baseUrl}。" },
-          { k: "site.publishPageUrl / publishMirrorSelector", v: "可选。主域失效时的发布页与镜像提取规则（正则或 CSS）。" },
-          { k: "parser.type", v: "必填。builtin / hybrid / script 三选一，决定整源默认解析方式。" },
-          { k: "parser.overrides.<api>", v: "可选。按 API 指定解析方式：builtin / xpath / jsonpath / css / script / webview / webview-html。" },
-          { k: "parser.script / entrypoints", v: "可选。script 模式下的 JS 源码与入口函数映射。" },
-          { k: "routes.<name>", v: "可选。各接口地址，支持字符串写法或 {url, method, headers, params, responseType, parser} 对象；{keyword}/{page}/{id}/{url} 占位符自动替换。" },
-          { k: "selectors", v: "可选。声明式选择器（JSONPath / CSS / XPath），与 parser.overrides 配合。" },
-          { k: "category.dynamicCategories / categoryEntries", v: "可选。动态分类推断或静态分类表 [{id,title}]。" },
-          { k: "homeSections[]", v: "可选。首页板块：{id, title, route, style, limit}；缺省回退单块「最新更新」。" },
-          { k: "filters", v: "可选。动态筛选：groups（筛选组）、byCategory（按分类覆盖）、defaults（分类默认参数）。" },
-          { k: "stealthMode", v: "可选布尔。开启更激进的反检测请求策略。" },
-          { k: "antiHotlinking.referer / headers / userAgent", v: "可选。反盗链：补 Referer / 头 / 特定 UA。" },
-          { k: "webviewConfig.adblock / timeoutSeconds", v: "可选。WebView 广告拦截开关与超时（默认 true / 20s）。" },
-          { k: "comments", v: "可选。评论配置：provider(source/bangumi)、routes(list 必需，replies/post/reply/like/report 可选)、selectors、login(WebView 登录页 + checkCookie/checkUrl)。" },
-          { k: "network", v: "可选。源级网络覆盖：proxy / dns / hosts / sni / ech；缺省继承全局，非法值只告警不阻断启用。" },
-          { k: "announcement", v: "可选。源公告：{title, body?, url?, updatedAt?}。" },
-          { k: "webFavorite", v: "可选。网络收藏：enabled / title / route / url / addRoute / addUrl / requireLogin；声明后在线浏览显示「网络收藏」Tab。" },
-          { k: "ageRating", v: "可选。年龄分级：general(全年龄) / teen(青少年16+) / mature(成人18+)。兼容别名 all/16/r18/nsfw 等；缺省 general。mature 在默认设置下自动隐藏。" },
-          { k: "deprecated / migrationMessage", v: "可选。标记弃用并给出迁移提示文案。" },
-          { k: "enabled / enabledExplore / isHidden", v: "可选布尔。是否启用 / 是否出现在探索 / 是否隐藏。" }
-        ],
-        code: "// 顶层字段骨架（仅示意，非完整源）\n{\n  \"id\": \"demo_anime\",\n  \"name\": \"演示动漫\",\n  \"version\": 1,\n  \"type\": \"animeSource\",\n  \"responseType\": \"json\",\n  \"useWebview\": false,\n  \"site\": { \"domain\": \"example.com\", \"baseUrl\": \"https://example.com\" },\n  \"parser\": { \"type\": \"hybrid\", \"overrides\": { \"video\": { \"type\": \"webview\" } } },\n  \"routes\": { \"latest\": { \"url\": \"/api/latest?page={page}\" } },\n  \"ageRating\": \"general\",\n  \"webFavorite\": { \"route\": \"fav\", \"addRoute\": \"fav_add\" },\n  \"network\": { \"proxy\": \"direct\" }\n}" }
-    ],
-    en: [
-      { id: "overview", title: "1. What is a Source",
-        group: "basic",
-        body: "A Source is a JSON file that describes HOW to scrape a specific site for anime / manga / novel / video. NexHub only ships a generic engine; all site-specific parsing lives in this file — that is exactly 'source = plugin'.\n\nThe app embeds a JS sandbox: you can use declarative selectors (jsonpath / css / xpath) to extract fields directly, or embed JavaScript in the source to handle complex pages. Anyone can import your source file with one tap, no full app update needed.",
-        fields: null, code: null },
-      { id: "basic", title: "2. Basic fields (every source)",
-        group: "basic",
-        body: "Every source starts with these common header fields. Fill them in first so the app can identify, manage and upgrade your source.\n\nNote: the source model does NOT read author / lang / builtin keys — they are silently ignored, so don't rely on them as functional fields.",
-        fields: [
-          { k: "id", v: "Unique id, e.g. manga_goda. Same-id sources upgrade or skip by version; avoid collisions." },
-          { k: "name", v: "Display name, e.g. 'GoDa漫画'." },
-          { k: "version", v: "Integer version (coerced to int, default 1). Same-id sources upgrade or skip by version (see 'Debug & import')." },
-          { k: "type", v: "Media type: animeSource (video/anime) / mangaSource / novelSource." },
-          { k: "site", v: "Site object (required): domain, baseUrl (root, for relative links), mirrors list; optional userAgent / cookies / headers." },
-          { k: "parser", v: "Parser config: { type, overrides?, script? }. type is builtin / hybrid / script (see sections 9-10)." },
-          { k: "enabled", v: "Optional, whether enabled (default true)." }
-        ],
-        code: "{\n  \"id\": \"demo_anime\",\n  \"name\": \"Demo Anime\",\n  \"version\": 1,\n  \"type\": \"animeSource\",\n  \"site\": {\n    \"domain\": \"example.com\",\n    \"baseUrl\": \"https://example.com\",\n    \"mirrors\": [ { \"name\": \"main\", \"domain\": \"example.com\", \"baseUrl\": \"https://example.com\" } ]\n  },\n  \"parser\": { \"type\": \"hybrid\", \"overrides\": { \"latest\": { \"type\": \"builtin\" } } }\n}" },
-      { id: "search", title: "3. Search module (search / ruleSearch)",
-        group: "modules",
-        body: "Triggered when the user types a keyword. Two paradigms:\n· Anime/Manga (Paradigm A): define search url in routes (with {keyword}), then use selectors or script to extract the result list.\n· Novel (Paradigm B, Legado-compatible): use ruleSearch with CSS selectors declaring each result's title, author, cover, detail link.\nReturned fields usually: id, title, cover, detailUrl.",
-        fields: [
-          { k: "routes.search.url", v: "Paradigm A: search endpoint, {keyword} for query, {page} for page." },
-          { k: "selectors.list / bookList", v: "Result container selector (jsonpath or css)." },
-          { k: "selectors.title / bookName", v: "Title field." },
-          { k: "selectors.cover / bookCoverUrl", v: "Cover URL; relative paths auto-joined to baseUrl." },
-          { k: "selectors.id / bookUrl", v: "Identifier or link used to open detail later." }
-        ],
-        code: "// Paradigm A: routes + selectors (anime)\n\"routes\": {\n  \"search\": { \"url\": \"/s?wd={keyword}&page={page}\", \"method\": \"get\", \"responseType\": \"json\" }\n},\n\"selectors\": {\n  \"list\": \"$.list\",\n  \"title\": \"$.vod_name\",\n  \"cover\": \"$.vod_pic\",\n  \"id\": \"$.vod_id\"\n}\n\n// Paradigm B: novel ruleSearch (Legado)\n\"ruleSearch\": {\n  \"bookList\": \".bookbox\",\n  \"bookName\": \".bookname a@text\",\n  \"bookAuthor\": \".author@text\",\n  \"bookCoverUrl\": \".bookimg img@src\",\n  \"bookUrl\": \".bookname a@href\"\n}" },
-      { id: "discovery", title: "4. Discovery / Category (discovery / ruleExplore)",
-        group: "modules",
-        body: "Used by the Home page and category browsing. Paradigm A uses latest/explore/category routes + categoryEntries; Paradigm B uses ruleExplore + exploreUrl (each line 'Category::URL').\nHome sections are defined by homeSections (title, route, style grid/list, limit).",
-        fields: [
-          { k: "category.categoryEntries", v: "Paradigm A: category array, each {id, title}, plugged into the category route." },
-          { k: "homeSections", v: "Home blocks (latest, popular…) referencing a route with a limit." },
-          { k: "exploreUrl", v: "Paradigm B: newline-separated 'Category::URL' for the explore page." }
-        ],
-        code: "\"category\": {\n  \"categoryEntries\": [\n    { \"id\": \"all\", \"title\": \"All\" },\n    { \"id\": \"1\", \"title\": \"Anime\" },\n    { \"id\": \"2\", \"title\": \"Movies\" }\n  ]\n},\n\"homeSections\": [\n  { \"id\": \"latest\", \"title\": \"Latest\", \"route\": \"latest\", \"style\": \"grid\", \"limit\": 18 }\n]" },
-      { id: "detail", title: "5. Detail / Contents (detail / ruleBookInfo)",
-        group: "modules",
-        body: "Loaded when opening a title. Responsible for: title, cover, description, author/cast, tags, status, and the chapter/episode list.\nParadigm A uses detail route + selectors.detail and episodes; Paradigm B uses ruleBookInfo (meta) + ruleToc (chapter list with chapterList / chapterName / chapterUrl).",
-        fields: [
-          { k: "selectors.detail", v: "Paradigm A: object extracting title/cover/description/cast per field." },
-          { k: "selectors.episodes", v: "Paradigm A: chapter link selector, e.g. ul li a." },
-          { k: "ruleBookInfo.tocUrl", v: "Paradigm B: link into the contents page; empty means detail page itself is the TOC." },
-          { k: "ruleToc.chapterList", v: "Paradigm B: chapter item selector; nextTocUrl supports paginated TOC." }
-        ],
-        code: "// Paradigm A\n\"selectors\": {\n  \"detail\": {\n    \"title\": \"$.list[0].vod_name\",\n    \"cover\": \"$.list[0].vod_pic\",\n    \"description\": \"$.list[0].vod_content\"\n  },\n  \"episodes\": \"ul.anthology-list-play li a\"\n}\n\n// Paradigm B (novel)\n\"ruleToc\": {\n  \"chapterList\": \".chapter li a\",\n  \"chapterName\": \"@text\",\n  \"chapterUrl\": \"@href\",\n  \"nextTocUrl\": \"a:contains(下一页)@href\"\n}" },
-      { id: "content", title: "6. Content module (content / ruleContent)",
-        group: "modules",
-        body: "Loaded when opening a specific chapter:\n· Novel (Paradigm B): ruleContent.content extracts body text (@textNodes for clean text, nextContentUrl for paginated body).\n· Manga: chapters route/script returns the chapter list, then images module parses that chapter's image URLs.\n· Anime: video module resolves the playable video URL.",
-        fields: [
-          { k: "ruleContent.content", v: "Novel body selector, often #content@textNodes for paragraph text." },
-          { k: "ruleContent.nextContentUrl", v: "Next-page link of the body for continuous reading." },
-          { k: "chapters (manga)", v: "Returns chapter list, each with id and detail link, feeding images." },
-          { k: "images (manga)", v: "Returns that chapter's image URL array, decryption supported." }
-        ],
-        code: "\"ruleContent\": {\n  \"content\": \"#nr1@textNodes\",\n  \"title\": \"#nr_title@text\",\n  \"nextContentUrl\": \"a:contains(下一页)@href\"\n}\n\n// manga images (script returns image array)\n\"images\": {\n  \"type\": \"script\",\n  \"function\": \"parseImages\",\n  \"script\": \"function parseImages(html, context){ /* parse & decrypt */ return [url1, url2]; }\"\n}" },
-      { id: "player", title: "7. Video parsing (player / video)",
-        group: "modules",
-        body: "The core of anime sources. The video route gets the player page HTML, then a selector / script / WebView extracts the real video URL (m3u8 / mp4).\nThree ways: a declarative selector (e.g. //video/@src), embedded JS (overrides.type:\"script\"), or WebView rendering then extract (overrides.type:\"webview\" — common for m3u8 or when the page must execute JS to reveal the URL).\nIf the source provides danmaku, the video module can additionally return a danmaku API. Multi-line: if an episode has several addresses, the app offers a 'source switch'.",
-        fields: [
-          { k: "routes.video.url", v: "Player page URL (usually from episodes)." },
-          { k: "overrides.video.type", v: "How this endpoint is parsed: builtin / css / xpath / jsonpath / script / webview. Video often uses webview for m3u8." },
-          { k: "selectors.video", v: "Video URL selector, e.g. //video/@src or jsonpath (declarative mode)." },
-          { k: "__meta async", v: "When an API call is needed first, the script returns {__meta:true,__fetchUrl,...}; the engine prefetches then calls the processor (see section 10)." }
-        ],
-        code: "// Option A: declarative\n\"routes\": { \"video\": { \"url\": \"{url}\", \"method\": \"get\", \"responseType\": \"html\" } },\n\"parser\": { \"type\": \"hybrid\", \"overrides\": { \"video\": { \"type\": \"webview\" } } }\n\n// Option B: script fetches API then parses\nfunction parseVideo(html, context){\n  var api = extractApi(html);\n  return { __meta: true, __fetchUrl: api, __processor: \"__processVideo\" };\n}\nfunction __processVideo(json, context){\n  return json.url; // real play URL\n}" },
-      { id: "images", title: "8. Manga image parsing (images)",
-        group: "modules",
-        body: "The most common script module for manga. Sites often encrypt image URLs, so decryption lives in the script. The images function receives the detail/API data and returns that chapter's image URL array.\nNote: many KR/CN sites obfuscate image URLs with a custom algorithm — implement it here.",
-        fields: [
-          { k: "function", v: "Entry function name, e.g. parseImages, matching overrides.images.function." },
-          { k: "returns", v: "A string array, each element a full image URL." },
-          { k: "context.baseUrl", v: "Site baseUrl available in script to complete relative paths." }
-        ],
-        code: "function parseImages(raw, context){\n  var baseUrl = (context.baseUrl || '').replace(/\\/$/, '');\n  var urls = decrypt(raw);\n  return urls.map(function(u){ return u.indexOf('/')===0 ? baseUrl+u : u; });\n}" },
-      { id: "selector", title: "9. Selector syntax cheat-sheet",
-        group: "syntax",
-        body: "Parsing has two layers — the top-level parser.type and each API's overrides.type:\n· Top-level parser.type takes only three values: builtin (pure declarative), hybrid (declarative + per-API overrides, most common), script (all JS sandbox).\n· Each API can set overrides.type to decide how THAT endpoint is parsed: builtin / xpath / jsonpath / css (the four declarative sub-types share one engine) / script (JS sandbox) / webview (render in an embedded browser then extract — common for m3u8) / webview-html (WebView returns HTML then parsed — common for anti-bot search).\n\nThe declarative selector syntax is chosen by overrides.type:\n· jsonpath: starts with $, for JSON APIs (e.g. $.list[0].vod_name).\n· css: standard CSS selectors for HTML (e.g. .bookname a).\n· xpath: starts with // or ./, for HTML (e.g. //video/@src).\nNovel sources (Legado-compatible) add custom syntax: @text gets text, @href/@src get attributes, @textNodes gets clean body, || is a fallback selector, a:contains(text) filters by visible text, .0/.1/-1 picks the Nth.",
-        fields: [
-          { k: "top-level parser.type", v: "builtin / hybrid / script — the source-wide default." },
-          { k: "overrides.<api>.type", v: "per-API: builtin / xpath / jsonpath / css / script / webview / webview-html." },
-          { k: "$.field", v: "jsonpath, extract a JSON field." },
-          { k: ".class a@text", v: "css + @text gets element text." },
-          { k: "//video/@src", v: "xpath gets an attribute value." },
-          { k: "a:contains(下一页)@href", v: "novel: filter links by visible text." }
-        ],
-        code: "// top-level: hybrid + per-API type\n\"parser\": { \"type\": \"hybrid\", \"overrides\": {\n  \"search\": { \"type\": \"jsonpath\" },\n  \"video\": { \"type\": \"webview\" },\n  \"detail\": { \"type\": \"css\" }\n} }\n// jsonpath\n\"title\": \"$.vod_name\"\n// css (HTML)\n\"bookName\": \".bookname a@text\"\n// xpath (HTML)\n\"video\": \"//video/@src\"" },
-      { id: "script", title: "10. Embedded JS conventions",
-        group: "syntax",
-        body: "When declarative selectors are not enough, use parser.overrides to write JS. Each module can set type:'script' with a function name and script source.\n\nKey rules:\n1. Signature is fixed: parseXxx(html, context); html is the page string, context has baseUrl, log, etc.\n2. Must return synchronously (array or object).\n3. For async data, return the {__meta:true, __fetchUrl, __processor} protocol object; the engine prefetches that URL, then calls __processor synchronously — the only safe async channel.\n4. Never hardcode site constants into the app; keep everything in the source file.",
-        fields: [
-          { k: "function", v: "Entry function name, matching overrides.<module>.function." },
-          { k: "context.baseUrl", v: "Current source's base URL, for relative links." },
-          { k: "context.log", v: "Optional logger for debugging (context.log('msg'))." },
-          { k: "__meta protocol", v: "Async prefetch: return this object, engine calls __processor after fetch." }
-        ],
-        code: "\"parser\": {\n  \"type\": \"hybrid\",\n  \"overrides\": {\n    \"search\": {\n      \"type\": \"script\",\n      \"function\": \"parseList\",\n      \"script\": \"function parseList(html, context){ /* parse & return array */ return []; }\"\n    }\n  }\n}" },
-      { id: "example", title: "11. Full example (anime source skeleton)",
-        group: "practice",
-        body: "A minimal runnable anime source skeleton tying the modules together (note: an anime source MUST include a latest route). Replace example.com with a real site and the selectors with real rules, then import it.",
-        fields: null,
-        code: "{\n  \"id\": \"demo_anime\",\n  \"name\": \"Demo Anime\",\n  \"version\": 1,\n  \"type\": \"animeSource\",\n  \"site\": {\n    \"domain\": \"example.com\",\n    \"baseUrl\": \"https://example.com\",\n    \"mirrors\": [ { \"name\": \"main\", \"domain\": \"example.com\", \"baseUrl\": \"https://example.com\" } ]\n  },\n  \"parser\": { \"type\": \"hybrid\", \"overrides\": {\n    \"latest\": { \"type\": \"builtin\" },\n    \"search\": { \"type\": \"builtin\" },\n    \"detail\": { \"type\": \"builtin\" },\n    \"video\": { \"type\": \"webview\" }\n  } },\n  \"routes\": {\n    \"latest\": { \"url\": \"/api/latest?page={page}\", \"method\": \"get\", \"responseType\": \"json\" },\n    \"search\": { \"url\": \"/s?wd={keyword}&page={page}\", \"method\": \"get\", \"responseType\": \"json\" },\n    \"detail\": { \"url\": \"/detail/{id}\", \"method\": \"get\", \"responseType\": \"json\" },\n    \"video\": { \"url\": \"{url}\", \"method\": \"get\", \"responseType\": \"html\" }\n  },\n  \"selectors\": {\n    \"list\": \"$.list\",\n    \"title\": \"$.vod_name\",\n    \"cover\": \"$.vod_pic\",\n    \"id\": \"$.vod_id\",\n    \"detail\": { \"title\": \"$.vod_name\", \"cover\": \"$.vod_pic\" },\n    \"episodes\": \"ul li a\"\n  },\n  \"category\": { \"categoryEntries\": [ { \"id\": \"all\", \"title\": \"All\" } ] },\n  \"homeSections\": [ { \"id\": \"latest\", \"title\": \"Latest\", \"route\": \"latest\", \"style\": \"grid\", \"limit\": 18 } ]\n}" },
-      { id: "advanced", title: "12. Advanced: source-level network / comments / login (v0.4.0)",
-        group: "modules",
-        body: "Since v0.4.0 a source can also declare some 'site-level' capabilities, letting the app adapt to more complex sites without engine changes:\n· network (optional): source-level network override. Sub-keys proxy / dns / hosts / sni / ech, each set to 'inherit global' or a specific override. Defaults to global; invalid values only warn and never disable the source.\n· comments (optional): declares the source's comment capability. provider defaults to source (comments from the site); routes declares list / replies / post / reply / like / report (undeclared buttons are not rendered); selectors reuse the same JSONPath/CSS/XPath engine; login can declare a WebView login page and session check (checkCookie / checkUrl).\n· source auth: for sites that require login, a WebView can capture the session Cookie, or you can paste a Cookie manually; credentials stay local only.",
-        fields: [
-          { k: "network", v: "Source-level proxy / DNS / Hosts / SNI / ECH override; defaults to global." },
-          { k: "comments.provider / routes / selectors", v: "Declares site comments; routes.list is required when comments is set, others optional." },
-          { k: "comments.login", v: "WebView login page and session check (checkCookie / checkUrl) when login is required." },
-          { k: "precedence", v: "User override > source network block > global > default; applies instantly, no restart." }
-        ],
-        code: "\"network\": { \"proxy\": \"direct\", \"dns\": \"system\" },\n\"comments\": {\n  \"provider\": \"source\",\n  \"routes\": { \"list\": { \"url\": \"/api/comments?book={id}\", \"responseType\": \"json\" } },\n  \"selectors\": { \"items\": \"$.list\", \"content\": \"$.content\", \"author\": \"$.user\" }\n}" },
-      { id: "debug", title: "13. Debug & import",
-        group: "practice",
-        body: "How to verify after writing?\n1. Use browser DevTools (F12) to confirm the real page's HTML/JSON structure matches your selectors.\n2. In the app, 'Import Source' and paste the JSON. If parsing fails, check JSON format (escaped quotes and newlines).\n3. Script sources can use context.log() inside overrides to print intermediate results.\n4. Start with a minimal source that only gets one module working (e.g. search), then progressively add detail / video / images.\n5. Share: send the JSON to friends, or submit to the community source repo — anyone can import it with one tap.",
-        fields: [
-          { k: "Import", v: "App 'Source Management / Import Source' → paste or pick file." },
-          { k: "Common errors", v: "JSON syntax error, selector returns empty, relative link not joined to baseUrl, script throws." },
-          { k: "Upgrade", v: "Bump version; same-id sources auto-overwrite the old one on import." }
-        ],
-        code: null },
-      { id: "roadmap", title: "14. Roadmap (planned · community input welcome)",
-        group: "practice",
-        body: "The following are not yet implemented and are the focus areas for upcoming versions. Their design involves many trade-offs — share your thoughts on GitHub Discussions or Issues:\\n1. AI integration: AI-assisted source search, content summarization, watch/read assistants, natural-language search, etc.\\n2. Novel translation: a machine-translation pipeline with original/translated side-by-side, on-demand paragraph translation and caching.\\n3. Manga translation (MTL): machine-translated inset text / speech-bubble replacement to lower the barrier for cross-language manga.\\n4. Real-time video translation: subtitle / live-subtitle translation for video, with language switching for both external and embedded subtitles.\\n5. More sync backends: beyond the current Bangumi sync, integrate AniList, MyAnimeList, Trakt, SIMKL, MDList and more, with configurable cross-backend two-way sync and conflict policies.",
-        fields: null, code: null },
-      { id: "fields", title: "15. Complete Source Field Reference",
-        group: "practice",
-        body: "A fairly complete field cheat-sheet, grouped as top-level / site / parser / routes / selectors / advanced blocks. Everything except id, name, type, site and parser is optional; unknown keys (e.g. author / lang / builtin) are ignored by the model — do not treat them as functional fields.\n\nThe authoritative constraints live in lib/core/models/plugin_config.dart; this table covers the fields used most often when writing a source.",
-        fields: [
-          { k: "id", v: "Required. Unique source id (e.g. domain_typename to avoid collisions); same id is upgraded/skipped by version." },
-          { k: "name", v: "Required. Display name." },
-          { k: "version", v: "Integer version (default 1). On import, only >= installed version overwrites; < installed version is skipped." },
-          { k: "type", v: "Required. animeSource (video/anime) / mangaSource (manga) / novelSource (novel)." },
-          { k: "responseType", v: "Optional. json | html, sets the default parse engine; overridable per-route." },
-          { k: "useWebview", v: "Optional bool. true = render the whole source via WebView before extraction (good for anti-bot sites)." },
-          { k: "site.domain", v: "Required. Site main domain." },
-          { k: "site.baseUrl", v: "Required. Site root used to resolve relative links." },
-          { k: "site.userAgent / cookies / headers", v: "Optional. Global request UA / cookies / custom headers." },
-          { k: "site.mirrors[]", v: "Optional. Mirror list, each {name, domain, baseUrl}." },
-          { k: "site.publishPageUrl / publishMirrorSelector", v: "Optional. Fallback publish page and mirror-extraction rule (regex or CSS) when the main domain dies." },
-          { k: "parser.type", v: "Required. builtin / hybrid / script — the source-wide default parse mode." },
-          { k: "parser.overrides.<api>", v: "Optional. Per-API parse mode: builtin / xpath / jsonpath / css / script / webview / webview-html." },
-          { k: "parser.script / entrypoints", v: "Optional. JS source and entry-function map for script mode." },
-          { k: "routes.<name>", v: "Optional. Endpoint addresses; string form or {url, method, headers, params, responseType, parser}; {keyword}/{page}/{id}/{url} placeholders auto-replaced." },
-          { k: "selectors", v: "Optional. Declarative selectors (JSONPath / CSS / XPath), used with parser.overrides." },
-          { k: "category.dynamicCategories / categoryEntries", v: "Optional. Dynamic category inference or static category table [{id,title}]." },
-          { k: "homeSections[]", v: "Optional. Home sections: {id, title, route, style, limit}; falls back to a single 'latest' block when omitted." },
-          { k: "filters", v: "Optional. Dynamic filters: groups, byCategory (per-category override), defaults (category default params)." },
-          { k: "stealthMode", v: "Optional bool. More aggressive anti-detection request strategy." },
-          { k: "antiHotlinking.referer / headers / userAgent", v: "Optional. Anti-hotlink: add Referer / headers / specific UA." },
-          { k: "webviewConfig.adblock / timeoutSeconds", v: "Optional. WebView adblock toggle and timeout (default true / 20s)." },
-          { k: "comments", v: "Optional. Comments config: provider(source/bangumi), routes(list required; replies/post/reply/like/report optional), selectors, login(WebView login page + checkCookie/checkUrl)." },
-          { k: "network", v: "Optional. Source-level network override: proxy / dns / hosts / sni / ech; inherits global by default, invalid values only warn." },
-          { k: "announcement", v: "Optional. Source announcement: {title, body?, url?, updatedAt?}." },
-          { k: "webFavorite", v: "Optional. Web favorites: enabled / title / route / url / addRoute / addUrl / requireLogin; when present, the 'Web Favorites' tab shows in browse." },
-          { k: "ageRating", v: "Optional. Age rating: general (all) / teen (13+/16+) / mature (18+). Aliases like all/16/r18/nsfw accepted; default general. mature is hidden by default." },
-          { k: "deprecated / migrationMessage", v: "Optional. Mark deprecated and show a migration hint." },
-          { k: "enabled / enabledExplore / isHidden", v: "Optional bool. Enabled / shown in explore / hidden." }
-        ],
-        code: "// Top-level field skeleton (illustrative, not a full source)\n{\n  \"id\": \"demo_anime\",\n  \"name\": \"Demo Anime\",\n  \"version\": 1,\n  \"type\": \"animeSource\",\n  \"responseType\": \"json\",\n  \"useWebview\": false,\n  \"site\": { \"domain\": \"example.com\", \"baseUrl\": \"https://example.com\" },\n  \"parser\": { \"type\": \"hybrid\", \"overrides\": { \"video\": { \"type\": \"webview\" } } },\n  \"routes\": { \"latest\": { \"url\": \"/api/latest?page={page}\" } },\n  \"ageRating\": \"general\",\n  \"webFavorite\": { \"route\": \"fav\", \"addRoute\": \"fav_add\" },\n  \"network\": { \"proxy\": \"direct\" }\n}" }
-    ]
-  }
-};
+  "zh": [
+    {
+      "id": "overview",
+      "title": "一、源文件是什么",
+      "group": "basic",
+      "body": "源（Source）是一个 JSON 文件，它描述了「如何去某个网站抓取动漫 / 漫画 / 小说 / 影视」。NexHub 只提供通用引擎，所有站点专属的解析逻辑都写在这个文件里——这就是「源即插件」。\n\n应用内置一个 JS 沙箱：能用声明式选择器（jsonpath / css / xpath）直接抽取字段，也能在源里内嵌 JavaScript 处理复杂页面。你写的源文件，别人一键就能导入使用，无需更新整个 App。",
+      "fields": null,
+      "code": null
+    },
+    {
+      "id": "basic",
+      "title": "二、基础字段（每个源都有）",
+      "group": "basic",
+      "body": "每个源的「头部」都是这些通用字段。填好后 App 才能识别、管理与升级你的源。\n\n注意：源模型不会读取 author / lang / builtin 这三个键——写进文件也会被忽略，请勿把它们当作功能字段。\n\n年龄分级（ageRating）也属于基础字段：可填 general（全年龄）/ teen（青少年 16+）/ mature（成人 18+），兼容别名如 all / 16 / r18 / nsfw 等；缺省为 general。mature 在默认设置下会自动对未开启年龄确认的用户隐藏。\n\n解析方式（parser.type）的详细取值见第十二、十三节。",
+      "fields": [
+        {
+          "k": "id",
+          "v": "唯一标识，如 manga_goda。同名源按 version 决定升级/跳过，请避免与他人重复。"
+        },
+        {
+          "k": "name",
+          "v": "显示名称，如「GoDa漫画」。"
+        },
+        {
+          "k": "version",
+          "v": "整数版本号（会被强制转为整数，默认 1）。同名源按版本号升级/跳过。"
+        },
+        {
+          "k": "type",
+          "v": "媒体类型：animeSource（影视/动漫）/ mangaSource（漫画）/ novelSource（小说）。"
+        },
+        {
+          "k": "site",
+          "v": "站点信息对象（必填）：domain、baseUrl（站点根地址，用于拼接相对链接）、mirrors 镜像站列表，可选 userAgent / cookies / headers。"
+        },
+        {
+          "k": "parser",
+          "v": "解析配置：{ type, overrides?, script? }。type 取 builtin / hybrid / script。"
+        },
+        {
+          "k": "ageRating",
+          "v": "可选。年龄分级 general / teen / mature；缺省 general，mature 默认隐藏。"
+        },
+        {
+          "k": "enabled",
+          "v": "可选，是否启用（默认 true）。"
+        }
+      ],
+      "code": "{\n  \"id\": \"demo_anime\",\n  \"name\": \"演示动漫\",\n  \"version\": 1,\n  \"type\": \"animeSource\",\n  \"ageRating\": \"general\",\n  \"site\": {\n    \"domain\": \"example.com\",\n    \"baseUrl\": \"https://example.com\",\n    \"mirrors\": [ { \"name\": \"主站\", \"domain\": \"example.com\", \"baseUrl\": \"https://example.com\" } ]\n  },\n  \"parser\": { \"type\": \"hybrid\", \"overrides\": { \"latest\": { \"type\": \"builtin\" } } }\n}"
+    },
+    {
+      "id": "search",
+      "title": "三、搜索模块（search / ruleSearch）",
+      "group": "intermediate",
+      "body": "用户点击搜索框输入关键词时触发。两种范式：\n· 影视/漫画（范式A）：在 routes 里定义 search 的 url（含 {keyword} 占位），selectors 或 script 把结果列表抽出来。\n· 小说（范式B，Legado 兼容）：用 ruleSearch 字段以 CSS 选择器声明每条结果的书名、作者、封面、详情链接。\n返回字段通常含：id（详情页标识）、title、cover、detailUrl。",
+      "fields": [
+        {
+          "k": "routes.search.url",
+          "v": "范式A：搜索接口，{keyword} 为关键词、{page} 为页码。"
+        },
+        {
+          "k": "selectors.list / bookList",
+          "v": "结果容器选择器（jsonpath 或 css）。"
+        },
+        {
+          "k": "selectors.title / bookName",
+          "v": "书名/标题字段。"
+        },
+        {
+          "k": "selectors.cover / bookCoverUrl",
+          "v": "封面图地址，相对路径会自动拼接 baseUrl。"
+        },
+        {
+          "k": "selectors.id / bookUrl",
+          "v": "用于后续打开详情页的标识或链接。"
+        }
+      ],
+      "code": "// 范式A：routes + selectors（影视）\n\"routes\": {\n  \"search\": { \"url\": \"/s?wd={keyword}&page={page}\", \"method\": \"get\", \"responseType\": \"json\" }\n},\n\"selectors\": {\n  \"list\": \"$.list\",\n  \"title\": \"$.vod_name\",\n  \"cover\": \"$.vod_pic\",\n  \"id\": \"$.vod_id\"\n}\n\n// 范式B：小说 ruleSearch（Legado 兼容）\n\"ruleSearch\": {\n  \"bookList\": \".bookbox\",\n  \"bookName\": \".bookname a@text\",\n  \"bookAuthor\": \".author@text\",\n  \"bookCoverUrl\": \".bookimg img@src\",\n  \"bookUrl\": \".bookname a@href\"\n}"
+    },
+    {
+      "id": "discovery",
+      "title": "四、发现 / 分类模块（discovery / ruleExplore）",
+      "group": "intermediate",
+      "body": "「首页」与「按分类浏览」使用此模块。范式A 用 latest/explore/category 路由 + categoryEntries 分类表；范式B 用 ruleExplore + exploreUrl（每行「分类名::链接」）。\n首页板块由 homeSections 定义（标题、路由、样式 grid/list、数量）。",
+      "fields": [
+        {
+          "k": "category.categoryEntries",
+          "v": "范式A：分类数组，每项 {id, title}，点击后拼接进 category 路由。"
+        },
+        {
+          "k": "homeSections",
+          "v": "首页展示的板块（最新更新、热门等），引用某个路由并限制条数。"
+        },
+        {
+          "k": "exploreUrl",
+          "v": "范式B：换行分隔的「分类名::URL」，用于发现页。"
+        }
+      ],
+      "code": "\"category\": {\n  \"categoryEntries\": [\n    { \"id\": \"all\", \"title\": \"全部\" },\n    { \"id\": \"1\", \"title\": \"动漫\" },\n    { \"id\": \"2\", \"title\": \"剧场版\" }\n  ]\n},\n\"homeSections\": [\n  { \"id\": \"latest\", \"title\": \"最新更新\", \"route\": \"latest\", \"style\": \"grid\", \"limit\": 18 }\n]"
+    },
+    {
+      "id": "detail",
+      "title": "五、详情 / 目录模块（detail / ruleBookInfo）",
+      "group": "intermediate",
+      "body": "点开一部作品时加载。负责：标题、封面、简介、作者/主演、标签、状态、目录（章节/话数）列表。\n范式A 用 detail 路由 + selectors.detail 与 episodes 选择器；范式B 用 ruleBookInfo（作品信息）+ ruleToc（章节列表，含 chapterList / chapterName / chapterUrl）。",
+      "fields": [
+        {
+          "k": "selectors.detail",
+          "v": "范式A：对象，逐字段抽取标题/封面/简介/演员等。"
+        },
+        {
+          "k": "selectors.episodes",
+          "v": "范式A：章节链接选择器，如 ul li a。"
+        },
+        {
+          "k": "ruleBookInfo.tocUrl",
+          "v": "范式B：进入目录页的链接；留空则详情页本身即目录。"
+        },
+        {
+          "k": "ruleToc.chapterList",
+          "v": "范式B：章节项选择器；nextTocUrl 支持目录分页。"
+        }
+      ],
+      "code": "// 范式A\n\"selectors\": {\n  \"detail\": {\n    \"title\": \"$.list[0].vod_name\",\n    \"cover\": \"$.list[0].vod_pic\",\n    \"description\": \"$.list[0].vod_content\"\n  },\n  \"episodes\": \"ul.anthology-list-play li a\"\n}\n\n// 范式B（小说）\n\"ruleToc\": {\n  \"chapterList\": \".chapter li a\",\n  \"chapterName\": \"@text\",\n  \"chapterUrl\": \"@href\",\n  \"nextTocUrl\": \"a:contains(下一页)@href\"\n}"
+    },
+    {
+      "id": "content",
+      "title": "六、正文 / 章节内容模块（content / ruleContent）",
+      "group": "intermediate",
+      "body": "打开具体一章时加载：\n· 小说（范式B）：ruleContent.content 抽取正文文本（可用 @textNodes 取干净文本，nextContentUrl 支持正文分页）。\n· 漫画：先由 chapters 路由/脚本拿到话列表，再由 images 模块解析出该话的图片地址数组。\n· 影视：由 video 模块解析出可播放的视频地址。",
+      "fields": [
+        {
+          "k": "ruleContent.content",
+          "v": "小说正文选择器，常用 #content@textNodes 取段落文本。"
+        },
+        {
+          "k": "ruleContent.nextContentUrl",
+          "v": "正文「下一页」链接，自动连读。"
+        },
+        {
+          "k": "chapters（漫画）",
+          "v": "返回话列表，每项含 id 与详情链接，供 images 使用。"
+        },
+        {
+          "k": "images（漫画）",
+          "v": "返回该话的图片 URL 数组，支持解密函数。"
+        }
+      ],
+      "code": "\"ruleContent\": {\n  \"content\": \"#nr1@textNodes\",\n  \"title\": \"#nr_title@text\",\n  \"nextContentUrl\": \"a:contains(下一页)@href\"\n}\n\n// 漫画 images（脚本返回图片数组）\n\"images\": {\n  \"type\": \"script\",\n  \"function\": \"parseImages\",\n  \"script\": \"function parseImages(html, context){ /* 解析并解密图片URL */ return [url1, url2]; }\"\n}"
+    },
+    {
+      "id": "player",
+      "title": "七、视频解析模块（player / video）",
+      "group": "intermediate",
+      "body": "影视源的核心。由 video 路由拿到播放页 HTML，再用选择器 / 脚本 / WebView 抽出真实视频地址（m3u8 / mp4）。\n三种解析方式：声明式选择器（如 //video/@src）、内嵌 JS（overrides.type:\"script\"）、或 WebView 渲染后抽取（overrides.type:\"webview\"，常用于 m3u8 或需要执行页面 JS 才能拿到地址的场景）。\n弹幕（danmaku）若源站提供，可在 video 模块额外返回弹幕接口地址。多线路：在 episodes 里若同一集有多个解析地址，App 会自动提供「线路切换」。\n异步数据：需先请求接口再解析时，脚本返回 {__meta:true,__fetchUrl,...}，由引擎预取后再调用处理函数（详见第十三节）。",
+      "fields": [
+        {
+          "k": "routes.video.url",
+          "v": "播放页地址（通常为 episodes 取出的链接）。"
+        },
+        {
+          "k": "overrides.video.type",
+          "v": "该接口解析方式：builtin / css / xpath / jsonpath / script / webview。视频常用 webview 提取 m3u8。"
+        },
+        {
+          "k": "selectors.video",
+          "v": "视频地址选择器，如 //video/@src 或 jsonpath 抽取（声明式时）。"
+        },
+        {
+          "k": "__meta 异步",
+          "v": "需先请求接口再解析时，脚本返回 {__meta:true,__fetchUrl,...}，由引擎预取后再调用处理函数（详见第十三节）。"
+        }
+      ],
+      "code": "// 方式一：声明式\n\"routes\": { \"video\": { \"url\": \"{url}\", \"method\": \"get\", \"responseType\": \"html\" } },\n\"parser\": { \"type\": \"hybrid\", \"overrides\": { \"video\": { \"type\": \"webview\" } } }\n\n// 方式二：脚本先抓取接口再解析\nfunction parseVideo(html, context){\n  var api = extractApi(html);\n  return { __meta: true, __fetchUrl: api, __processor: \"__processVideo\" };\n}\nfunction __processVideo(json, context){\n  return json.url; // 返回真实播放地址\n}"
+    },
+    {
+      "id": "images",
+      "title": "八、漫画图片解析（images）",
+      "group": "intermediate",
+      "body": "漫画源最常用的脚本模块。站点常对图片地址加密，需要在脚本里解密。images 函数接收详情页/接口数据，返回该话的图片 URL 数组。\n注意：很多韩漫/国漫站把图片地址用自定义算法混淆，解密逻辑就写在这里。",
+      "fields": [
+        {
+          "k": "function",
+          "v": "入口函数名，如 parseImages，与 overrides.images.function 对应。"
+        },
+        {
+          "k": "返回",
+          "v": "字符串数组，每个元素是一张图片的完整 URL。"
+        },
+        {
+          "k": "context.baseUrl",
+          "v": "脚本内可用的站点 baseUrl，用于补全相对路径。"
+        }
+      ],
+      "code": "function parseImages(raw, context){\n  var baseUrl = (context.baseUrl || '').replace(/\\/$/, '');\n  // 解密 raw 得到真实地址列表\n  var urls = decrypt(raw);\n  return urls.map(function(u){ return u.indexOf('/')===0 ? baseUrl+u : u; });\n}"
+    },
+    {
+      "id": "webfavorite",
+      "title": "九、网络收藏（webFavorite）",
+      "group": "intermediate",
+      "body": "如果你的源站本身提供「我的书架 / 收藏」这类网页，可以声明 webFavorite，让 App 在在线浏览页多出一个「网络收藏」Tab。用户在这里看到的收藏来自源站账号（需登录），不是 App 本地收藏。\n\n声明方式：在源顶层加 webFavorite 对象。enabled 默认 true；title 为该 Tab 的显示名；route / url 是「查看收藏列表」的路由或地址；addRoute / addUrl 是「加入收藏」的路由或地址，支持 {id} / {detailUrl} / {title} 占位符（自动替换为当前作品的标识 / 详情链接 / 标题）；requireLogin 为 true 时要求先登录才能访问。\n\n注意：webFavorite 与 App 本地收藏相互独立——本地收藏由 App 管理，网络收藏走源站接口。",
+      "fields": [
+        {
+          "k": "enabled",
+          "v": "可选，是否启用网络收藏 Tab（默认 true）。"
+        },
+        {
+          "k": "title",
+          "v": "可选，Tab 显示名，如「我的书架」。"
+        },
+        {
+          "k": "route / url",
+          "v": "查看收藏列表的路由名或完整地址；二选一，route 需在 routes 中定义。"
+        },
+        {
+          "k": "addRoute / addUrl",
+          "v": "加入收藏的路由或地址，支持 {id} / {detailUrl} / {title} 占位符。"
+        },
+        {
+          "k": "requireLogin",
+          "v": "可选，true 时要求先登录源站。"
+        }
+      ],
+      "code": "\"webFavorite\": {\n  \"title\": \"我的书架\",\n  \"route\": \"webFavorite\",\n  \"url\": \"/user/bookshelf\",\n  \"addUrl\": \"/user/favorite/add?id={id}\",\n  \"requireLogin\": true\n}"
+    },
+    {
+      "id": "announcement",
+      "title": "十、源公告（announcement）",
+      "group": "intermediate",
+      "body": "源作者可以用 announcement 给使用该源的用户发布一条公告（如「站点换域名，请更新源」）。公告会以横幅（banner）形式展示在源的首页与详情页顶部。\n\nannouncement 是源顶层的可选对象：title 为必填（公告标题）；body 为可选正文；url 为可选「查看详情」链接；updatedAt 为可选更新时间（Unix 秒，用于显示「几天前」）。不填 url 时，整条公告不可点击。",
+      "fields": [
+        {
+          "k": "title",
+          "v": "必填，公告标题。"
+        },
+        {
+          "k": "body",
+          "v": "可选，公告正文。"
+        },
+        {
+          "k": "url",
+          "v": "可选，点击公告跳转的链接（如迁移说明页）。"
+        },
+        {
+          "k": "updatedAt",
+          "v": "可选，更新时间，Unix 秒级时间戳。"
+        }
+      ],
+      "code": "\"announcement\": {\n  \"title\": \"站点已更换域名\",\n  \"body\": \"旧域名 example-old.com 已停用，请更新到新域名。\",\n  \"url\": \"https://example.com/notice\",\n  \"updatedAt\": 1700000000\n}"
+    },
+    {
+      "id": "schedule",
+      "title": "十一、周期表 / 周更列表（schedule）",
+      "group": "intermediate",
+      "body": "想让源在首页展示「周更表 / 时间表」（周一到周日每天更新了哪些作品）？用 homeSections 里 style 为 schedule 的板块即可，App 会按星期分组渲染。\n\n做法：\n1) 在 homeSections 加一项 { id, title, route:'week', style:'schedule', limit:0, more:false }。route 名字可自定（这里用 week）。\n2) 在 routes 里定义同名的 week 路由，其返回结果需带「星期」字段（App 按该字段把作品分到周一到周日）。\n\n这样用户打开源首页就能看到按星期排列的更新表。limit:0 表示不限制条数；more:false 表示不显示「查看更多」。",
+      "fields": [
+        {
+          "k": "homeSections[].style",
+          "v": "设为 'schedule' 即开启周期表板块。"
+        },
+        {
+          "k": "homeSections[].route",
+          "v": "周期表数据的路由名（需与 routes 中的定义一致）。"
+        },
+        {
+          "k": "routes.week",
+          "v": "返回带星期字段的列表；App 据此分到周一~周日。"
+        },
+        {
+          "k": "limit / more",
+          "v": "limit:0 不限制条数；more:false 隐藏「查看更多」。"
+        }
+      ],
+      "code": "\"homeSections\": [\n  { \"id\": \"week\", \"title\": \"周更列表\", \"route\": \"week\", \"style\": \"schedule\", \"limit\": 0, \"more\": false }\n],\n\"routes\": {\n  \"week\": { \"url\": \"/api/weekly\", \"method\": \"get\", \"responseType\": \"json\" }\n}"
+    },
+    {
+      "id": "selector",
+      "title": "十二、选择器语法速查",
+      "group": "advanced",
+      "body": "解析方式分「顶层 parser.type」与「每个 API 的 overrides.type」两层：\n· 顶层 parser.type 只取三种：builtin（纯声明式）、hybrid（声明式 + 按 API 用 overrides 覆盖，最常用）、script（全部走 JS 沙箱）。\n· 每个 API 可在 overrides 里指定 overrides.type，决定该接口实际怎么解析：builtin / xpath / jsonpath / css（四种声明式子类型，归入同一套抽取引擎）/ script（JS 沙箱）/ webview（用内嵌浏览器渲染后抽取，常用于 m3u8 提取）/ webview-html（WebView 取回 HTML 再走解析，常用于反爬搜索）。\n\n声明式选择器语法按 overrides.type 选一种：\n· jsonpath：以 $ 开头，适合 JSON 接口（如 $.list[0].vod_name）。\n· css：标准 CSS 选择器，适合 HTML（如 .bookname a）。\n· xpath：以 // 或 ./ 开头，适合 HTML（如 //video/@src）。\n小说源（Legado 兼容）额外支持「自定义语法」：@text 取文本、@href/@src 取属性、@textNodes 取干净正文、|| 为回退选择器、a:contains(文字) 按文本筛选、用 .0/.1/-1 取第 N 个。",
+      "fields": [
+        {
+          "k": "顶层 parser.type",
+          "v": "builtin / hybrid / script 三选一，决定整源默认解析方式。"
+        },
+        {
+          "k": "overrides.<api>.type",
+          "v": "每个 API 单独指定：builtin / xpath / jsonpath / css / script / webview / webview-html。"
+        },
+        {
+          "k": "$.field",
+          "v": "jsonpath，抽取 JSON 字段。"
+        },
+        {
+          "k": ".class a@text",
+          "v": "css + @text 取元素文本。"
+        },
+        {
+          "k": "//video/@src",
+          "v": "xpath 取属性值。"
+        },
+        {
+          "k": "a:contains(下一页)@href",
+          "v": "小说源：按可见文本筛选链接。"
+        }
+      ],
+      "code": "// 顶层：hybrid + 各 API 指定解析方式\n\"parser\": { \"type\": \"hybrid\", \"overrides\": {\n  \"search\": { \"type\": \"jsonpath\" },\n  \"video\": { \"type\": \"webview\" },\n  \"detail\": { \"type\": \"css\" }\n} }\n// jsonpath\n\"title\": \"$.vod_name\"\n// css（HTML）\n\"bookName\": \".bookname a@text\"\n// xpath（HTML）\n\"video\": \"//video/@src\""
+    },
+    {
+      "id": "script",
+      "title": "十三、内嵌 JS 脚本约定",
+      "group": "advanced",
+      "body": "当声明式选择器搞不定时，用 parser.overrides 写 JS。每个模块可指定 type:\"script\" 并给出 function 名与 script 源码。\n\n重要约定：\n1. 函数签名固定为 parseXxx(html, context)，html 为页面字符串，context 含 baseUrl、log 等。\n2. 必须同步返回结果（数组或对象）。\n3. 需要异步数据时，返回 {__meta:true, __fetchUrl, __processor} 协议对象，引擎会先预取该 URL，再调用 __processor 同步处理函数——这是唯一安全的异步通道。\n4. 不要写死任何站点常量到 App，全部留在源文件。",
+      "fields": [
+        {
+          "k": "function",
+          "v": "入口函数名，与 overrides.<module>.function 对应。"
+        },
+        {
+          "k": "context.baseUrl",
+          "v": "当前源的主站地址，补全相对链接用。"
+        },
+        {
+          "k": "context.log",
+          "v": "可选日志函数，便于调试（context.log('msg')）。"
+        },
+        {
+          "k": "__meta 协议",
+          "v": "异步预取：返回该对象，引擎取数后回调 __processor。"
+        }
+      ],
+      "code": "\"parser\": {\n  \"type\": \"hybrid\",\n  \"overrides\": {\n    \"search\": {\n      \"type\": \"script\",\n      \"function\": \"parseList\",\n      \"script\": \"function parseList(html, context){ /* 解析并返回数组 */ return []; }\"\n    }\n  }\n}"
+    },
+    {
+      "id": "advanced",
+      "title": "十四、进阶：源级网络 / 评论 / 登录（v0.4.0）",
+      "group": "advanced",
+      "body": "v0.4.0 起，源还能声明一些「站点级」能力，让 App 在不改引擎的前提下适配更复杂的站点：\n· network（可选）：源级网络覆盖。子键 proxy / dns / hosts / sni / ech，逐项选「继承全局」或「单独覆盖」。缺省即继承全局设置，非法值只告警、不会让源无法启用。\n· comments（可选）：声明该源的评论能力。provider 默认 source（评论来自源站）；routes 声明 list / replies / post / reply / like / report 等路由（未声明的按钮不渲染）；selectors 用同一套 JSONPath/CSS/XPath 引擎抽取内容；login 可声明 WebView 登录页与登录态校验（checkCookie / checkUrl）。\n· 源登录鉴权：对需登录的站点，可用 WebView 捕获会话 Cookie 或手动粘贴 Cookie，凭据仅存本地。",
+      "fields": [
+        {
+          "k": "network",
+          "v": "源级代理 / DNS / Hosts / SNI / ECH 覆盖；缺省继承全局设置。"
+        },
+        {
+          "k": "comments.provider / routes / selectors",
+          "v": "声明源站评论；routes.list 为必需（声明 comments 时），其余按需。"
+        },
+        {
+          "k": "comments.login",
+          "v": "需登录时的 WebView 登录页与登录态校验（checkCookie / checkUrl）。"
+        },
+        {
+          "k": "生效优先级",
+          "v": "用户覆盖 > 源 network 块 > 全局设置 > 默认值；改完即时生效，无需重启。"
+        }
+      ],
+      "code": "\"network\": { \"proxy\": \"direct\", \"dns\": \"system\" },\n\"comments\": {\n  \"provider\": \"source\",\n  \"routes\": { \"list\": { \"url\": \"/api/comments?book={id}\", \"responseType\": \"json\" } },\n  \"selectors\": { \"items\": \"$.list\", \"content\": \"$.content\", \"author\": \"$.user\" }\n}"
+    },
+    {
+      "id": "collection",
+      "title": "十五、采集 API 接口说明",
+      "group": "advanced",
+      "body": "「采集 API」指的是一个源对外暴露的「抓取接口集合」——也就是 routes 里定义的一个个端点（search / latest / detail / video / images …），以及每个端点用 selectors 或 overrides 声明的抽取规则。App 的引擎按这套约定逐个调用端点、把站点数据变成统一结构。\n\n端点与覆盖层：\n· 每个端点先在 routes 里定义 url（支持 {keyword}/{page}/{id}/{url}/{detailUrl} 占位符）、method、responseType、headers、params。\n· 抽取方式由 parser.overrides.<端点> 决定：builtin / xpath / jsonpath / css / script / webview / webview-html。\n· 声明式端点用 selectors.<端点> 指定选择器；脚本端点用 overrides.<端点>.script 提供函数。\n\n异步协议 __meta：当端点需要先请求另一个接口才能解析（例如视频先调 API 拿真实地址），脚本返回 { __meta:true, __fetchUrl, __processor }。引擎会先预取 __fetchUrl，再把结果交给 __processor 同步处理。这是沙箱里唯一安全的异步通道。\n\n常用端点一览：search（搜索）、latest（最新）、explore / category（发现/分类）、detail（详情+目录）、episodes（剧集列表）、video（视频地址）、chapters（漫画话列表）、images（漫画图片）、week（周更表）。具体字段名见各模块小节与「源字段完整参考」。",
+      "fields": [
+        {
+          "k": "routes.<name>",
+          "v": "端点地址与方法；占位符 {keyword}/{page}/{id}/{url} 自动替换。"
+        },
+        {
+          "k": "parser.overrides.<name>",
+          "v": "该端点的解析方式：builtin / xpath / jsonpath / css / script / webview / webview-html。"
+        },
+        {
+          "k": "selectors.<name>",
+          "v": "声明式端点的抽取选择器。"
+        },
+        {
+          "k": "__meta 协议",
+          "v": "脚本端点需要二次请求时返回 {__meta:true,__fetchUrl,__processor}。"
+        }
+      ],
+      "code": "// 一个端点的完整声明（routes + overrides + selectors）\n\"routes\": {\n  \"search\": { \"url\": \"/s?wd={keyword}&page={page}\", \"method\": \"get\", \"responseType\": \"json\" }\n},\n\"parser\": { \"type\": \"hybrid\", \"overrides\": { \"search\": { \"type\": \"jsonpath\" } } },\n\"selectors\": { \"list\": \"$.list\", \"title\": \"$.vod_name\", \"cover\": \"$.vod_pic\", \"id\": \"$.vod_id\" }\n\n// 需二次请求的视频端点\nfunction parseVideo(html, context){\n  var api = extractApi(html);\n  return { __meta: true, __fetchUrl: api, __processor: \"__processVideo\" };\n}\nfunction __processVideo(json, context){ return json.url; }"
+    },
+    {
+      "id": "example_novel",
+      "title": "十六、完整示例：小说源（Legado 兼容）",
+      "group": "advanced",
+      "body": "下面是一个完整可运行的小说源示例（Legado 兼容格式）。注意：小说源【不】使用 id / name / type / site 这些顶层字段，而是用 bookSourceName / bookSourceUrl / bookSourceType / ruleSearch / ruleToc / ruleContent / ruleBookInfo 等 Legado 字段；解析通过 parser.overrides.content 的脚本处理正文。把 example.com 换成真实站点、选择器换成真实规则即可导入。",
+      "fields": null,
+      "code": "{\n  \"bookSourceName\": \"演示小说\",\n  \"bookSourceUrl\": \"https://m.example.com\",\n  \"bookSourceType\": 0,\n  \"enabledExplore\": true,\n  \"enabledSearch\": true,\n  \"exploreUrl\": \"玄幻小说::https://m.example.com/xuanhuan/\\n都市小说::https://m.example.com/dushi/\",\n  \"bookSourceGroup\": \"内置书源\",\n  \"concurrentRate\": 0,\n  \"ruleSearch\": {\n    \"bookList\": \".bookbox\",\n    \"bookName\": \".bookname a@text\",\n    \"bookAuthor\": \".author@text\",\n    \"bookCoverUrl\": \".bookimg img@src\",\n    \"bookUrl\": \".bookname a@href\",\n    \"bookLastChapter\": \".update a@text\"\n  },\n  \"ruleExplore\": {\n    \"bookList\": \".bookbox\",\n    \"bookName\": \".bookname a@text\",\n    \"bookAuthor\": \".author@text\",\n    \"bookCoverUrl\": \".bookimg img@src\",\n    \"bookUrl\": \".bookname a@href\"\n  },\n  \"ruleBookInfo\": {\n    \"name\": \"h1@text\",\n    \"author\": \"p:contains(作者)@text\",\n    \"coverUrl\": \".block_img2 img@src\",\n    \"intro\": \".intro_info@text\",\n    \"tocUrl\": \"a[href^=\\\"/book_\\\"]@href\",\n    \"lastChapter\": \"p:contains(最新) a@text\",\n    \"bookStatus\": \"p:contains(状态) span@text\"\n  },\n  \"ruleToc\": {\n    \"chapterList\": \"a[href^=\\\"/book_\\\"][href$=\\\".html\\\"]\",\n    \"chapterName\": \"@text\",\n    \"chapterUrl\": \"@href\",\n    \"nextTocUrl\": \"a:contains(下一页)@href\"\n  },\n  \"ruleContent\": {\n    \"content\": \"#nr1@html\",\n    \"title\": \"#nr_title@text\",\n    \"nextContentUrl\": \"a:contains(下一章)@href\"\n  },\n  \"parser\": {\n    \"type\": \"hybrid\",\n    \"overrides\": {\n      \"content\": {\n        \"type\": \"script\",\n        \"function\": \"parseContent\",\n        \"script\": \"function parseContent(html, context){ var raw = context.dom.queryHtml(html, '#nr1') || context.dom.queryHtml(html, '#content') || ''; raw = raw.replace(/<script.*?<\\/script>/gi, ''); return context.content.clean(raw); }\"\n      }\n    }\n  },\n  \"bookSourceComment\": \"演示小说源，正文为纯 HTML\"\n}"
+    },
+    {
+      "id": "example_media",
+      "title": "十七、完整示例：影视源（animeSource）",
+      "group": "advanced",
+      "body": "下面是一个完整可运行的影视源示例（animeSource）。影视源核心在 video 端点：这里用 webview 方式抽取真实播放地址（适合 m3u8 / 需执行页面 JS 才能拿到地址的站点）。注意 anime 源必须包含 latest 路由。把 example.com 换成真实站点即可导入。",
+      "fields": null,
+      "code": "{\n  \"id\": \"demo_anime\",\n  \"name\": \"演示影视\",\n  \"version\": 1,\n  \"type\": \"animeSource\",\n  \"responseType\": \"json\",\n  \"useWebview\": true,\n  \"site\": {\n    \"domain\": \"example.com\",\n    \"baseUrl\": \"https://example.com\",\n    \"mirrors\": [ { \"name\": \"主站\", \"domain\": \"example.com\", \"baseUrl\": \"https://example.com\" } ]\n  },\n  \"parser\": {\n    \"type\": \"hybrid\",\n    \"overrides\": {\n      \"latest\": { \"type\": \"builtin\" },\n      \"search\": { \"type\": \"builtin\" },\n      \"detail\": { \"type\": \"builtin\" },\n      \"episodes\": { \"type\": \"builtin\" },\n      \"video\": { \"type\": \"webview\" }\n    }\n  },\n  \"routes\": {\n    \"latest\": { \"url\": \"/api/latest?page={page}\", \"method\": \"get\", \"responseType\": \"json\" },\n    \"search\": { \"url\": \"/s?wd={keyword}&page={page}\", \"method\": \"get\", \"responseType\": \"json\" },\n    \"detail\": { \"url\": \"/detail/{id}\", \"method\": \"get\", \"responseType\": \"json\" },\n    \"episodes\": { \"url\": \"/detail/{id}\", \"method\": \"get\", \"responseType\": \"json\" },\n    \"video\": { \"url\": \"{url}\", \"method\": \"get\", \"responseType\": \"html\" },\n    \"week\": { \"url\": \"/api/weekly\", \"method\": \"get\", \"responseType\": \"json\" }\n  },\n  \"selectors\": {\n    \"list\": \"$.list\",\n    \"title\": \"$.vod_name\",\n    \"cover\": \"$.vod_pic\",\n    \"id\": \"$.vod_id\",\n    \"detail\": { \"title\": \"$.vod_name\", \"cover\": \"$.vod_pic\", \"description\": \"$.vod_content\" },\n    \"episodes\": \"ul li a\"\n  },\n  \"category\": { \"categoryEntries\": [ { \"id\": \"all\", \"title\": \"全部\" }, { \"id\": \"1\", \"title\": \"动漫\" } ] },\n  \"homeSections\": [\n    { \"id\": \"latest\", \"title\": \"最新更新\", \"route\": \"latest\", \"style\": \"grid\", \"limit\": 18 },\n    { \"id\": \"week\", \"title\": \"周更列表\", \"route\": \"week\", \"style\": \"schedule\", \"limit\": 0, \"more\": false }\n  ]\n}"
+    },
+    {
+      "id": "example_manga",
+      "title": "十八、完整示例：漫画源（mangaSource）",
+      "group": "advanced",
+      "body": "下面是一个完整可运行的漫画源示例（mangaSource）。漫画源多了 chapters（话列表）与 images（该话图片）两个端点；图片地址常被加密，用 overrides.images.script 解密。把 example.com 换成真实站点、解密逻辑换成真实算法即可导入。",
+      "fields": null,
+      "code": "{\n  \"id\": \"demo_manga\",\n  \"name\": \"演示漫画\",\n  \"type\": \"mangaSource\",\n  \"version\": 1,\n  \"enabledExplore\": true,\n  \"site\": {\n    \"domain\": \"example.com\",\n    \"baseUrl\": \"https://example.com\",\n    \"mirrors\": [ { \"name\": \"主站\", \"domain\": \"example.com\", \"baseUrl\": \"https://example.com\" } ]\n  },\n  \"responseType\": \"html\",\n  \"useWebview\": true,\n  \"parser\": {\n    \"type\": \"hybrid\",\n    \"engine\": \"css\",\n    \"overrides\": {\n      \"latest\": { \"type\": \"script\", \"function\": \"parseList\", \"script\": \"function parseList(html, context){ /* 解析列表页返回 [{id,title,cover,detailUrl}] */ return []; }\" },\n      \"search\": { \"type\": \"script\", \"function\": \"parseList\", \"script\": \"function parseList(html, context){ return []; }\" },\n      \"detail\": { \"type\": \"script\", \"function\": \"parseDetail\", \"script\": \"function parseDetail(html, context){ /* 返回 {title,cover,description,author,...} */ return {}; }\" },\n      \"chapters\": { \"type\": \"script\", \"function\": \"parseChapters\", \"script\": \"function parseChapters(html, context){ /* 返回 [{id,title,url}] */ return []; }\" },\n      \"images\": { \"type\": \"script\", \"function\": \"parseImages\", \"script\": \"function parseImages(raw, context){ var urls = decrypt(raw); return urls; }\" }\n    }\n  },\n  \"routes\": {\n    \"latest\": { \"url\": \"/manga/page/{page}\", \"method\": \"get\", \"responseType\": \"html\" },\n    \"search\": { \"url\": \"/s?q={keyword}&page={page}\", \"method\": \"get\", \"responseType\": \"html\" },\n    \"detail\": { \"url\": \"/manga/{id}\", \"method\": \"get\", \"responseType\": \"html\" },\n    \"chapters\": { \"url\": \"/manga/{id}\", \"method\": \"get\", \"responseType\": \"html\" },\n    \"images\": { \"url\": \"/manga/{id}/{chapterId}\", \"method\": \"get\", \"responseType\": \"html\" }\n  },\n  \"homeSections\": [\n    { \"id\": \"latest\", \"title\": \"最近更新\", \"route\": \"latest\", \"style\": \"grid\", \"limit\": 18 }\n  ]\n}"
+    },
+    {
+      "id": "debug",
+      "title": "十九、调试与导入",
+      "group": "advanced",
+      "body": "写好后如何验证？\n1. 用浏览器开发者工具（F12）核对真实页面的 HTML/JSON 结构与选择器是否匹配。\n2. 在 App 内「导入源」粘贴 JSON，若解析失败，检查 JSON 格式（注意转义引号与换行）。\n3. 脚本类源可在 overrides 里用 context.log() 打印中间结果辅助定位。\n4. 先在本地用一份最小数据源跑通一个模块（如 search），再逐步补全 detail / video / images。\n5. 分享：把 JSON 文件发给朋友，或提交到社区源仓库，别人一键导入即可。",
+      "fields": [
+        {
+          "k": "导入方式",
+          "v": "App 内「源管理 / 导入源」→ 粘贴或选文件。"
+        },
+        {
+          "k": "常见错误",
+          "v": "JSON 语法错误、选择器返回空、相对链接未补 baseUrl、脚本抛出异常。"
+        },
+        {
+          "k": "版本升级",
+          "v": "提高 version，同名源导入时自动覆盖旧版。"
+        }
+      ],
+      "code": null
+    },
+    {
+      "id": "roadmap",
+      "title": "二十、路线规划（规划中 · 欢迎参与）",
+      "group": "advanced",
+      "body": "以下功能尚未实现，是后续版本的重点方向。设计同样存在大量取舍，欢迎到 GitHub Discussions 或 Issues 提意见：\n1. 接入 AI 能力：AI 辅助搜源、内容摘要、看番 / 看书助手、自然语言检索等。\n2. 小说翻译：机翻管线，原文 / 译文对照、按需段落翻译与缓存。\n3. 漫画翻译（MTL）：漫画图片机翻嵌字 / 气泡替换，降低跨语言漫画阅读门槛。\n4. 视频实时翻译：影视字幕 / 实时字幕翻译，支持外挂与内嵌字幕的语言切换。\n5. 增加其他同步方式：在现有 Bangumi 同步之外，接入 AniList、MyAnimeList、Trakt、SIMKL、MDList 等更多后端，并支持跨后端双向同步与可配置冲突策略。",
+      "fields": null,
+      "code": null
+    },
+    {
+      "id": "fields",
+      "title": "二十一、源字段完整参考",
+      "group": "advanced",
+      "body": "下面按「顶层字段 / site / parser / routes / 选择器 / 高级块」给出一份较完整的字段速查。除 id、name、type、site、parser 外，其余字段均可选；源模型会忽略未知键（如 author / lang / builtin），请勿把它们当功能字段使用。\n\n完整约束以仓库源码 lib/core/models/plugin_config.dart 为准，本表覆盖日常编写最常用的字段。",
+      "fields": [
+        {
+          "k": "id",
+          "v": "必填。源唯一标识（建议 域名_类型 之类，避免与他人重复）；同名源按 version 升级/跳过。"
+        },
+        {
+          "k": "name",
+          "v": "必填。展示名称。"
+        },
+        {
+          "k": "version",
+          "v": "整数版本号（默认 1）。导入时 ≥ 已装版本才覆盖，< 已装版本不覆盖（防误装旧版冲掉新源）。"
+        },
+        {
+          "k": "type",
+          "v": "必填。animeSource（影视/动漫）/ mangaSource（漫画）/ novelSource（小说）。"
+        },
+        {
+          "k": "responseType",
+          "v": "可选。json | html，决定默认解析引擎；可被各路由的 responseType 覆盖。"
+        },
+        {
+          "k": "useWebview",
+          "v": "可选布尔。true 时该源整体用 WebView 渲染后抽取（适合强反爬站）。"
+        },
+        {
+          "k": "site.domain",
+          "v": "必填。站点主域名。"
+        },
+        {
+          "k": "site.baseUrl",
+          "v": "必填。站点根地址，用于拼接相对链接。"
+        },
+        {
+          "k": "site.userAgent / cookies / headers",
+          "v": "可选。全局请求 UA / Cookie / 自定义头。"
+        },
+        {
+          "k": "site.mirrors[]",
+          "v": "可选。镜像站列表，每项 {name, domain, baseUrl}。"
+        },
+        {
+          "k": "site.publishPageUrl / publishMirrorSelector",
+          "v": "可选。主域失效时的发布页与镜像提取规则（正则或 CSS）。"
+        },
+        {
+          "k": "parser.type",
+          "v": "必填。builtin / hybrid / script 三选一，决定整源默认解析方式。"
+        },
+        {
+          "k": "parser.overrides.<api>",
+          "v": "可选。按 API 指定解析方式：builtin / xpath / jsonpath / css / script / webview / webview-html。"
+        },
+        {
+          "k": "parser.script / entrypoints",
+          "v": "可选。script 模式下的 JS 源码与入口函数映射。"
+        },
+        {
+          "k": "routes.<name>",
+          "v": "可选。各接口地址，支持字符串写法或 {url, method, headers, params, responseType, parser} 对象；{keyword}/{page}/{id}/{url} 占位符自动替换。"
+        },
+        {
+          "k": "selectors",
+          "v": "可选。声明式选择器（JSONPath / CSS / XPath），与 parser.overrides 配合。"
+        },
+        {
+          "k": "category.dynamicCategories / categoryEntries",
+          "v": "可选。动态分类推断或静态分类表 [{id,title}]。"
+        },
+        {
+          "k": "homeSections[]",
+          "v": "可选。首页板块：{id, title, route, style, limit}；缺省回退单块「最新更新」。"
+        },
+        {
+          "k": "filters",
+          "v": "可选。动态筛选：groups（筛选组）、byCategory（按分类覆盖）、defaults（分类默认参数）。"
+        },
+        {
+          "k": "stealthMode",
+          "v": "可选布尔。开启更激进的反检测请求策略。"
+        },
+        {
+          "k": "antiHotlinking.referer / headers / userAgent",
+          "v": "可选。反盗链：补 Referer / 头 / 特定 UA。"
+        },
+        {
+          "k": "webviewConfig.adblock / timeoutSeconds",
+          "v": "可选。WebView 广告拦截开关与超时（默认 true / 20s）。"
+        },
+        {
+          "k": "comments",
+          "v": "可选。评论配置：provider(source/bangumi)、routes(list 必需，replies/post/reply/like/report 可选)、selectors、login(WebView 登录页 + checkCookie/checkUrl)。"
+        },
+        {
+          "k": "network",
+          "v": "可选。源级网络覆盖：proxy / dns / hosts / sni / ech；缺省继承全局，非法值只告警不阻断启用。"
+        },
+        {
+          "k": "announcement",
+          "v": "可选。源公告：{title, body?, url?, updatedAt?}。"
+        },
+        {
+          "k": "webFavorite",
+          "v": "可选。网络收藏：enabled / title / route / url / addRoute / addUrl / requireLogin；声明后在线浏览显示「网络收藏」Tab。"
+        },
+        {
+          "k": "ageRating",
+          "v": "可选。年龄分级：general(全年龄) / teen(青少年16+) / mature(成人18+)。兼容别名 all/16/r18/nsfw 等；缺省 general。mature 在默认设置下自动隐藏。"
+        },
+        {
+          "k": "deprecated / migrationMessage",
+          "v": "可选。标记弃用并给出迁移提示文案。"
+        },
+        {
+          "k": "enabled / enabledExplore / isHidden",
+          "v": "可选布尔。是否启用 / 是否出现在探索 / 是否隐藏。"
+        }
+      ],
+      "code": "// 顶层字段骨架（仅示意，非完整源）\n{\n  \"id\": \"demo_anime\",\n  \"name\": \"演示动漫\",\n  \"version\": 1,\n  \"type\": \"animeSource\",\n  \"responseType\": \"json\",\n  \"useWebview\": false,\n  \"site\": { \"domain\": \"example.com\", \"baseUrl\": \"https://example.com\" },\n  \"parser\": { \"type\": \"hybrid\", \"overrides\": { \"video\": { \"type\": \"webview\" } } },\n  \"routes\": { \"latest\": { \"url\": \"/api/latest?page={page}\" } },\n  \"ageRating\": \"general\",\n  \"webFavorite\": { \"route\": \"fav\", \"addRoute\": \"fav_add\" },\n  \"network\": { \"proxy\": \"direct\" }\n}"
+    }
+  ],
+  "en": [
+    {
+      "id": "overview",
+      "title": "1. What is a Source",
+      "group": "basic",
+      "body": "A Source is a JSON file that describes HOW to scrape a specific site for anime / manga / novel / video. NexHub only ships a generic engine; all site-specific parsing lives in this file — that is exactly 'source = plugin'.\n\nThe app embeds a JS sandbox: you can use declarative selectors (jsonpath / css / xpath) to extract fields directly, or embed JavaScript in the source to handle complex pages. Anyone can import your source file with one tap, no full app update needed.",
+      "fields": null,
+      "code": null
+    },
+    {
+      "id": "basic",
+      "title": "2. Basic fields (every source)",
+      "group": "basic",
+      "body": "Every source starts with these common header fields. Fill them in first so the app can identify, manage and upgrade your source.\n\nNote: the source model does NOT read author / lang / builtin keys — they are silently ignored, so don't rely on them as functional fields.\n\nAge rating (ageRating) is also a basic field: general (all) / teen (13+/16+) / mature (18+), with aliases like all / 16 / r18 / nsfw accepted; default general. mature is hidden by default from users who have not enabled age confirmation.\n\nThe parser.type values are detailed in sections 12-13.",
+      "fields": [
+        {
+          "k": "id",
+          "v": "Unique id, e.g. manga_goda. Same-id sources upgrade or skip by version; avoid collisions."
+        },
+        {
+          "k": "name",
+          "v": "Display name, e.g. 'GoDa Manga'."
+        },
+        {
+          "k": "version",
+          "v": "Integer version (coerced to int, default 1). Same-id sources upgrade or skip by version."
+        },
+        {
+          "k": "type",
+          "v": "Media type: animeSource (video/anime) / mangaSource / novelSource."
+        },
+        {
+          "k": "site",
+          "v": "Site object (required): domain, baseUrl (root, for relative links), mirrors list; optional userAgent / cookies / headers."
+        },
+        {
+          "k": "parser",
+          "v": "Parser config: { type, overrides?, script? }. type is builtin / hybrid / script."
+        },
+        {
+          "k": "ageRating",
+          "v": "Optional. Age rating general / teen / mature; default general, mature hidden by default."
+        },
+        {
+          "k": "enabled",
+          "v": "Optional, whether enabled (default true)."
+        }
+      ],
+      "code": "{\n  \"id\": \"demo_anime\",\n  \"name\": \"Demo Anime\",\n  \"version\": 1,\n  \"type\": \"animeSource\",\n  \"ageRating\": \"general\",\n  \"site\": {\n    \"domain\": \"example.com\",\n    \"baseUrl\": \"https://example.com\",\n    \"mirrors\": [ { \"name\": \"main\", \"domain\": \"example.com\", \"baseUrl\": \"https://example.com\" } ]\n  },\n  \"parser\": { \"type\": \"hybrid\", \"overrides\": { \"latest\": { \"type\": \"builtin\" } } }\n}"
+    },
+    {
+      "id": "search",
+      "title": "3. Search module (search / ruleSearch)",
+      "group": "intermediate",
+      "body": "Triggered when the user types a keyword. Two paradigms:\n· Anime/Manga (Paradigm A): define search url in routes (with {keyword}), then use selectors or script to extract the result list.\n· Novel (Paradigm B, Legado-compatible): use ruleSearch with CSS selectors declaring each result's title, author, cover, detail link.\nReturned fields usually: id, title, cover, detailUrl.",
+      "fields": [
+        {
+          "k": "routes.search.url",
+          "v": "Paradigm A: search endpoint, {keyword} for query, {page} for page."
+        },
+        {
+          "k": "selectors.list / bookList",
+          "v": "Result container selector (jsonpath or css)."
+        },
+        {
+          "k": "selectors.title / bookName",
+          "v": "Title field."
+        },
+        {
+          "k": "selectors.cover / bookCoverUrl",
+          "v": "Cover URL; relative paths auto-joined to baseUrl."
+        },
+        {
+          "k": "selectors.id / bookUrl",
+          "v": "Identifier or link used to open detail later."
+        }
+      ],
+      "code": "// Paradigm A: routes + selectors (anime)\n\"routes\": {\n  \"search\": { \"url\": \"/s?wd={keyword}&page={page}\", \"method\": \"get\", \"responseType\": \"json\" }\n},\n\"selectors\": {\n  \"list\": \"$.list\",\n  \"title\": \"$.vod_name\",\n  \"cover\": \"$.vod_pic\",\n  \"id\": \"$.vod_id\"\n}\n\n// Paradigm B: novel ruleSearch (Legado)\n\"ruleSearch\": {\n  \"bookList\": \".bookbox\",\n  \"bookName\": \".bookname a@text\",\n  \"bookAuthor\": \".author@text\",\n  \"bookCoverUrl\": \".bookimg img@src\",\n  \"bookUrl\": \".bookname a@href\"\n}"
+    },
+    {
+      "id": "discovery",
+      "title": "4. Discovery / Category (discovery / ruleExplore)",
+      "group": "intermediate",
+      "body": "Used by the Home page and category browsing. Paradigm A uses latest/explore/category routes + categoryEntries; Paradigm B uses ruleExplore + exploreUrl (each line 'Category::URL').\nHome sections are defined by homeSections (title, route, style grid/list, limit).",
+      "fields": [
+        {
+          "k": "category.categoryEntries",
+          "v": "Paradigm A: category array, each {id, title}, plugged into the category route."
+        },
+        {
+          "k": "homeSections",
+          "v": "Home blocks (latest, popular…) referencing a route with a limit."
+        },
+        {
+          "k": "exploreUrl",
+          "v": "Paradigm B: newline-separated 'Category::URL' for the explore page."
+        }
+      ],
+      "code": "\"category\": {\n  \"categoryEntries\": [\n    { \"id\": \"all\", \"title\": \"All\" },\n    { \"id\": \"1\", \"title\": \"Anime\" },\n    { \"id\": \"2\", \"title\": \"Movies\" }\n  ]\n},\n\"homeSections\": [\n  { \"id\": \"latest\", \"title\": \"Latest\", \"route\": \"latest\", \"style\": \"grid\", \"limit\": 18 }\n]"
+    },
+    {
+      "id": "detail",
+      "title": "5. Detail / Contents (detail / ruleBookInfo)",
+      "group": "intermediate",
+      "body": "Loaded when opening a title. Responsible for: title, cover, description, author/cast, tags, status, and the chapter/episode list.\nParadigm A uses detail route + selectors.detail and episodes; Paradigm B uses ruleBookInfo (meta) + ruleToc (chapter list with chapterList / chapterName / chapterUrl).",
+      "fields": [
+        {
+          "k": "selectors.detail",
+          "v": "Paradigm A: object extracting title/cover/description/cast per field."
+        },
+        {
+          "k": "selectors.episodes",
+          "v": "Paradigm A: chapter link selector, e.g. ul li a."
+        },
+        {
+          "k": "ruleBookInfo.tocUrl",
+          "v": "Paradigm B: link into the contents page; empty means detail page itself is the TOC."
+        },
+        {
+          "k": "ruleToc.chapterList",
+          "v": "Paradigm B: chapter item selector; nextTocUrl supports paginated TOC."
+        }
+      ],
+      "code": "// Paradigm A\n\"selectors\": {\n  \"detail\": {\n    \"title\": \"$.list[0].vod_name\",\n    \"cover\": \"$.list[0].vod_pic\",\n    \"description\": \"$.list[0].vod_content\"\n  },\n  \"episodes\": \"ul.anthology-list-play li a\"\n}\n\n// Paradigm B (novel)\n\"ruleToc\": {\n  \"chapterList\": \".chapter li a\",\n  \"chapterName\": \"@text\",\n  \"chapterUrl\": \"@href\",\n  \"nextTocUrl\": \"a:contains(下一页)@href\"\n}"
+    },
+    {
+      "id": "content",
+      "title": "6. Content module (content / ruleContent)",
+      "group": "intermediate",
+      "body": "Loaded when opening a specific chapter:\n· Novel (Paradigm B): ruleContent.content extracts body text (@textNodes for clean text, nextContentUrl for paginated body).\n· Manga: chapters route/script returns the chapter list, then images module parses that chapter's image URLs.\n· Anime: video module resolves the playable video URL.",
+      "fields": [
+        {
+          "k": "ruleContent.content",
+          "v": "Novel body selector, often #content@textNodes for paragraph text."
+        },
+        {
+          "k": "ruleContent.nextContentUrl",
+          "v": "Next-page link of the body for continuous reading."
+        },
+        {
+          "k": "chapters (manga)",
+          "v": "Returns chapter list, each with id and detail link, feeding images."
+        },
+        {
+          "k": "images (manga)",
+          "v": "Returns that chapter's image URL array, decryption supported."
+        }
+      ],
+      "code": "\"ruleContent\": {\n  \"content\": \"#nr1@textNodes\",\n  \"title\": \"#nr_title@text\",\n  \"nextContentUrl\": \"a:contains(下一页)@href\"\n}\n\n// manga images (script returns image array)\n\"images\": {\n  \"type\": \"script\",\n  \"function\": \"parseImages\",\n  \"script\": \"function parseImages(html, context){ /* parse & decrypt */ return [url1, url2]; }\"\n}"
+    },
+    {
+      "id": "player",
+      "title": "7. Video parsing (player / video)",
+      "group": "intermediate",
+      "body": "The core of anime sources. The video route gets the player page HTML, then a selector / script / WebView extracts the real video URL (m3u8 / mp4).\nThree ways: a declarative selector (e.g. //video/@src), embedded JS (overrides.type:\"script\"), or WebView rendering then extract (overrides.type:\"webview\" — common for m3u8 or when the page must execute JS to reveal the URL).\nIf the source provides danmaku, the video module can additionally return a danmaku API. Multi-line: if an episode has several addresses, the app offers a 'source switch'.\nAsync data: when an API call is needed first, the script returns {__meta:true,__fetchUrl,...}; the engine prefetches then calls the processor (see section 13).",
+      "fields": [
+        {
+          "k": "routes.video.url",
+          "v": "Player page URL (usually from episodes)."
+        },
+        {
+          "k": "overrides.video.type",
+          "v": "How this endpoint is parsed: builtin / css / xpath / jsonpath / script / webview. Video often uses webview for m3u8."
+        },
+        {
+          "k": "selectors.video",
+          "v": "Video URL selector, e.g. //video/@src or jsonpath (declarative mode)."
+        },
+        {
+          "k": "__meta async",
+          "v": "When an API call is needed first, the script returns {__meta:true,__fetchUrl,...}; the engine prefetches then calls the processor (see section 13)."
+        }
+      ],
+      "code": "// Option A: declarative\n\"routes\": { \"video\": { \"url\": \"{url}\", \"method\": \"get\", \"responseType\": \"html\" } },\n\"parser\": { \"type\": \"hybrid\", \"overrides\": { \"video\": { \"type\": \"webview\" } } }\n\n// Option B: script fetches API then parses\nfunction parseVideo(html, context){\n  var api = extractApi(html);\n  return { __meta: true, __fetchUrl: api, __processor: \"__processVideo\" };\n}\nfunction __processVideo(json, context){\n  return json.url; // real play URL\n}"
+    },
+    {
+      "id": "images",
+      "title": "8. Manga image parsing (images)",
+      "group": "intermediate",
+      "body": "The most common script module for manga. Sites often encrypt image URLs, so decryption lives in the script. The images function receives the detail/API data and returns that chapter's image URL array.\nNote: many KR/CN sites obfuscate image URLs with a custom algorithm — implement it here.",
+      "fields": [
+        {
+          "k": "function",
+          "v": "Entry function name, e.g. parseImages, matching overrides.images.function."
+        },
+        {
+          "k": "returns",
+          "v": "A string array, each element a full image URL."
+        },
+        {
+          "k": "context.baseUrl",
+          "v": "Site baseUrl available in script to complete relative paths."
+        }
+      ],
+      "code": "function parseImages(raw, context){\n  var baseUrl = (context.baseUrl || '').replace(/\\/$/, '');\n  var urls = decrypt(raw);\n  return urls.map(function(u){ return u.indexOf('/')===0 ? baseUrl+u : u; });\n}"
+    },
+    {
+      "id": "webfavorite",
+      "title": "9. Web favorites (webFavorite)",
+      "group": "intermediate",
+      "body": "If your source site itself offers a 'my bookshelf / favorites' page, declare webFavorite so the app shows an extra 'Web Favorites' tab in browse. What users see there comes from the site account (requires login), not the app's local favorites.\n\nDeclare it by adding a webFavorite object at the source top level. enabled defaults true; title is the tab label; route / url is the 'view favorites list' route or address; addRoute / addUrl is the 'add to favorites' route or address, supporting {id} / {detailUrl} / {title} placeholders (auto-replaced with the current work's id / detail link / title); requireLogin true means login is required first.\n\nNote: webFavorite and the app's local favorites are independent — local favorites are managed by the app, web favorites go through the site API.",
+      "fields": [
+        {
+          "k": "enabled",
+          "v": "Optional, whether to enable the Web Favorites tab (default true)."
+        },
+        {
+          "k": "title",
+          "v": "Optional, the tab label, e.g. 'My Bookshelf'."
+        },
+        {
+          "k": "route / url",
+          "v": "View-favorites route name or full address; pick one, route must be defined in routes."
+        },
+        {
+          "k": "addRoute / addUrl",
+          "v": "Add-to-favorites route or address, supports {id} / {detailUrl} / {title} placeholders."
+        },
+        {
+          "k": "requireLogin",
+          "v": "Optional, true requires site login first."
+        }
+      ],
+      "code": "\"webFavorite\": {\n  \"title\": \"My Bookshelf\",\n  \"route\": \"webFavorite\",\n  \"url\": \"/user/bookshelf\",\n  \"addUrl\": \"/user/favorite/add?id={id}\",\n  \"requireLogin\": true\n}"
+    },
+    {
+      "id": "announcement",
+      "title": "10. Source announcement (announcement)",
+      "group": "intermediate",
+      "body": "Source authors can publish an announcement to users of the source (e.g. 'site changed domain, please update'). It renders as a banner at the top of the source's home and detail pages.\n\nannouncement is an optional top-level object: title is required (announcement title); body is optional text; url is an optional 'view details' link; updatedAt is an optional update time (Unix seconds, used to show 'N days ago'). If url is omitted, the whole banner is non-clickable.",
+      "fields": [
+        {
+          "k": "title",
+          "v": "Required, announcement title."
+        },
+        {
+          "k": "body",
+          "v": "Optional, announcement body."
+        },
+        {
+          "k": "url",
+          "v": "Optional, link opened when the banner is tapped (e.g. a migration note)."
+        },
+        {
+          "k": "updatedAt",
+          "v": "Optional, update time as Unix seconds."
+        }
+      ],
+      "code": "\"announcement\": {\n  \"title\": \"Site domain changed\",\n  \"body\": \"Old domain example-old.com is down, please update to the new one.\",\n  \"url\": \"https://example.com/notice\",\n  \"updatedAt\": 1700000000\n}"
+    },
+    {
+      "id": "schedule",
+      "title": "11. Weekly schedule (schedule)",
+      "group": "intermediate",
+      "body": "Want the source's home page to show a 'weekly schedule' (what updated each day Mon-Sun)? Use a homeSections entry with style 'schedule'; the app groups it by weekday.\n\nSteps:\n1) Add a homeSections entry { id, title, route:'week', style:'schedule', limit:0, more:false }. The route name is up to you (here 'week').\n2) Define a week route with the same name in routes; its results must carry a 'weekday' field (the app bins works into Mon-Sun by it).\n\nUsers then see an update table grouped by weekday on the source home. limit:0 means no cap; more:false hides 'view more'.",
+      "fields": [
+        {
+          "k": "homeSections[].style",
+          "v": "Set to 'schedule' to enable the weekly board."
+        },
+        {
+          "k": "homeSections[].route",
+          "v": "Route name for the schedule data (must match routes)."
+        },
+        {
+          "k": "routes.week",
+          "v": "Returns a list with weekday field; app bins into Mon-Sun."
+        },
+        {
+          "k": "limit / more",
+          "v": "limit:0 = no cap; more:false hides 'view more'."
+        }
+      ],
+      "code": "\"homeSections\": [\n  { \"id\": \"week\", \"title\": \"Weekly\", \"route\": \"week\", \"style\": \"schedule\", \"limit\": 0, \"more\": false }\n],\n\"routes\": {\n  \"week\": { \"url\": \"/api/weekly\", \"method\": \"get\", \"responseType\": \"json\" }\n}"
+    },
+    {
+      "id": "selector",
+      "title": "12. Selector syntax cheat-sheet",
+      "group": "advanced",
+      "body": "Parsing has two layers — the top-level parser.type and each API's overrides.type:\n· Top-level parser.type takes only three values: builtin (pure declarative), hybrid (declarative + per-API overrides, most common), script (all JS sandbox).\n· Each API can set overrides.type to decide how THAT endpoint is parsed: builtin / xpath / jsonpath / css (the four declarative sub-types share one engine) / script (JS sandbox) / webview (render in an embedded browser then extract — common for m3u8) / webview-html (WebView returns HTML then parsed — common for anti-bot search).\n\nThe declarative selector syntax is chosen by overrides.type:\n· jsonpath: starts with $, for JSON APIs (e.g. $.list[0].vod_name).\n· css: standard CSS selectors for HTML (e.g. .bookname a).\n· xpath: starts with // or ./, for HTML (e.g. //video/@src).\nNovel sources (Legado-compatible) add custom syntax: @text gets text, @href/@src get attributes, @textNodes gets clean body, || is a fallback selector, a:contains(text) filters by visible text, .0/.1/-1 picks the Nth.",
+      "fields": [
+        {
+          "k": "top-level parser.type",
+          "v": "builtin / hybrid / script — the source-wide default."
+        },
+        {
+          "k": "overrides.<api>.type",
+          "v": "per-API: builtin / xpath / jsonpath / css / script / webview / webview-html."
+        },
+        {
+          "k": "$.field",
+          "v": "jsonpath, extract a JSON field."
+        },
+        {
+          "k": ".class a@text",
+          "v": "css + @text gets element text."
+        },
+        {
+          "k": "//video/@src",
+          "v": "xpath gets an attribute value."
+        },
+        {
+          "k": "a:contains(下一页)@href",
+          "v": "novel: filter links by visible text."
+        }
+      ],
+      "code": "// top-level: hybrid + per-API type\n\"parser\": { \"type\": \"hybrid\", \"overrides\": {\n  \"search\": { \"type\": \"jsonpath\" },\n  \"video\": { \"type\": \"webview\" },\n  \"detail\": { \"type\": \"css\" }\n} }\n// jsonpath\n\"title\": \"$.vod_name\"\n// css (HTML)\n\"bookName\": \".bookname a@text\"\n// xpath (HTML)\n\"video\": \"//video/@src\""
+    },
+    {
+      "id": "script",
+      "title": "13. Embedded JS conventions",
+      "group": "advanced",
+      "body": "When declarative selectors are not enough, use parser.overrides to write JS. Each module can set type:'script' with a function name and script source.\n\nKey rules:\n1. Signature is fixed: parseXxx(html, context); html is the page string, context has baseUrl, log, etc.\n2. Must return synchronously (array or object).\n3. For async data, return the {__meta:true, __fetchUrl, __processor} protocol object; the engine prefetches that URL, then calls __processor synchronously — the only safe async channel.\n4. Never hardcode site constants into the app; keep everything in the source file.",
+      "fields": [
+        {
+          "k": "function",
+          "v": "Entry function name, matching overrides.<module>.function."
+        },
+        {
+          "k": "context.baseUrl",
+          "v": "Current source's base URL, for relative links."
+        },
+        {
+          "k": "context.log",
+          "v": "Optional logger for debugging (context.log('msg'))."
+        },
+        {
+          "k": "__meta protocol",
+          "v": "Async prefetch: return this object, engine calls __processor after fetch."
+        }
+      ],
+      "code": "\"parser\": {\n  \"type\": \"hybrid\",\n  \"overrides\": {\n    \"search\": {\n      \"type\": \"script\",\n      \"function\": \"parseList\",\n      \"script\": \"function parseList(html, context){ /* parse & return array */ return []; }\"\n    }\n  }\n}"
+    },
+    {
+      "id": "advanced",
+      "title": "14. Advanced: source-level network / comments / login (v0.4.0)",
+      "group": "advanced",
+      "body": "Since v0.4.0 a source can also declare some 'site-level' capabilities, letting the app adapt to more complex sites without engine changes:\n· network (optional): source-level network override. Sub-keys proxy / dns / hosts / sni / ech, each set to 'inherit global' or a specific override. Defaults to global; invalid values only warn and never disable the source.\n· comments (optional): declares the source's comment capability. provider defaults to source (comments from the site); routes declares list / replies / post / reply / like / report (undeclared buttons are not rendered); selectors reuse the same JSONPath/CSS/XPath engine; login can declare a WebView login page and session check (checkCookie / checkUrl).\n· source auth: for sites that require login, a WebView can capture the session Cookie, or you can paste a Cookie manually; credentials stay local only.",
+      "fields": [
+        {
+          "k": "network",
+          "v": "Source-level proxy / DNS / Hosts / SNI / ECH override; defaults to global."
+        },
+        {
+          "k": "comments.provider / routes / selectors",
+          "v": "Declares site comments; routes.list is required when comments is set, others optional."
+        },
+        {
+          "k": "comments.login",
+          "v": "WebView login page and session check (checkCookie / checkUrl) when login is required."
+        },
+        {
+          "k": "precedence",
+          "v": "User override > source network block > global > default; applies instantly, no restart."
+        }
+      ],
+      "code": "\"network\": { \"proxy\": \"direct\", \"dns\": \"system\" },\n\"comments\": {\n  \"provider\": \"source\",\n  \"routes\": { \"list\": { \"url\": \"/api/comments?book={id}\", \"responseType\": \"json\" } },\n  \"selectors\": { \"items\": \"$.list\", \"content\": \"$.content\", \"author\": \"$.user\" }\n}"
+    },
+    {
+      "id": "collection",
+      "title": "15. Collection API interface",
+      "group": "advanced",
+      "body": "The 'collection API' is the set of scrape endpoints a source exposes — i.e. the endpoints defined in routes (search / latest / detail / video / images …) and the extraction rules declared per endpoint via selectors or overrides. The app engine calls each endpoint in turn, turning site data into a unified structure.\n\nEndpoints and overrides:\n· Each endpoint first defines url in routes (supports {keyword}/{page}/{id}/{url}/{detailUrl} placeholders), method, responseType, headers, params.\n· How it is parsed is decided by parser.overrides.<endpoint>: builtin / xpath / jsonpath / css / script / webview / webview-html.\n· Declarative endpoints use selectors.<endpoint>; script endpoints use overrides.<endpoint>.script.\n\nAsync protocol __meta: when an endpoint must call another API before parsing (e.g. video first calls an API to get the real URL), the script returns { __meta:true, __fetchUrl, __processor }. The engine prefetches __fetchUrl, then hands the result to __processor synchronously. This is the only safe async channel in the sandbox.\n\nCommon endpoints: search, latest, explore / category, detail (+contents), episodes, video, chapters (manga), images (manga), week (schedule). Exact field names are in each module section and the 'Complete Source Field Reference'.",
+      "fields": [
+        {
+          "k": "routes.<name>",
+          "v": "Endpoint address and method; {keyword}/{page}/{id}/{url} auto-replaced."
+        },
+        {
+          "k": "parser.overrides.<name>",
+          "v": "How this endpoint is parsed: builtin / xpath / jsonpath / css / script / webview / webview-html."
+        },
+        {
+          "k": "selectors.<name>",
+          "v": "Extraction selectors for declarative endpoints."
+        },
+        {
+          "k": "__meta protocol",
+          "v": "Script endpoints that need a second request return {__meta:true,__fetchUrl,__processor}."
+        }
+      ],
+      "code": "// A full endpoint declaration (routes + overrides + selectors)\n\"routes\": {\n  \"search\": { \"url\": \"/s?wd={keyword}&page={page}\", \"method\": \"get\", \"responseType\": \"json\" }\n},\n\"parser\": { \"type\": \"hybrid\", \"overrides\": { \"search\": { \"type\": \"jsonpath\" } } },\n\"selectors\": { \"list\": \"$.list\", \"title\": \"$.vod_name\", \"cover\": \"$.vod_pic\", \"id\": \"$.vod_id\" }\n\n// Video endpoint needing a second request\nfunction parseVideo(html, context){\n  var api = extractApi(html);\n  return { __meta: true, __fetchUrl: api, __processor: \"__processVideo\" };\n}\nfunction __processVideo(json, context){ return json.url; }"
+    },
+    {
+      "id": "example_novel",
+      "title": "16. Full example: novel source (Legado)",
+      "group": "advanced",
+      "body": "A complete runnable novel source example (Legado-compatible format). Note: novel sources do NOT use the id / name / type / site top-level keys; instead they use Legado keys like bookSourceName / bookSourceUrl / bookSourceType / ruleSearch / ruleToc / ruleContent / ruleBookInfo; parsing is handled by parser.overrides.content. Replace example.com with a real site and the selectors with real rules, then import.",
+      "fields": null,
+      "code": "{\n  \"bookSourceName\": \"Demo Novel\",\n  \"bookSourceUrl\": \"https://m.example.com\",\n  \"bookSourceType\": 0,\n  \"enabledExplore\": true,\n  \"enabledSearch\": true,\n  \"exploreUrl\": \"Xuanhuan::https://m.example.com/xuanhuan/\\nUrban::https://m.example.com/dushi/\",\n  \"bookSourceGroup\": \"Built-in\",\n  \"concurrentRate\": 0,\n  \"ruleSearch\": {\n    \"bookList\": \".bookbox\",\n    \"bookName\": \".bookname a@text\",\n    \"bookAuthor\": \".author@text\",\n    \"bookCoverUrl\": \".bookimg img@src\",\n    \"bookUrl\": \".bookname a@href\",\n    \"bookLastChapter\": \".update a@text\"\n  },\n  \"ruleExplore\": {\n    \"bookList\": \".bookbox\",\n    \"bookName\": \".bookname a@text\",\n    \"bookAuthor\": \".author@text\",\n    \"bookCoverUrl\": \".bookimg img@src\",\n    \"bookUrl\": \".bookname a@href\"\n  },\n  \"ruleBookInfo\": {\n    \"name\": \"h1@text\",\n    \"author\": \"p:contains(作者)@text\",\n    \"coverUrl\": \".block_img2 img@src\",\n    \"intro\": \".intro_info@text\",\n    \"tocUrl\": \"a[href^=\\\"/book_\\\"]@href\",\n    \"lastChapter\": \"p:contains(最新) a@text\",\n    \"bookStatus\": \"p:contains(状态) span@text\"\n  },\n  \"ruleToc\": {\n    \"chapterList\": \"a[href^=\\\"/book_\\\"][href$=\\\".html\\\"]\",\n    \"chapterName\": \"@text\",\n    \"chapterUrl\": \"@href\",\n    \"nextTocUrl\": \"a:contains(下一页)@href\"\n  },\n  \"ruleContent\": {\n    \"content\": \"#nr1@html\",\n    \"title\": \"#nr_title@text\",\n    \"nextContentUrl\": \"a:contains(下一章)@href\"\n  },\n  \"parser\": {\n    \"type\": \"hybrid\",\n    \"overrides\": {\n      \"content\": {\n        \"type\": \"script\",\n        \"function\": \"parseContent\",\n        \"script\": \"function parseContent(html, context){ var raw = context.dom.queryHtml(html, '#nr1') || context.dom.queryHtml(html, '#content') || ''; raw = raw.replace(/<script.*?<\\/script>/gi, ''); return context.content.clean(raw); }\"\n      }\n    }\n  },\n  \"bookSourceComment\": \"Demo novel source, plain HTML content\"\n}"
+    },
+    {
+      "id": "example_media",
+      "title": "17. Full example: anime source (animeSource)",
+      "group": "advanced",
+      "body": "A complete runnable anime source example (animeSource). The core is the video endpoint: here we use webview to extract the real play URL (good for m3u8 / sites where the page must execute JS to reveal the URL). Note an anime source MUST include a latest route. Replace example.com with a real site and import.",
+      "fields": null,
+      "code": "{\n  \"id\": \"demo_anime\",\n  \"name\": \"Demo Anime\",\n  \"version\": 1,\n  \"type\": \"animeSource\",\n  \"responseType\": \"json\",\n  \"useWebview\": true,\n  \"site\": {\n    \"domain\": \"example.com\",\n    \"baseUrl\": \"https://example.com\",\n    \"mirrors\": [ { \"name\": \"main\", \"domain\": \"example.com\", \"baseUrl\": \"https://example.com\" } ]\n  },\n  \"parser\": {\n    \"type\": \"hybrid\",\n    \"overrides\": {\n      \"latest\": { \"type\": \"builtin\" },\n      \"search\": { \"type\": \"builtin\" },\n      \"detail\": { \"type\": \"builtin\" },\n      \"episodes\": { \"type\": \"builtin\" },\n      \"video\": { \"type\": \"webview\" }\n    }\n  },\n  \"routes\": {\n    \"latest\": { \"url\": \"/api/latest?page={page}\", \"method\": \"get\", \"responseType\": \"json\" },\n    \"search\": { \"url\": \"/s?wd={keyword}&page={page}\", \"method\": \"get\", \"responseType\": \"json\" },\n    \"detail\": { \"url\": \"/detail/{id}\", \"method\": \"get\", \"responseType\": \"json\" },\n    \"episodes\": { \"url\": \"/detail/{id}\", \"method\": \"get\", \"responseType\": \"json\" },\n    \"video\": { \"url\": \"{url}\", \"method\": \"get\", \"responseType\": \"html\" },\n    \"week\": { \"url\": \"/api/weekly\", \"method\": \"get\", \"responseType\": \"json\" }\n  },\n  \"selectors\": {\n    \"list\": \"$.list\",\n    \"title\": \"$.vod_name\",\n    \"cover\": \"$.vod_pic\",\n    \"id\": \"$.vod_id\",\n    \"detail\": { \"title\": \"$.vod_name\", \"cover\": \"$.vod_pic\", \"description\": \"$.vod_content\" },\n    \"episodes\": \"ul li a\"\n  },\n  \"category\": { \"categoryEntries\": [ { \"id\": \"all\", \"title\": \"All\" }, { \"id\": \"1\", \"title\": \"Anime\" } ] },\n  \"homeSections\": [\n    { \"id\": \"latest\", \"title\": \"Latest\", \"route\": \"latest\", \"style\": \"grid\", \"limit\": 18 },\n    { \"id\": \"week\", \"title\": \"Weekly\", \"route\": \"week\", \"style\": \"schedule\", \"limit\": 0, \"more\": false }\n  ]\n}"
+    },
+    {
+      "id": "example_manga",
+      "title": "18. Full example: manga source (mangaSource)",
+      "group": "advanced",
+      "body": "A complete runnable manga source example (mangaSource). Manga sources add two endpoints: chapters (chapter list) and images (that chapter's images); image URLs are often encrypted, so decrypt them in overrides.images.script. Replace example.com with a real site and the decryption with a real algorithm, then import.",
+      "fields": null,
+      "code": "{\n  \"id\": \"demo_manga\",\n  \"name\": \"Demo Manga\",\n  \"type\": \"mangaSource\",\n  \"version\": 1,\n  \"enabledExplore\": true,\n  \"site\": {\n    \"domain\": \"example.com\",\n    \"baseUrl\": \"https://example.com\",\n    \"mirrors\": [ { \"name\": \"main\", \"domain\": \"example.com\", \"baseUrl\": \"https://example.com\" } ]\n  },\n  \"responseType\": \"html\",\n  \"useWebview\": true,\n  \"parser\": {\n    \"type\": \"hybrid\",\n    \"engine\": \"css\",\n    \"overrides\": {\n      \"latest\": { \"type\": \"script\", \"function\": \"parseList\", \"script\": \"function parseList(html, context){ /* parse list -> [{id,title,cover,detailUrl}] */ return []; }\" },\n      \"search\": { \"type\": \"script\", \"function\": \"parseList\", \"script\": \"function parseList(html, context){ return []; }\" },\n      \"detail\": { \"type\": \"script\", \"function\": \"parseDetail\", \"script\": \"function parseDetail(html, context){ /* -> {title,cover,description,author,...} */ return {}; }\" },\n      \"chapters\": { \"type\": \"script\", \"function\": \"parseChapters\", \"script\": \"function parseChapters(html, context){ /* -> [{id,title,url}] */ return []; }\" },\n      \"images\": { \"type\": \"script\", \"function\": \"parseImages\", \"script\": \"function parseImages(raw, context){ var urls = decrypt(raw); return urls; }\" }\n    }\n  },\n  \"routes\": {\n    \"latest\": { \"url\": \"/manga/page/{page}\", \"method\": \"get\", \"responseType\": \"html\" },\n    \"search\": { \"url\": \"/s?q={keyword}&page={page}\", \"method\": \"get\", \"responseType\": \"html\" },\n    \"detail\": { \"url\": \"/manga/{id}\", \"method\": \"get\", \"responseType\": \"html\" },\n    \"chapters\": { \"url\": \"/manga/{id}\", \"method\": \"get\", \"responseType\": \"html\" },\n    \"images\": { \"url\": \"/manga/{id}/{chapterId}\", \"method\": \"get\", \"responseType\": \"html\" }\n  },\n  \"homeSections\": [\n    { \"id\": \"latest\", \"title\": \"Latest\", \"route\": \"latest\", \"style\": \"grid\", \"limit\": 18 }\n  ]\n}"
+    },
+    {
+      "id": "debug",
+      "title": "19. Debug & import",
+      "group": "advanced",
+      "body": "How to verify after writing?\n1. Use browser DevTools (F12) to confirm the real page's HTML/JSON structure matches your selectors.\n2. In the app, 'Import Source' and paste the JSON. If parsing fails, check JSON format (escaped quotes and newlines).\n3. Script sources can use context.log() inside overrides to print intermediate results.\n4. Start with a minimal source that only gets one module working (e.g. search), then progressively add detail / video / images.\n5. Share: send the JSON to friends, or submit to the community source repo — anyone can import it with one tap.",
+      "fields": [
+        {
+          "k": "Import",
+          "v": "App 'Source Management / Import Source' → paste or pick file."
+        },
+        {
+          "k": "Common errors",
+          "v": "JSON syntax error, selector returns empty, relative link not joined to baseUrl, script throws."
+        },
+        {
+          "k": "Upgrade",
+          "v": "Bump version; same-id sources auto-overwrite the old one on import."
+        }
+      ],
+      "code": null
+    },
+    {
+      "id": "roadmap",
+      "title": "20. Roadmap (planned · community input welcome)",
+      "group": "advanced",
+      "body": "The following are not yet implemented and are the focus areas for upcoming versions. Their design involves many trade-offs — share your thoughts on GitHub Discussions or Issues:\n1. AI integration: AI-assisted source search, content summarization, watch/read assistants, natural-language search, etc.\n2. Novel translation: a machine-translation pipeline with original/translated side-by-side, on-demand paragraph translation and caching.\n3. Manga translation (MTL): machine-translated inset text / speech-bubble replacement to lower the barrier for cross-language manga.\n4. Real-time video translation: subtitle / live-subtitle translation for video, with language switching for both external and embedded subtitles.\n5. More sync backends: beyond the current Bangumi sync, integrate AniList, MyAnimeList, Trakt, SIMKL, MDList and more, with configurable cross-backend two-way sync and conflict policies.",
+      "fields": null,
+      "code": null
+    },
+    {
+      "id": "fields",
+      "title": "21. Complete Source Field Reference",
+      "group": "advanced",
+      "body": "A fairly complete field cheat-sheet, grouped as top-level / site / parser / routes / selectors / advanced blocks. Everything except id, name, type, site and parser is optional; unknown keys (e.g. author / lang / builtin) are ignored by the model — do not treat them as functional fields.\n\nThe authoritative constraints live in lib/core/models/plugin_config.dart; this table covers the fields used most often when writing a source.",
+      "fields": [
+        {
+          "k": "id",
+          "v": "Required. Unique source id (e.g. domain_typename to avoid collisions); same id is upgraded/skipped by version."
+        },
+        {
+          "k": "name",
+          "v": "Required. Display name."
+        },
+        {
+          "k": "version",
+          "v": "Integer version (default 1). On import, only >= installed version overwrites; < installed version is skipped."
+        },
+        {
+          "k": "type",
+          "v": "Required. animeSource (video/anime) / mangaSource (manga) / novelSource (novel)."
+        },
+        {
+          "k": "responseType",
+          "v": "Optional. json | html, sets the default parse engine; overridable per-route."
+        },
+        {
+          "k": "useWebview",
+          "v": "Optional bool. true = render the whole source via WebView before extraction (good for anti-bot sites)."
+        },
+        {
+          "k": "site.domain",
+          "v": "Required. Site main domain."
+        },
+        {
+          "k": "site.baseUrl",
+          "v": "Required. Site root used to resolve relative links."
+        },
+        {
+          "k": "site.userAgent / cookies / headers",
+          "v": "Optional. Global request UA / cookies / custom headers."
+        },
+        {
+          "k": "site.mirrors[]",
+          "v": "Optional. Mirror list, each {name, domain, baseUrl}."
+        },
+        {
+          "k": "site.publishPageUrl / publishMirrorSelector",
+          "v": "Optional. Fallback publish page and mirror-extraction rule (regex or CSS) when the main domain dies."
+        },
+        {
+          "k": "parser.type",
+          "v": "Required. builtin / hybrid / script — the source-wide default parse mode."
+        },
+        {
+          "k": "parser.overrides.<api>",
+          "v": "Optional. Per-API parse mode: builtin / xpath / jsonpath / css / script / webview / webview-html."
+        },
+        {
+          "k": "parser.script / entrypoints",
+          "v": "Optional. JS source and entry-function map for script mode."
+        },
+        {
+          "k": "routes.<name>",
+          "v": "Optional. Endpoint addresses; string form or {url, method, headers, params, responseType, parser}; {keyword}/{page}/{id}/{url} placeholders auto-replaced."
+        },
+        {
+          "k": "selectors",
+          "v": "Optional. Declarative selectors (JSONPath / CSS / XPath), used with parser.overrides."
+        },
+        {
+          "k": "category.dynamicCategories / categoryEntries",
+          "v": "Optional. Dynamic category inference or static category table [{id,title}]."
+        },
+        {
+          "k": "homeSections[]",
+          "v": "Optional. Home sections: {id, title, route, style, limit}; falls back to a single 'latest' block when omitted."
+        },
+        {
+          "k": "filters",
+          "v": "Optional. Dynamic filters: groups, byCategory (per-category override), defaults (category default params)."
+        },
+        {
+          "k": "stealthMode",
+          "v": "Optional bool. More aggressive anti-detection request strategy."
+        },
+        {
+          "k": "antiHotlinking.referer / headers / userAgent",
+          "v": "Optional. Anti-hotlink: add Referer / headers / specific UA."
+        },
+        {
+          "k": "webviewConfig.adblock / timeoutSeconds",
+          "v": "Optional. WebView adblock toggle and timeout (default true / 20s)."
+        },
+        {
+          "k": "comments",
+          "v": "Optional. Comments config: provider(source/bangumi), routes(list required; replies/post/reply/like/report optional), selectors, login(WebView login page + checkCookie/checkUrl)."
+        },
+        {
+          "k": "network",
+          "v": "Optional. Source-level network override: proxy / dns / hosts / sni / ech; inherits global by default, invalid values only warn."
+        },
+        {
+          "k": "announcement",
+          "v": "Optional. Source announcement: {title, body?, url?, updatedAt?}."
+        },
+        {
+          "k": "webFavorite",
+          "v": "Optional. Web favorites: enabled / title / route / url / addRoute / addUrl / requireLogin; when present, the 'Web Favorites' tab shows in browse."
+        },
+        {
+          "k": "ageRating",
+          "v": "Optional. Age rating: general (all) / teen (13+/16+) / mature (18+). Aliases like all/16/r18/nsfw accepted; default general. mature is hidden by default."
+        },
+        {
+          "k": "deprecated / migrationMessage",
+          "v": "Optional. Mark deprecated and show a migration hint."
+        },
+        {
+          "k": "enabled / enabledExplore / isHidden",
+          "v": "Optional bool. Enabled / shown in explore / hidden."
+        }
+      ],
+      "code": "// Top-level field skeleton (illustrative, not a full source)\n{\n  \"id\": \"demo_anime\",\n  \"name\": \"Demo Anime\",\n  \"version\": 1,\n  \"type\": \"animeSource\",\n  \"responseType\": \"json\",\n  \"useWebview\": false,\n  \"site\": { \"domain\": \"example.com\", \"baseUrl\": \"https://example.com\" },\n  \"parser\": { \"type\": \"hybrid\", \"overrides\": { \"video\": { \"type\": \"webview\" } } },\n  \"routes\": { \"latest\": { \"url\": \"/api/latest?page={page}\" } },\n  \"ageRating\": \"general\",\n  \"webFavorite\": { \"route\": \"fav\", \"addRoute\": \"fav_add\" },\n  \"network\": { \"proxy\": \"direct\" }\n}"
+    }
+  ]
+}};

@@ -342,7 +342,7 @@
     var dict = I18N[state.lang] || I18N.zh;
 
     // 按 group 分组（右侧大纲）
-    var groupOrder = ["basic", "modules", "syntax", "practice"];
+    var groupOrder = ["basic", "intermediate", "advanced"];
     var groups = {};
     groupOrder.forEach(function (g) { groups[g] = []; });
     arr.forEach(function (m) {
