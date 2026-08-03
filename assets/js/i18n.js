@@ -1246,7 +1246,7 @@ window.CONTENT = {
       "id": "advanced",
       "title": "十四、进阶：源级网络 / 评论 / 登录（v0.4.0）",
       "group": "advanced",
-      "body": "v0.4.0 起，源还能声明一些「站点级」能力，让 App 在不改引擎的前提下适配更复杂的站点：\n· network（可选）：源级网络覆盖。子键 proxy / dns / hosts / sni / ech，逐项选「继承全局」或「单独覆盖」。缺省即继承全局设置，非法值只告警、不会让源无法启用。\n· comments（可选）：声明该源的评论能力。provider 默认 source（评论来自源站）；routes 声明 list / replies / post / reply / like / report 等路由（未声明的按钮不渲染）；selectors 用同一套 JSONPath/CSS/XPath 引擎抽取内容；login 可声明 WebView 登录页与登录态校验（checkCookie / checkUrl）。\n· 源登录鉴权：对需登录的站点，可用 WebView 捕获会话 Cookie 或手动粘贴 Cookie，凭据仅存本地。",
+      "body": "v0.4.0 起，源还能声明一些「站点级」能力，让 App 在不改引擎的前提下适配更复杂的站点：\n· network（可选）：源级网络覆盖。子键 proxy / dns / hosts / sni / ech，逐项选「继承全局」或「单独覆盖」。缺省即继承全局设置，非法值只告警、不会让源无法启用。\n· comments（可选）：声明该源的评论能力。provider 默认 source（评论来自源站）；routes 声明 list / replies / post / reply / like / report 等路由（未声明的按钮不渲染）；selectors 用同一套 JSONPath/CSS/XPath 引擎抽取内容。\n· 登录（可选，comments.login 段 + site.cookies），两种方式：\n  - WebView 登录：login.url 填登录页地址，App 用 WebView 打开让用户登录，成功后捕获会话 Cookie 存本地；可用 login.checkUrl + login.loggedInSelector 做登录态二次探测（GET checkUrl，选择器命中非空即已登录）。\n  - Cookie 登录：login.checkCookie 填「Cookie 中代表已登录的键名」，App 据此快速判断登录态；也可以在 site.cookies 直接粘贴整段会话 Cookie，全源请求自动携带。\n凭据只存本地，不会上传；未声明登录时，该源按「只读 / 免登录」处理。",
       "fields": [
         {
           "k": "network",
@@ -1257,15 +1257,27 @@ window.CONTENT = {
           "v": "声明源站评论；routes.list 为必需（声明 comments 时），其余按需。"
         },
         {
-          "k": "comments.login",
-          "v": "需登录时的 WebView 登录页与登录态校验（checkCookie / checkUrl）。"
+          "k": "comments.login.url",
+          "v": "WebView 登录页地址；App 打开该页登录并捕获会话 Cookie（仅存本地）。"
+        },
+        {
+          "k": "comments.login.checkCookie",
+          "v": "Cookie 登录：Cookie 中出现该键名即视为已登录（快速判断）。"
+        },
+        {
+          "k": "comments.login.checkUrl / loggedInSelector",
+          "v": "登录态二次探测：GET checkUrl，选择器命中非空即登录有效。"
+        },
+        {
+          "k": "site.cookies",
+          "v": "手动 Cookie 登录：直接把会话 Cookie 字符串填到 site.cookies，全源请求自动携带。"
         },
         {
           "k": "生效优先级",
           "v": "用户覆盖 > 源 network 块 > 全局设置 > 默认值；改完即时生效，无需重启。"
         }
       ],
-      "code": "\"network\": { \"proxy\": \"direct\", \"dns\": \"system\" },\n\"comments\": {\n  \"provider\": \"source\",\n  \"routes\": { \"list\": { \"url\": \"/api/comments?book={id}\", \"responseType\": \"json\" } },\n  \"selectors\": { \"items\": \"$.list\", \"content\": \"$.content\", \"author\": \"$.user\" }\n}"
+      "code": "\"network\": { \"proxy\": \"direct\", \"dns\": \"system\" },\n\"comments\": {\n  \"provider\": \"source\",\n  \"routes\": { \"list\": { \"url\": \"/api/comments?book={id}\", \"responseType\": \"json\" } },\n  \"selectors\": { \"items\": \"$.list\", \"content\": \"$.content\", \"author\": \"$.user\" },\n  \"login\": {\n    \"url\": \"https://example.com/login\",\n    \"checkCookie\": \"sessionid\",\n    \"checkUrl\": \"https://example.com/me\",\n    \"loggedInSelector\": \".user-info\"\n  }\n}\n// 手动 Cookie 登录：直接在 site.cookies 粘贴整段会话 Cookie\n\"site\": { \"baseUrl\": \"https://example.com\", \"cookies\": \"sessionid=abc123; uid=42\" }"
     },
     {
       "id": "collection",
@@ -1338,16 +1350,8 @@ window.CONTENT = {
       "code": null
     },
     {
-      "id": "roadmap",
-      "title": "二十、路线规划（规划中 · 欢迎参与）",
-      "group": "advanced",
-      "body": "以下功能尚未实现，是后续版本的重点方向。设计同样存在大量取舍，欢迎到 GitHub Discussions 或 Issues 提意见：\n1. 接入 AI 能力：AI 辅助搜源、内容摘要、看番 / 看书助手、自然语言检索等。\n2. 小说翻译：机翻管线，原文 / 译文对照、按需段落翻译与缓存。\n3. 漫画翻译（MTL）：漫画图片机翻嵌字 / 气泡替换，降低跨语言漫画阅读门槛。\n4. 视频实时翻译：影视字幕 / 实时字幕翻译，支持外挂与内嵌字幕的语言切换。\n5. 增加其他同步方式：在现有 Bangumi 同步之外，接入 AniList、MyAnimeList、Trakt、SIMKL、MDList 等更多后端，并支持跨后端双向同步与可配置冲突策略。",
-      "fields": null,
-      "code": null
-    },
-    {
       "id": "fields",
-      "title": "二十一、源字段完整参考",
+      "title": "二十、源字段完整参考",
       "group": "advanced",
       "body": "下面按「顶层字段 / site / parser / routes / 选择器 / 高级块」给出一份较完整的字段速查。除 id、name、type、site、parser 外，其余字段均可选；源模型会忽略未知键（如 author / lang / builtin），请勿把它们当功能字段使用。\n\n完整约束以仓库源码 lib/core/models/plugin_config.dart 为准，本表覆盖日常编写最常用的字段。",
       "fields": [
@@ -1441,7 +1445,7 @@ window.CONTENT = {
         },
         {
           "k": "comments",
-          "v": "可选。评论配置：provider(source/bangumi)、routes(list 必需，replies/post/reply/like/report 可选)、selectors、login(WebView 登录页 + checkCookie/checkUrl)。"
+          "v": "可选。评论配置：provider(source/bangumi)、routes(list 必需，replies/post/reply/like/report 可选)、selectors、login(url=WebView 登录页 + checkCookie=Cookie 键名 + checkUrl/loggedInSelector=登录态探测)。"
         },
         {
           "k": "network",
@@ -1808,7 +1812,7 @@ window.CONTENT = {
       "id": "advanced",
       "title": "14. Advanced: source-level network / comments / login (v0.4.0)",
       "group": "advanced",
-      "body": "Since v0.4.0 a source can also declare some 'site-level' capabilities, letting the app adapt to more complex sites without engine changes:\n· network (optional): source-level network override. Sub-keys proxy / dns / hosts / sni / ech, each set to 'inherit global' or a specific override. Defaults to global; invalid values only warn and never disable the source.\n· comments (optional): declares the source's comment capability. provider defaults to source (comments from the site); routes declares list / replies / post / reply / like / report (undeclared buttons are not rendered); selectors reuse the same JSONPath/CSS/XPath engine; login can declare a WebView login page and session check (checkCookie / checkUrl).\n· source auth: for sites that require login, a WebView can capture the session Cookie, or you can paste a Cookie manually; credentials stay local only.",
+      "body": "Since v0.4.0 a source can also declare some 'site-level' capabilities, letting the app adapt to more complex sites without engine changes:\n· network (optional): source-level network override. Sub-keys proxy / dns / hosts / sni / ech, each set to 'inherit global' or a specific override. Defaults to global; invalid values only warn and never disable the source.\n· comments (optional): declares the source's comment capability. provider defaults to source (comments from the site); routes declares list / replies / post / reply / like / report (undeclared buttons are not rendered); selectors reuse the same JSONPath/CSS/XPath engine.\n· login (optional, comments.login + site.cookies), two ways:\n  - WebView login: set login.url to the login page; the app opens it in a WebView, captures the session cookie after login and stores it locally; optionally use login.checkUrl + login.loggedInSelector for a session probe (GET checkUrl; non-empty selector match = logged in).\n  - Cookie login: set login.checkCookie to the cookie key that indicates logged-in so the app can quickly check the session; you can also paste the whole session cookie into site.cookies and all source requests will carry it.\nCredentials stay local only; if login is not declared, the source is treated as read-only / no-login.",
       "fields": [
         {
           "k": "network",
@@ -1819,15 +1823,27 @@ window.CONTENT = {
           "v": "Declares site comments; routes.list is required when comments is set, others optional."
         },
         {
-          "k": "comments.login",
-          "v": "WebView login page and session check (checkCookie / checkUrl) when login is required."
+          "k": "comments.login.url",
+          "v": "WebView login page URL; the app opens it for login and captures the session cookie (stored locally only)."
+        },
+        {
+          "k": "comments.login.checkCookie",
+          "v": "Cookie login: if this key appears in the cookie, the user is considered logged in (fast check)."
+        },
+        {
+          "k": "comments.login.checkUrl / loggedInSelector",
+          "v": "Session probe: GET checkUrl; non-empty selector match means login is valid."
+        },
+        {
+          "k": "site.cookies",
+          "v": "Manual cookie login: paste the session cookie string into site.cookies; all source requests carry it."
         },
         {
           "k": "precedence",
           "v": "User override > source network block > global > default; applies instantly, no restart."
         }
       ],
-      "code": "\"network\": { \"proxy\": \"direct\", \"dns\": \"system\" },\n\"comments\": {\n  \"provider\": \"source\",\n  \"routes\": { \"list\": { \"url\": \"/api/comments?book={id}\", \"responseType\": \"json\" } },\n  \"selectors\": { \"items\": \"$.list\", \"content\": \"$.content\", \"author\": \"$.user\" }\n}"
+      "code": "\"network\": { \"proxy\": \"direct\", \"dns\": \"system\" },\n\"comments\": {\n  \"provider\": \"source\",\n  \"routes\": { \"list\": { \"url\": \"/api/comments?book={id}\", \"responseType\": \"json\" } },\n  \"selectors\": { \"items\": \"$.list\", \"content\": \"$.content\", \"author\": \"$.user\" },\n  \"login\": {\n    \"url\": \"https://example.com/login\",\n    \"checkCookie\": \"sessionid\",\n    \"checkUrl\": \"https://example.com/me\",\n    \"loggedInSelector\": \".user-info\"\n  }\n}\n// Manual cookie login: paste the whole session cookie into site.cookies\n\"site\": { \"baseUrl\": \"https://example.com\", \"cookies\": \"sessionid=abc123; uid=42\" }"
     },
     {
       "id": "collection",
@@ -1900,16 +1916,8 @@ window.CONTENT = {
       "code": null
     },
     {
-      "id": "roadmap",
-      "title": "20. Roadmap (planned · community input welcome)",
-      "group": "advanced",
-      "body": "The following are not yet implemented and are the focus areas for upcoming versions. Their design involves many trade-offs — share your thoughts on GitHub Discussions or Issues:\n1. AI integration: AI-assisted source search, content summarization, watch/read assistants, natural-language search, etc.\n2. Novel translation: a machine-translation pipeline with original/translated side-by-side, on-demand paragraph translation and caching.\n3. Manga translation (MTL): machine-translated inset text / speech-bubble replacement to lower the barrier for cross-language manga.\n4. Real-time video translation: subtitle / live-subtitle translation for video, with language switching for both external and embedded subtitles.\n5. More sync backends: beyond the current Bangumi sync, integrate AniList, MyAnimeList, Trakt, SIMKL, MDList and more, with configurable cross-backend two-way sync and conflict policies.",
-      "fields": null,
-      "code": null
-    },
-    {
       "id": "fields",
-      "title": "21. Complete Source Field Reference",
+      "title": "20. Complete Source Field Reference",
       "group": "advanced",
       "body": "A fairly complete field cheat-sheet, grouped as top-level / site / parser / routes / selectors / advanced blocks. Everything except id, name, type, site and parser is optional; unknown keys (e.g. author / lang / builtin) are ignored by the model — do not treat them as functional fields.\n\nThe authoritative constraints live in lib/core/models/plugin_config.dart; this table covers the fields used most often when writing a source.",
       "fields": [
@@ -2003,7 +2011,7 @@ window.CONTENT = {
         },
         {
           "k": "comments",
-          "v": "Optional. Comments config: provider(source/bangumi), routes(list required; replies/post/reply/like/report optional), selectors, login(WebView login page + checkCookie/checkUrl)."
+          "v": "Optional. Comments config: provider(source/bangumi), routes(list required; replies/post/reply/like/report optional), selectors, login(url=WebView login page + checkCookie=cookie key + checkUrl/loggedInSelector=session probe)."
         },
         {
           "k": "network",
