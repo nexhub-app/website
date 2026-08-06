@@ -196,7 +196,10 @@ window.CONTENT = {
       { icon: "📊", title: "Bangumi 同步", desc: "一键将看番进度、收藏与评分同步到 Bangumi（bgm.tv），多端共享你的动画清单。" },
       { icon: "🌐", title: "网络配置", desc: "自定义代理、镜像站与请求头，应对部分站点被 SNI/ECH 阻断或限流的情况。" },
       { icon: "💬", title: "收藏分组与评论", desc: "本地收藏支持分组、评分与备注评论，跨媒体统一管理你的追更清单。" },
-      { icon: "🔑", title: "源登录鉴权", desc: "源可声明登录需求，保存 Cookie / 登录态后访问需登录的站点，凭据仅存本地。" }
+      { icon: "🔑", title: "源登录鉴权", desc: "源可声明登录需求，保存 Cookie / 登录态后访问需登录的站点，凭据仅存本地。" },
+      { icon: "🗂️", title: "本地内容管理", desc: "本地导入的漫画 / 文件支持删除、重命名与按文件名顺序阅读；下载路径可自定义并立即生效（Windows 不再冻结）。" },
+      { icon: "🔞", title: "年龄分级体系", desc: "源可声明 ageRating 年龄分级；18+ 源默认隐藏，可在设置中手动开启，保护未成年人。" },
+      { icon: "🎨", title: "Material 3 + 设计基准", desc: "弹层限高合规、语义状态色统一、间距 / 圆角 token 化，窄屏自适应，观感一致。" }
     ],
     en: [
       { icon: "🧩", title: "All-in-One", desc: "Anime / manga / novel / video in a single app, with unified search, favorites and history." },
@@ -210,7 +213,10 @@ window.CONTENT = {
       { icon: "📊", title: "Bangumi Sync", desc: "One-tap sync your watch progress, collections and ratings to Bangumi (bgm.tv) — share your anime list across devices." },
       { icon: "🌐", title: "Network Config", desc: "Set custom proxies, mirrors and request headers to handle sites blocked or rate-limited via SNI/ECH." },
       { icon: "💬", title: "Favorites & Comments", desc: "Group, rate and annotate your local favorites; manage your tracking list across all media types." },
-      { icon: "🔑", title: "Source Auth", desc: "Sources can require login; save cookies / session to access member-only sites — credentials stay local only." }
+      { icon: "🔑", title: "Source Auth", desc: "Sources can require login; save cookies / session to access member-only sites — credentials stay local only." },
+      { icon: "🗂️", title: "Local Content Management", desc: "Delete / rename locally imported manga and files, read image folders in filename order; custom download paths take effect instantly (no more Windows freeze)." },
+      { icon: "🔞", title: "Age Rating System", desc: "Sources can declare an ageRating; 18+ sources are hidden by default and can be enabled in Settings — protecting minors." },
+      { icon: "🎨", title: "Material 3 + Design Baseline", desc: "Compliant bottom sheets, unified semantic status colors, tokenized spacing & radii, responsive on narrow screens." }
     ]
   },
   downloads: {
@@ -235,14 +241,14 @@ window.CONTENT = {
       { q: "如何导入源", a: "在应用内进入「源管理 / 导入源」，粘贴源文件内容或选择文件即可。同名源以版本号较高者覆盖，旧版本不会被误装，安全升级。" },
       { q: "自己写源（共创式架构）", a: "源是一个 JSON 文件，可包含声明式选择器（xpath / css / jsonpath）或内嵌 JS 解析脚本。应用通过 JS 沙箱执行脚本，不把任何站点写死在代码里——这正是「源即插件」的含义。往下滚动可查看完整《源编写教程》。" },
       { q: "数据安全与隐私", a: "NexHub 不收集个人信息，不托管任何媒体内容；所有请求直连第三方源站。请遵守所在地法律法规使用。" },
-      { q: "v0.4.0 是大版本更新，数据安全吗？", a: "v0.4.0 是一次较大的功能更新（新增 Bangumi 同步、网络配置、收藏分组与评论、源登录鉴权、详情页重构等）。数据格式向后兼容，旧版本收藏与导入的源无需重新导入；建议升级前备份应用数据以防意外。新版本稳定性仍在打磨，遇到问题可在 GitHub 反馈。" }
+      { q: "v0.4.x 是大版本更新，数据安全吗？", a: "v0.4.x 系列是一次较大的功能更新（新增 Bangumi 同步、网络配置、收藏分组与评论、源登录鉴权、详情页重构、UI 设计基准等）。数据格式向后兼容，旧版本收藏与导入的源无需重新导入；建议升级前备份应用数据以防意外。新版本稳定性仍在打磨，遇到问题可在 GitHub 反馈。" }
     ],
     en: [
       { q: "Getting Started", a: "Install and open the app — built-in sources ship with it. For more content, import community sources from the Source Repository and browse them in the matching category." },
       { q: "How to import a source", a: "In the app, open 'Source Management / Import Source', then paste the source JSON or pick a file. Same-id sources upgrade by the higher version; older versions won't overwrite — safe upgrades." },
       { q: "Write your own source", a: "A source is a JSON file with declarative selectors (xpath / css / jsonpath) or embedded JS. The app runs it in a JS sandbox and hardcodes no site — that is exactly what 'source = plugin' means. Scroll down for the full Source Authoring Tutorial." },
       { q: "Data & privacy", a: "NexHub collects no personal data and hosts no content; all requests go directly to third-party sources. Please use it in compliance with local laws." },
-      { q: "v0.4.0 is a major update — is my data safe?", a: "v0.4.0 is a large feature update (Bangumi sync, network config, favorites grouping & comments, source auth, detail-page rebuild). Data is backward-compatible — your existing favorites and imported sources need no re-import. We recommend backing up app data before upgrading. Stability is still being polished; report issues on GitHub." }
+      { q: "v0.4.x is a major update — is my data safe?", a: "The v0.4.x series is a large feature update (Bangumi sync, network config, favorites grouping & comments, source auth, detail-page rebuild, UI design baseline, etc.). Data is backward-compatible — your existing favorites and imported sources need no re-import. We recommend backing up app data before upgrading. Stability is still being polished; report issues on GitHub." }
     ]
   },
   guide: {
