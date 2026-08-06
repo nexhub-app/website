@@ -252,261 +252,803 @@ window.CONTENT = {
     ]
   },
   guide: {
-    zh: {
-      novel: {
-        title: "📖 小说阅读器",
-        features: [
-          "字体、字号、行距、段距自由调节",
-          "多套阅读主题（含护眼 / 夜间）",
-          "翻页方式可选：上下滚动 / 左右滑动 / 仿真",
-          "阅读进度自动保存，可跨设备同步",
-          "目录跳转、书签、侧边亮度手势"
-        ],
-        howto: [
-          "在「源仓库」导入小说源（如八一中文、笔趣阁）",
-          "进入「小说」分类，搜索或浏览书名",
-          "点开书籍 → 自动拉取目录",
-          "选择章节开始阅读，左右滑动翻页",
-          "点屏幕中央唤出菜单，调整字体 / 主题 / 翻页"
-        ],
-        controls: [
-          { key: "☰ 目录", desc: "打开本书章节列表，点击任意章节直接跳转；支持搜索章节名快速定位。" },
-          { key: "◀ ▶ 上一章 / 下一章", desc: "在章节之间顺序切换，长按时弹出章节进度条可快速跳章。" },
-          { key: "⚙ 设置（屏幕中央菜单）", desc: "调整字体、字号、行距、段距、正文/背景主题、翻页方式（滚动/滑动/仿真）与亮度；所有设置即时生效并自动保存。" },
-          { key: "🔆 亮度", desc: "在设置内或左侧边缘上下滑动调节屏幕亮度，独立于系统亮度，夜间阅读更护眼。" },
-          { key: "🔖 书签", desc: "为当前页或章节添加书签，在目录面板中统一管理，方便回看。" },
-          { key: "🔍 书内搜索", desc: "在当前书籍全文中搜索关键词，定位剧情或台词。" },
-          { key: "⬇ 下载 / 缓存", desc: "将本书或当前章节缓存到本地，离线也能阅读。" },
-          { key: "↻ 自动翻页", desc: "开启后按设定间隔自动向下翻页，解放双手（部分版本支持）。" },
-          { key: "↩ 返回", desc: "返回上一层（书籍列表 / 分类），阅读进度已自动记录。" }
-        ],
-        settings: [
-          { key: "字体", desc: "选择正文字体（系统默认、思源黑体、等宽等）；部分版本支持导入本地字体文件。" },
-          { key: "字号", desc: "滑动或 +/- 调整正文字号，常见范围 12–28px，改动实时预览。" },
-          { key: "行距", desc: "调整每行文字之间的垂直间距，疏朗或紧凑随你喜好。" },
-          { key: "段距", desc: "调整段落之间的空白，长段落之间更易区分，阅读不串行。" },
-          { key: "正文主题", desc: "内置多套配色：纯白、米黄护眼、夜间黑、自定义背景；一键切换阅读背景与文字色。" },
-          { key: "翻页方式", desc: "上下滚动（连续）、左右滑动（拟真翻页）、仿真（仿书页翻动动画）三种任选。" },
-          { key: "屏幕亮度", desc: "独立调节阅读亮度，不影响系统亮度，夜间不刺眼；可与正文主题叠加使用。" },
-          { key: "自动翻页", desc: "开启后按设定秒数自动向下翻页，可随时暂停，解放双手。" },
-          { key: "全屏 / 横屏", desc: "隐藏状态栏与菜单进入沉浸阅读；部分版本支持横屏模式。" },
-          { key: "边距", desc: "调整正文左右留白，窄屏手机阅读更舒适，宽屏避免单行文字过长。" }
-        ]
-      },
-      video: {
-        title: "▶️ 视频 / 动漫",
-        features: [
-          "基于 media_kit 的硬件解码播放器",
-          "弹幕（bullet comments）支持",
-          "多播放线路一键切换",
-          "清晰度、倍速、手势控制",
-          "单击显隐控制栏；双击中间播放/暂停、双击左右快退/快进；长按自定义倍速",
-          "缓冲加载动画 + 解析进度条",
-          "追番进度与续播记忆"
-        ],
-        howto: [
-          "导入影视 / 动漫源（如花子动漫、233动漫）",
-          "进入「影视 / 动漫」分类浏览或搜索",
-          "点开番剧 → 选集",
-          "播放页可切线路、开关弹幕、调节倍速",
-          "单击显隐控制栏；双击中间播放/暂停、双击左右快退/快进；长按临时加速；横滑定位"
-        ],
-        controls: [
-          { key: "⏯ 播放 / 暂停", desc: "双击画面中间或此按钮在播放与暂停间切换；单击画面任意处显隐控制栏；暂停时显示进度条与功能菜单。" },
-          { key: "⏪ ⏩ 快退 / 快进", desc: "双击画面左半屏快退 10 秒、右半屏快进 10 秒；长按则临时切到自定义倍速加速，松手恢复。" },
-          { key: "📊 进度条", desc: "拖动定位播放位置；松手前显示时间预览，便于精准定位。左右横滑亦可拖动定位（可在设置调倍率）。" },
-          { key: "🔊 音量", desc: "点击音量图标后拖动调节；也可在屏幕右侧上下滑动控制音量。" },
-          { key: "🔎 清晰度", desc: "在菜单中选择 480P / 720P / 1080P 等，切换后从当前位置继续播放。" },
-          { key: "⏩ 倍速", desc: "0.5× ~ 3× 调节播放速度；长按画面可临时切到自定义倍速（默认 2.0×，可在设置改）。" },
-          { key: "⏳ 缓冲 / 解析进度", desc: "播放中缓冲时画面中央显示转圈动画；点开一集「找视频地址」时顶部显示细进度条。" },
-          { key: "🔀 线路 / 源切换", desc: "当某集卡顿或失效，一键切换到备用解析线路，无需退出播放页。" },
-          { key: "💬 弹幕开关", desc: "开/关弹幕显示；长按可进一步设置弹幕区域、透明度、字号与速度。" },
-          { key: "⛶ 全屏 / 小窗", desc: "切换全屏沉浸，或缩小为可拖动的小窗边看边做别的事。" },
-          { key: "🔒 锁定", desc: "锁定后屏蔽误触（尤其全屏横屏时），避免手势误操作。" },
-          { key: "📜 选集", desc: "展开剧集列表，点击任意一集跳转；已看集数会标记。" },
-          { key: "↩ 返回", desc: "返回详情页，当前播放进度自动记忆，下次续播。" }
-        ],
-        settings: [
-          { key: "默认清晰度", desc: "设置优先播放的清晰度（480P / 720P / 1080P 等），源提供时自动选用。" },
-          { key: "倍速", desc: "0.5×–2× 调节播放速度，记忆上次选择，追番或慢放细节都方便。" },
-          { key: "弹幕设置", desc: "总开关 + 显示区域（顶部/底部/全屏）、不透明度、字号、滚动速度，以及「防挡屏」（隐藏飘过角色脸部的弹幕）。" },
-          { key: "解码方式", desc: "硬解（默认，省电流畅） / 软解（兼容个别非常规编码格式）。" },
-          { key: "画面比例", desc: "16:9 / 4:3 / 铺满屏幕 / 原始比例，适应不同片源的黑边处理。" },
-          { key: "跳过片头片尾", desc: "设定秒数后自动略过片头尾，连续看剧不中断。" },
-          { key: "后台播放", desc: "锁屏或切换到后台时继续播放音频，当收音机用。" },
-          { key: "默认线路", desc: "记忆上次使用的解析线路，下次播放免重复选择。" },
-          { key: "手势灵敏度", desc: "调节左右滑动快进、上下滑动亮度/音量的触发区域与灵敏度（部分版本）。" }
-        ]
-      },
-      manga: {
-        title: "📚 漫画阅读器",
-        features: [
-          "分页 / 卷轴（Webtoon）两种模式",
-          "双页、单页、自适应宽度",
-          "缩放、平移、阅读方向（左 / 右）",
-          "夜间模式与亮度调节",
-          "预加载与离线缓存"
-        ],
-        howto: [
-          "导入漫画源（如 GoDa漫画、Bun漫畫）",
-          "进入「漫画」分类，按标签筛选（韩漫 / 国漫 / 日漫…）",
-          "点开漫画 → 选话",
-          "阅读页双指缩放、滑动翻页",
-          "设置中切换分页 / 卷轴与阅读方向"
-        ],
-        controls: [
-          { key: "☰ 目录", desc: "打开话数列表，点击任意一话跳转；支持按标签/进度筛选已看章节。" },
-          { key: "◀ ▶ 上一话 / 下一话", desc: "顺序切换章节（卷轴模式下为向上/向下翻页）。" },
-          { key: "🔍 缩放", desc: "双指捏合或点击缩放按钮放大画面；分页模式下可拖动平移查看大图细节。" },
-          { key: "⚙ 阅读设置", desc: "切换「分页 / 卷轴（Webtoon）」模式、单页/双页/自适应宽度、阅读方向（左→右 或 右→左，适配日漫/韩漫）、点击区域翻页或滚动翻页。" },
-          { key: "🌙 夜间模式", desc: "降低背景亮度并反转/过滤色温，暗光环境不刺眼；也可滑动调节亮度。" },
-          { key: "⬇ 下载 / 缓存", desc: "缓存整话或整本图片，离线阅读；后台预加载下一话减少等待。" },
-          { key: "↻ 修正方向", desc: "若图片上下/左右颠倒，在此旋转 90° 校正。" },
-          { key: "💾 保存图片", desc: "长按单张图片可保存到本地相册（部分源支持）。" },
-          { key: "↩ 返回", desc: "返回详情页，阅读进度自动保存。" }
-        ],
-        settings: [
-          { key: "阅读模式", desc: "分页（单页翻） / 卷轴 Webtoon（长图连续向下滚动，适合条漫）。" },
-          { key: "页面布局", desc: "单页 / 双页（适合平板横屏） / 自适应宽度（图片撑满屏宽）。" },
-          { key: "阅读方向", desc: "左→右（国漫/美漫）或 右→左（日漫/韩漫），目录排序与翻页逻辑随之翻转。" },
-          { key: "翻页方式", desc: "点击屏幕左右区域 / 滑动 / 音量键翻页，单手也能操作。" },
-          { key: "夜间模式", desc: "压暗背景并过滤蓝光，亮度可微调，暗光环境不刺眼。" },
-          { key: "图片质量", desc: "加载原图（清晰）或压缩图（省流量），按网络情况取舍。" },
-          { key: "预加载", desc: "提前缓存后续若干页，翻页更跟手，减少等待。" },
-          { key: "双击缩放", desc: "双击在「适配宽度」与「原图放大」之间快速切换。" },
-          { key: "旋转", desc: "整体旋转 90°，校正上下/左右颠倒的图片。" },
-          { key: "长按保存", desc: "开启后长按单张图片可保存到本地相册（部分源支持）。" }
-        ]
-      }
+  "zh": {
+    "novel": {
+      "title": "📖 小说阅读器",
+      "features": [
+        "字号 / 行距 / 段距 / 边距自由调节，实时预览",
+        "11 套背景预设（黑 / 深灰 / 白 / 护眼绿 / 羊皮纸 / 暖黄…）+ 自定义背景与正文色",
+        "6 种翻页动画：无动画 / 滑动 / 滚动 / 淡入 / 覆盖 / 仿真卷页",
+        "自定义字体：系统 / serif / 等宽，支持导入本地 .ttf / .otf",
+        "TTS 朗读：语速 / 睡眠定时 / 后台朗读",
+        "自动翻页、简繁转换、文字阴影、夜间跟随策略",
+        "书内搜索、书签、整本缓存下载",
+        "阅读进度自动保存；上一章自动回到章末页"
+      ],
+      "howto": [
+        "在「源仓库」导入小说源（如笔趣阁、八一中文）",
+        "进入「小说」分类，搜索或浏览书名",
+        "点开书籍 → 自动拉取目录",
+        "选择章节开始阅读：单击按热区翻页，左侧 1/3 上下滑动调亮度",
+        "单击屏幕中央呼出菜单，调整字体 / 主题 / 翻页 / 自动翻页，改动即时生效",
+        "想改默认值？到「设置 → 小说阅读器」统一调整"
+      ],
+      "controls": [
+        {
+          "key": "☰ 目录",
+          "desc": "打开章节列表，点击任意章节跳转；支持搜索章节名快速定位；书签列表也在这里统一管理。"
+        },
+        {
+          "key": "◀ ▶ 上一章 / 下一章",
+          "desc": "顺序切换章节；上一章自动回到上章最后一页，下一章从第一页开始。"
+        },
+        {
+          "key": "⚙ 设置（屏幕中央菜单）",
+          "desc": "字号、行距、段距、边距、背景预设 / 自定义色、翻页动画、点击区布局、文字阴影、简繁转换、亮度、自动翻页等，即时生效并自动保存。"
+        },
+        {
+          "key": "🔆 亮度",
+          "desc": "设置内滑块，或左侧 1/3 区域上下滑动独立调节亮度，不影响系统亮度。"
+        },
+        {
+          "key": "🔖 书签",
+          "desc": "为当前页添加书签；书签列表可跳转、删除，方便回看。"
+        },
+        {
+          "key": "🔍 书内搜索",
+          "desc": "在当前章节或全书范围搜索关键词，快速定位剧情。"
+        },
+        {
+          "key": "🗣 朗读（TTS）",
+          "desc": "语速、睡眠定时、后台朗读（锁屏或切后台继续朗读）。"
+        },
+        {
+          "key": "⬇ 下载 / 缓存",
+          "desc": "将整本缓存到本地，离线也能阅读。"
+        },
+        {
+          "key": "↻ 自动翻页",
+          "desc": "按设定秒数（如 3 / 5 / 10 / 15）自动翻页，可随时暂停。"
+        },
+        {
+          "key": "🔤 简繁转换",
+          "desc": "一键在简体 / 繁体之间切换正文。"
+        },
+        {
+          "key": "↩ 返回",
+          "desc": "返回书籍列表，阅读进度已自动保存。"
+        }
+      ],
+      "settings": [
+        {
+          "key": "字号",
+          "desc": "12–32，实时预览。"
+        },
+        {
+          "key": "行距",
+          "desc": "1.2–3.0，调节行间垂直间距。"
+        },
+        {
+          "key": "段距",
+          "desc": "4–48，段落之间的空白。"
+        },
+        {
+          "key": "边距",
+          "desc": "8–64，左右留白。"
+        },
+        {
+          "key": "背景预设",
+          "desc": "11 套：黑 / 深灰 / 白 / 护眼绿 / 羊皮纸 / 暖黄 / 浅褐 / 豆沙绿 / 淡青 / 暖杏 / 浅灰蓝；另可自定义背景色与正文色。"
+        },
+        {
+          "key": "翻页动画",
+          "desc": "无动画 / 滑动 / 滚动 / 淡入 / 覆盖 / 仿真（贝塞尔卷页）六种。"
+        },
+        {
+          "key": "字体",
+          "desc": "系统默认 / serif / 等宽；自定义字体支持导入本地 .ttf / .otf 文件。"
+        },
+        {
+          "key": "夜间跟随",
+          "desc": "跟随应用主题 / 始终夜间 / 始终日间。"
+        },
+        {
+          "key": "亮度",
+          "desc": "独立于系统亮度的阅读亮度，可与背景叠加。"
+        },
+        {
+          "key": "自动翻页",
+          "desc": "间隔秒数（0 为关闭），到点自动翻页。"
+        },
+        {
+          "key": "点击区布局",
+          "desc": "L 形默认 / 左右 / Kindle / 两侧 / 关闭五种，可反转；决定单击屏幕各区域的动作。"
+        },
+        {
+          "key": "文字阴影",
+          "desc": "正文描边 / 阴影开关，深色背景下更清晰。"
+        },
+        {
+          "key": "简繁转换",
+          "desc": "简体 / 繁体 / 不转换。"
+        },
+        {
+          "key": "朗读（TTS）",
+          "desc": "语速、睡眠定时、后台朗读。"
+        },
+        {
+          "key": "页眉 / 页脚",
+          "desc": "自定义显示时间、电量、章节标题、书名、页码、阅读进度等槽位。"
+        },
+        {
+          "key": "底部工具栏",
+          "desc": "自定义摆放 目录 / 上一章 / 下一章 / 夜间 / 自动翻页 / 设置 / 书签 / 书内搜索 / 朗读 等按钮。"
+        }
+      ]
     },
-    en: {
-      novel: {
-        title: "📖 Novel Reader",
-        features: [
-          "Adjustable font, size, line & paragraph spacing",
-          "Multiple reading themes (incl. eye-care / night)",
-          "Page-turn modes: scroll / swipe / simulated",
-          "Auto-saved progress, syncable across devices",
-          "TOC jump, bookmarks, side brightness gesture"
-        ],
-        howto: [
-          "Import a novel source (e.g. 八一中文, 笔趣阁)",
-          "Open the Novel category, search or browse titles",
-          "Open a book → table of contents is fetched",
-          "Pick a chapter to read; swipe to turn pages",
-          "Tap the screen center to open the menu and tweak style"
-        ],
-        controls: [
-          { key: "☰ Contents", desc: "Open the chapter list and jump to any chapter; search by chapter name to locate quickly." },
-          { key: "◀ ▶ Prev / Next chapter", desc: "Move between chapters sequentially; long-press shows a chapter scrubber for fast jumping." },
-          { key: "⚙ Settings (center tap)", desc: "Adjust font, size, line/paragraph spacing, text/background theme, page-turn mode (scroll/swipe/simulation) and brightness — all apply instantly and persist." },
-          { key: "🔆 Brightness", desc: "Drag up/down on the left edge (or use the slider in settings) to control screen brightness independently of the system, easier on the eyes at night." },
-          { key: "🔖 Bookmark", desc: "Bookmark the current page or chapter; manage them in the contents panel for easy revisiting." },
-          { key: "🔍 In-book search", desc: "Search keywords across the whole book to find a plot point or a line." },
-          { key: "⬇ Download / cache", desc: "Cache the book or current chapters locally for offline reading." },
-          { key: "↻ Auto-scroll", desc: "Auto page-down at a set interval to free your hands (some builds)." },
-          { key: "↩ Back", desc: "Return to the book list / category; progress is saved automatically." }
-        ],
-        settings: [
-          { key: "Font", desc: "Pick the body font (system default, Source Han, monospace, etc.); some builds let you import a local font file." },
-          { key: "Font size", desc: "Slide or use +/- to change body size, typically 12–28px, with live preview." },
-          { key: "Line spacing", desc: "Adjust vertical gap between lines — airy or compact, your choice." },
-          { key: "Paragraph spacing", desc: "Adjust blank space between paragraphs so long passages stay distinguishable." },
-          { key: "Reading theme", desc: "Several presets: white, eye-care beige, night black, custom background — one tap switches text & bg colors." },
-          { key: "Page-turn mode", desc: "Scroll (continuous), swipe (page-flip), or simulated (book-page animation) — pick any." },
-          { key: "Screen brightness", desc: "Independent reader brightness, not affecting system; gentle at night, stacks with the theme." },
-          { key: "Auto-scroll", desc: "Auto page-down at a set interval; pausable, hands-free." },
-          { key: "Fullscreen / Landscape", desc: "Hide status bar & menu for immersion; some builds support landscape." },
-          { key: "Margins", desc: "Adjust left/right padding for comfortable reading on narrow phones or avoid over-long lines on wide screens." }
-        ]
-      },
-      video: {
-        title: "▶️ Video / Anime",
-        features: [
-          "media_kit based hardware-decoded player",
-          "Danmaku (bullet comments) support",
-          "One-tap switch between play sources",
-          "Quality, playback speed and gesture control",
-          "Tap to toggle UI; double-tap center play/pause, left/right rewind/forward; long-press custom speed boost",
-          "Buffering spinner & resolve progress bar",
-          "Episode progress & resume memory"
-        ],
-        howto: [
-          "Import a video/anime source (e.g. 花子动漫, 233动漫)",
-          "Open the Video/Anime category to browse or search",
-          "Open a show → pick an episode",
-          "In player: switch source, toggle danmaku, change speed",
-          "Tap to toggle UI; double-tap center play/pause, left/right rewind/forward; long-press to boost; swipe to seek"
-        ],
-        controls: [
-          { key: "⏯ Play / Pause", desc: "Double-tap the center or this button to toggle play/pause; single tap toggles the control bar; the progress bar and menu show while paused." },
-          { key: "⏪ ⏩ Rewind / Forward", desc: "Double-tap the left half to rewind 10s, the right half to forward 10s; long-press to temporarily switch to a custom speed boost, release to restore." },
-          { key: "📊 Progress bar", desc: "Drag to seek; a time preview appears before release. Horizontal drag also scrubs (multiplier adjustable in settings)." },
-          { key: "🔊 Volume", desc: "Tap the volume icon then drag; or swipe up/down on the right edge to control volume." },
-          { key: "🔎 Quality", desc: "Pick 480P / 720P / 1080P etc. in the menu; playback continues from the current position after switching." },
-          { key: "⏩ Speed", desc: "0.5× ~ 3× playback speed; long-press the screen to temporarily boost to a custom speed (default 2.0×, configurable)." },
-          { key: "⏳ Buffer / Resolve", desc: "A spinner shows in the center while buffering; a thin top progress bar shows while resolving the video URL." },
-          { key: "🔀 Source / line", desc: "When an episode lags or fails, switch to a backup解析 line with one tap without leaving the player." },
-          { key: "💬 Danmaku toggle", desc: "Show/hide bullet comments; long-press to further set region, opacity, font size and speed." },
-          { key: "⛶ Fullscreen / PiP", desc: "Toggle immersive fullscreen, or shrink to a draggable picture-in-picture window." },
-          { key: "🔒 Lock", desc: "Lock to block accidental touches (especially in landscape fullscreen)." },
-          { key: "📜 Episodes", desc: "Expand the episode list and jump to any one; watched episodes are marked." },
-          { key: "↩ Back", desc: "Return to the detail page; progress is remembered for resume." }
-        ],
-        settings: [
-          { key: "Default quality", desc: "Preferred quality (480P / 720P / 1080P etc.); auto-used when the source provides it." },
-          { key: "Speed", desc: "0.5×–2× playback speed, remembers last choice — handy for binge or detail." },
-          { key: "Danmaku settings", desc: "Master toggle + region (top/bottom/full), opacity, font size, scroll speed, and 'anti-occlusion' (hide danmaku over characters' faces)." },
-          { key: "Decoder", desc: "Hardware (default, power-efficient) / Software (for unusual codecs)." },
-          { key: "Aspect ratio", desc: "16:9 / 4:3 / fill / original — handles letterboxing per source." },
-          { key: "Skip intro/outro", desc: "Auto-skip after set seconds so binge-watching is uninterrupted." },
-          { key: "Background play", desc: "Keep audio playing when locked or switched to background, like a radio." },
-          { key: "Default line", desc: "Remembers the last解析 line so you don't re-pick next time." },
-          { key: "Gesture sensitivity", desc: "Tune the trigger zones/sensitivity for swipe-seek and swipe-brightness/volume (some builds)." }
-        ]
-      },
-      manga: {
-        title: "📚 Manga Reader",
-        features: [
-          "Paged / webtoon (scroll) modes",
-          "Double-page, single-page, fit-width",
-          "Zoom, pan, reading direction (L / R)",
-          "Night mode & brightness control",
-          "Preload & offline cache"
-        ],
-        howto: [
-          "Import a manga source (e.g. GoDa漫画, Bun漫畫)",
-          "Open Manga category, filter by tag (KR/CN/JP…)",
-          "Open a title → pick a chapter",
-          "Pinch to zoom, swipe to turn pages",
-          "In settings switch paged/webtoon and direction"
-        ],
-        controls: [
-          { key: "☰ Contents", desc: "Open the chapter list and jump to any chapter; filter read chapters by tag/progress." },
-          { key: "◀ ▶ Prev / Next chapter", desc: "Switch chapters sequentially (scroll mode: page up/down)." },
-          { key: "🔍 Zoom", desc: "Pinch or tap the zoom button to enlarge; in paged mode drag to pan across a large image." },
-          { key: "⚙ Reading settings", desc: "Switch Paged / Webtoon, single/double/fit-width, reading direction (L→R or R→L for JP/KR manga), tap-zone or scroll paging." },
-          { key: "🌙 Night mode", desc: "Dim the background and shift color temperature for dark rooms; also adjustable via a brightness slider." },
-          { key: "⬇ Download / cache", desc: "Cache a whole chapter or book for offline reading; next chapter preloads in the background." },
-          { key: "↻ Rotate", desc: "Rotate 90° to correct upside-down or mis-oriented images." },
-          { key: "💾 Save image", desc: "Long-press a single page to save it to the local album (some sources)." },
-          { key: "↩ Back", desc: "Return to the detail page; progress is saved automatically." }
-        ],
-        settings: [
-          { key: "Reading mode", desc: "Paged (one page at a time) / Webtoon (long continuous scroll, great for manhwa)." },
-          { key: "Page layout", desc: "Single / Double (good on landscape tablets) / Fit-width (image fills screen width)." },
-          { key: "Reading direction", desc: "L→R (CN/US comics) or R→L (JP/KR manga); TOC order and paging flip accordingly." },
-          { key: "Page-turn method", desc: "Tap left/right zones / swipe / volume keys — one-handed friendly." },
-          { key: "Night mode", desc: "Dim background and filter blue light, brightness adjustable for dark rooms." },
-          { key: "Image quality", desc: "Original (sharp) or compressed (data-saving) depending on network." },
-          { key: "Preload", desc: "Cache the next few pages ahead so paging feels snappy with less waiting." },
-          { key: "Double-tap zoom", desc: "Toggle quickly between 'fit width' and 'original zoom' on double tap." },
-          { key: "Rotate", desc: "Rotate the whole view 90° to correct upside-down or sideways images." },
-          { key: "Long-press save", desc: "When enabled, long-press a page to save it to the local album (some sources)." }
-        ]
-      }
+    "video": {
+      "title": "▶️ 视频 / 动漫播放器",
+      "features": [
+        "media_kit 播放内核：自动 / 软解 / 硬解 / 硬解+ 解码模式",
+        "弹幕（DandanPlay）：匹配剧集、关键词过滤、时间偏移等完整设置",
+        "多线路按名称分组，一键切换备用线路",
+        "手势完整：单击显隐、双击左 / 中 / 右 = 快退 / 暂停 / 快进、长按加速、左半屏亮度、右半屏音量、横滑定位",
+        "字幕、自动连播、续播记忆（每 5 秒存档）",
+        "画中画（平台支持时）、截图、定时关闭、外部播放、分享",
+        "播放统计：软硬解 / 码率 / 掉帧"
+      ],
+      "howto": [
+        "导入影视 / 动漫源（如 233动漫、花子动漫）",
+        "进入「影视 / 动漫」分类浏览或搜索",
+        "点开番剧 → 选集",
+        "播放页：单击显隐控制栏；双击中间播放 / 暂停、双击左右快退 / 快进；长按临时加速；左半屏竖滑亮度、右半屏竖滑音量；横滑定位",
+        "控制栏开关弹幕；长按弹幕按钮进弹幕设置",
+        "默认值可在「设置 → 播放器」统一调整"
+      ],
+      "controls": [
+        {
+          "key": "⏯ 播放 / 暂停",
+          "desc": "双击画面中间或点击按钮切换；单击任意处显隐控制栏。"
+        },
+        {
+          "key": "⏪ ⏩ 快退 / 快进",
+          "desc": "双击画面左半屏快退 10 秒、右半屏快进 10 秒。"
+        },
+        {
+          "key": "⚡ 长按加速",
+          "desc": "按住画面临时切到自定义倍速（默认 2.0×，可在设置改 1.0–3.0×），松手恢复。"
+        },
+        {
+          "key": "📊 进度条 / 横滑",
+          "desc": "拖动或左右横滑定位；松手前显示时间预览；横滑倍率可在设置调（0.5× / 1× / 2×）。"
+        },
+        {
+          "key": "🔆 🔊 亮度 / 音量",
+          "desc": "左半屏上下滑动调亮度、右半屏上下滑动调音量。"
+        },
+        {
+          "key": "⏩ 倍速",
+          "desc": "0.5×–2.0× 调节播放速度，记忆上次选择。"
+        },
+        {
+          "key": "⏳ 缓冲 / 解析进度",
+          "desc": "缓冲时画面中央转圈；顶部细进度条分「嗅探 / 解析」两段。"
+        },
+        {
+          "key": "🔀 线路切换",
+          "desc": "某线路卡顿或失效时，按线路名分组切换备用线路，无需退出播放页。"
+        },
+        {
+          "key": "💬 弹幕",
+          "desc": "开 / 关弹幕；长按弹幕按钮进入弹幕设置：匹配剧集（手动搜索）、关键词过滤（支持正则）、时间偏移（-10~10s）、显示区域、持续时间、行高、字号、不透明度、隐藏顶部 / 底部 / 滚动、跟随倍速。"
+        },
+        {
+          "key": "⛶ 全屏 / 画中画",
+          "desc": "全屏沉浸；画中画小窗（平台支持时）边看边做别的。"
+        },
+        {
+          "key": "📸 截图 / 分享",
+          "desc": "截图保存到 Documents/screenshots（可自定义路径）；分享当前集；外部播放器打开。"
+        },
+        {
+          "key": "⏲ 定时关闭",
+          "desc": "设定时长后自动停止播放，睡前可用。"
+        },
+        {
+          "key": "🔒 锁定",
+          "desc": "锁定后屏蔽误触（全屏横屏时尤其有用）。"
+        },
+        {
+          "key": "📜 选集 / 自动连播",
+          "desc": "展开选集列表点击跳转；开启自动连播后一集结束自动播下一集。"
+        },
+        {
+          "key": "ℹ 媒体信息 / 统计",
+          "desc": "查看分辨率、码率、解码方式（软 / 硬解）、掉帧等播放统计。"
+        },
+        {
+          "key": "↩ 返回",
+          "desc": "返回详情页；播放位置每 5 秒自动存档，下次续播。"
+        }
+      ],
+      "settings": [
+        {
+          "key": "默认解码模式",
+          "desc": "自动 / 软解 / 硬解 / 硬解+，硬解省电流畅，软解兼容特殊编码。"
+        },
+        {
+          "key": "默认音频通道",
+          "desc": "自动 / 自动保护 / 立体声 / 单声道 / 翻转立体声。"
+        },
+        {
+          "key": "默认画面比例",
+          "desc": "默认 / 4:3 / 16:9 / 填充，处理片源黑边。"
+        },
+        {
+          "key": "默认播放速度",
+          "desc": "0.5×–2.0×。"
+        },
+        {
+          "key": "自动连播",
+          "desc": "一集结束自动播下一集。"
+        },
+        {
+          "key": "默认音量",
+          "desc": "播放器起始音量。"
+        },
+        {
+          "key": "字幕",
+          "desc": "字体大小、边框、底部边距。"
+        },
+        {
+          "key": "锁定方向",
+          "desc": "自动 / 竖屏 / 横屏。"
+        },
+        {
+          "key": "拖动进度倍率",
+          "desc": "0.5× / 1× / 2×，调节横滑定位的灵敏度。"
+        },
+        {
+          "key": "长按加速",
+          "desc": "开关 + 倍速（1.0×–3.0×），长按画面临时加速。"
+        },
+        {
+          "key": "续播记忆",
+          "desc": "全局开关；每 5 秒保存播放位置。"
+        },
+        {
+          "key": "弹幕设置",
+          "desc": "匹配剧集（手动搜索）/ 关键词过滤（正则）/ 时间偏移（-10~10s）/ 显示区域 / 持续时间 / 行高 / 字体大小 / 不透明度 / 隐藏顶部·底部·滚动 / 跟随倍速。"
+        }
+      ]
+    },
+    "manga": {
+      "title": "📚 漫画阅读器",
+      "features": [
+        "5 种阅读模式：单页 LTR / 单页 RTL / 单页竖向 / 条漫 / 条漫（带间距）",
+        "双击锚点缩放（2× / 3×）、双指捏合（条漫跨页同样生效）、放大平移",
+        "背景（黑 / 灰 / 白 / 自动）+ 画面滤镜（亮度 / 对比度 / 色温 / 饱和度 / 色相 / 反色 / 灰度）",
+        "屏幕方向 7 种、点击区布局、左右留白、裁边、显示页码",
+        "翻页闪光、章节过渡、屏幕常亮、旋转页面、鼠标滚轮（桌面）",
+        "回上一话自动回到上话末页；下一页自动预加载"
+      ],
+      "howto": [
+        "导入漫画源（如 GoDa漫画、Bun漫畫）",
+        "进入「漫画」分类，按标签筛选（韩漫 / 国漫 / 日漫…）",
+        "点开漫画 → 选话",
+        "阅读：单击热区翻页 / 呼出菜单；双击任意处锚点缩放；双指捏合缩放；放大后拖动平移",
+        "桌面端：右键图片弹「设为封面 / 保存 / 分享」；鼠标滚轮缩放或翻页",
+        "默认值在「设置 → 漫画阅读器」统一调整"
+      ],
+      "controls": [
+        {
+          "key": "☰ 目录",
+          "desc": "话数列表，点击任意一话跳转。"
+        },
+        {
+          "key": "◀ ▶ 上一话 / 下一话",
+          "desc": "顺序切换；上一话自动回到上话最后一页，下一话从第一页开始。"
+        },
+        {
+          "key": "🔍 缩放",
+          "desc": "双击任意处锚点缩放（倍率 2× / 3× 可设）；双指捏合（条漫跨页也生效）；放大态拖动平移。"
+        },
+        {
+          "key": "⚙ 阅读设置（屏幕中央菜单）",
+          "desc": "阅读模式、背景、屏幕方向、点击区布局、左右留白、裁边、显示页码、翻页闪光、章节过渡等，即时生效。"
+        },
+        {
+          "key": "🎨 画面滤镜",
+          "desc": "亮度 / 对比度 / 色温 / 饱和度 / 色相 / 反色 / 灰度，暗光或特殊画风可调。"
+        },
+        {
+          "key": "🔄 旋转页面",
+          "desc": "整体旋转 90°，校正上下 / 左右颠倒的图片。"
+        },
+        {
+          "key": "🖱 鼠标滚轮（桌面）",
+          "desc": "滚轮缩放或翻页，自然 / 反向可设。"
+        },
+        {
+          "key": "✂ 设为封面 / 保存 / 分享",
+          "desc": "桌面右键或长按图片弹出；保存到 reader_images/ 目录。"
+        },
+        {
+          "key": "💾 进度",
+          "desc": "自动保存；回上一话精确回到上话末页，继续阅读不中断。"
+        },
+        {
+          "key": "↩ 返回",
+          "desc": "返回详情页，进度已自动记录。"
+        }
+      ],
+      "settings": [
+        {
+          "key": "阅读模式",
+          "desc": "单页 LTR / 单页 RTL / 单页竖向 / 条漫 / 条漫（带间距），条漫适合长图滚动阅读。"
+        },
+        {
+          "key": "背景",
+          "desc": "黑 / 灰 / 白 / 自动。"
+        },
+        {
+          "key": "屏幕方向",
+          "desc": "7 种：自动 / 竖屏 / 横屏 / 反向等。"
+        },
+        {
+          "key": "点击区域",
+          "desc": "5 种布局（L 形默认 / 左右 / Kindle / 两侧 / 关闭）+ 反转。"
+        },
+        {
+          "key": "左右留白",
+          "desc": "0–50%，调节图片左右边距。"
+        },
+        {
+          "key": "双击缩放",
+          "desc": "开关 + 倍率（2× / 3×）。"
+        },
+        {
+          "key": "初始缩放",
+          "desc": "适配宽度 / 适配高度 / 原始大小。"
+        },
+        {
+          "key": "画面与滤镜",
+          "desc": "亮度 / 对比度 / 色温 / 饱和度 / 色相 / 反色 / 灰度。"
+        },
+        {
+          "key": "裁边",
+          "desc": "裁掉图片白边，画面更满。"
+        },
+        {
+          "key": "显示页码",
+          "desc": "阅读时显示当前页 / 总页数。"
+        },
+        {
+          "key": "进度条位置",
+          "desc": "进度条固定在右侧。"
+        },
+        {
+          "key": "屏幕常亮",
+          "desc": "阅读时保持屏幕常亮。"
+        },
+        {
+          "key": "旋转页面",
+          "desc": "旋转 90° 校正方向。"
+        },
+        {
+          "key": "全屏 / 长按菜单 / 防止缩小",
+          "desc": "沉浸全屏；长按弹操作菜单；防止图片缩得比屏宽还小。"
+        },
+        {
+          "key": "章节过渡 / 翻页闪光",
+          "desc": "翻页闪光时长、延迟与颜色可调；章节切换过渡动画。"
+        },
+        {
+          "key": "鼠标滚轮（桌面）",
+          "desc": "缩放 / 翻页模式，自然 / 反向。"
+        }
+      ]
     }
   },
+  "en": {
+    "novel": {
+      "title": "📖 Novel Reader",
+      "features": [
+        "Adjustable font size, line height, paragraph spacing & margins, live preview",
+        "11 background presets (black / dark gray / white / eye-care green / parchment / warm yellow…) + custom bg & text colors",
+        "6 page animations: none / slide / scroll / fade / cover / simulated page curl",
+        "Custom fonts: system / serif / monospace, plus importing local .ttf / .otf",
+        "TTS read-aloud: speed / sleep timer / background reading",
+        "Auto page-turn, simplified ⇄ traditional conversion, text shadow, night-follow policy",
+        "In-book search, bookmarks, whole-book offline cache",
+        "Progress auto-saved; prev chapter resumes at its last page"
+      ],
+      "howto": [
+        "Import a novel source in Source Repository (e.g. 笔趣阁, 八一中文)",
+        "Open the Novel category, search or browse titles",
+        "Open a book → table of contents is fetched",
+        "Pick a chapter: tap tap-zones to turn pages; swipe up/down on the left 1/3 to adjust brightness",
+        "Tap the center to open the menu and tweak font / theme / page-turn / auto-page, applied instantly",
+        "Set global defaults in Settings → Novel Reader"
+      ],
+      "controls": [
+        {
+          "key": "☰ Contents",
+          "desc": "Open the chapter list and jump to any chapter; search by chapter name; bookmarks are managed here too."
+        },
+        {
+          "key": "◀ ▶ Prev / Next chapter",
+          "desc": "Switch chapters; prev chapter resumes at its last page, next starts from page one."
+        },
+        {
+          "key": "⚙ Settings (center tap)",
+          "desc": "Font size, line/paragraph spacing, margins, background presets / custom colors, page animation, tap-zone layout, text shadow, conversion, brightness, auto-page — applied instantly and saved."
+        },
+        {
+          "key": "🔆 Brightness",
+          "desc": "Slider in settings, or swipe up/down on the left 1/3 — independent of system brightness."
+        },
+        {
+          "key": "🔖 Bookmark",
+          "desc": "Bookmark the current page; the bookmark list supports jumping and deleting."
+        },
+        {
+          "key": "🔍 In-book search",
+          "desc": "Search keywords in the current chapter or the whole book."
+        },
+        {
+          "key": "🗣 Read-aloud (TTS)",
+          "desc": "Speed, sleep timer, background reading (keeps reading when locked or in background)."
+        },
+        {
+          "key": "⬇ Download / cache",
+          "desc": "Cache the whole book locally for offline reading."
+        },
+        {
+          "key": "↻ Auto page-turn",
+          "desc": "Auto-turn at a set interval (e.g. 3 / 5 / 10 / 15 s), pausable anytime."
+        },
+        {
+          "key": "🔤 Conversion",
+          "desc": "One-tap switch between simplified and traditional Chinese."
+        },
+        {
+          "key": "↩ Back",
+          "desc": "Return to the book list; progress is saved automatically."
+        }
+      ],
+      "settings": [
+        {
+          "key": "Font size",
+          "desc": "12–32, live preview."
+        },
+        {
+          "key": "Line height",
+          "desc": "1.2–3.0, vertical spacing between lines."
+        },
+        {
+          "key": "Paragraph spacing",
+          "desc": "4–48, blank space between paragraphs."
+        },
+        {
+          "key": "Margins",
+          "desc": "8–64, left/right padding."
+        },
+        {
+          "key": "Background presets",
+          "desc": "11: black / dark gray / white / eye-care green / parchment / warm yellow / light brown / bean green / pale cyan / warm apricot / light blue-gray; custom bg & text colors too."
+        },
+        {
+          "key": "Page animation",
+          "desc": "None / slide / scroll / fade / cover / simulated (Bezier page curl)."
+        },
+        {
+          "key": "Font",
+          "desc": "System default / serif / monospace; custom fonts support importing local .ttf / .otf."
+        },
+        {
+          "key": "Night follow",
+          "desc": "Follow app theme / always night / always day."
+        },
+        {
+          "key": "Brightness",
+          "desc": "Reader brightness independent of the system, stacks with the theme."
+        },
+        {
+          "key": "Auto page-turn",
+          "desc": "Interval in seconds (0 = off)."
+        },
+        {
+          "key": "Tap-zone layout",
+          "desc": "L-shape default / left-right / Kindle / both sides / off, invertible — decides what each screen area does on tap."
+        },
+        {
+          "key": "Text shadow",
+          "desc": "Outline/shadow for clearer text on dark backgrounds."
+        },
+        {
+          "key": "Conversion",
+          "desc": "Simplified / traditional / none."
+        },
+        {
+          "key": "Read-aloud (TTS)",
+          "desc": "Speed, sleep timer, background reading."
+        },
+        {
+          "key": "Header / footer",
+          "desc": "Custom slots: time, battery, chapter title, book title, page number, reading progress, etc."
+        },
+        {
+          "key": "Bottom toolbar",
+          "desc": "Customize buttons: contents / prev / next / night / auto-page / settings / bookmark / bookmarks / search / read-aloud."
+        }
+      ]
+    },
+    "video": {
+      "title": "▶️ Video / Anime Player",
+      "features": [
+        "media_kit core: auto / software / hardware / hardware+ decode modes",
+        "Danmaku (DandanPlay): episode matching, keyword filter, time offset and more",
+        "Multiple play lines grouped by name, one-tap backup switch",
+        "Full gestures: tap to toggle UI, double-tap left/center/right = rewind/pause/forward, long-press boost, left-half brightness, right-half volume, swipe to seek",
+        "Subtitles, auto-play next, resume memory (saved every 5 s)",
+        "PiP (when platform supports), screenshot, sleep timer, external player, share",
+        "Playback stats: software/hardware decode, bitrate, dropped frames"
+      ],
+      "howto": [
+        "Import a video/anime source (e.g. 233动漫, 花子动漫)",
+        "Open the Video/Anime category to browse or search",
+        "Open a show → pick an episode",
+        "In player: tap to toggle UI; double-tap center play/pause, left/right rewind/forward; long-press to boost; left-half swipe brightness, right-half volume; swipe to seek",
+        "Toggle danmaku from the bar; long-press the danmaku button for danmaku settings",
+        "Set global defaults in Settings → Player"
+      ],
+      "controls": [
+        {
+          "key": "⏯ Play / Pause",
+          "desc": "Double-tap the center or tap the button to toggle; single tap toggles the control bar."
+        },
+        {
+          "key": "⏪ ⏩ Rewind / Forward",
+          "desc": "Double-tap the left half to rewind 10 s, the right half to forward 10 s."
+        },
+        {
+          "key": "⚡ Long-press boost",
+          "desc": "Hold the screen to temporarily switch to a custom speed (default 2.0×, 1.0–3.0× in settings), release to restore."
+        },
+        {
+          "key": "📊 Progress / swipe seek",
+          "desc": "Drag or swipe horizontally to seek; a time preview shows before release; swipe multiplier adjustable (0.5× / 1× / 2×)."
+        },
+        {
+          "key": "🔆 🔊 Brightness / volume",
+          "desc": "Swipe up/down on the left half for brightness, right half for volume."
+        },
+        {
+          "key": "⏩ Speed",
+          "desc": "0.5×–2.0× playback speed, remembers last choice."
+        },
+        {
+          "key": "⏳ Buffer / Resolve",
+          "desc": "A spinner shows while buffering; a thin top bar shows resolve progress in two phases (sniff / parse)."
+        },
+        {
+          "key": "🔀 Line switch",
+          "desc": "When a line lags or fails, switch to a backup line grouped by name, without leaving the player."
+        },
+        {
+          "key": "💬 Danmaku",
+          "desc": "Show/hide; long-press the button for settings: match episode (manual search), keyword filter (regex), time offset (-10~10 s), region, duration, line height, font size, opacity, hide top/bottom/scroll, follow speed."
+        },
+        {
+          "key": "⛶ Fullscreen / PiP",
+          "desc": "Immersive fullscreen; picture-in-picture window when the platform supports it."
+        },
+        {
+          "key": "📸 Screenshot / Share",
+          "desc": "Screenshots saved to Documents/screenshots (path configurable); share the current episode; open in an external player."
+        },
+        {
+          "key": "⏲ Sleep timer",
+          "desc": "Stop playback automatically after a set time — handy before bed."
+        },
+        {
+          "key": "🔒 Lock",
+          "desc": "Block accidental touches (especially in landscape fullscreen)."
+        },
+        {
+          "key": "📜 Episodes / auto-next",
+          "desc": "Open the episode list and jump; with auto-play enabled the next episode starts automatically."
+        },
+        {
+          "key": "ℹ Media info / stats",
+          "desc": "Resolution, bitrate, decode mode (software/hardware), dropped frames and more."
+        },
+        {
+          "key": "↩ Back",
+          "desc": "Return to the detail page; position is saved every 5 s for resume."
+        }
+      ],
+      "settings": [
+        {
+          "key": "Default decoder",
+          "desc": "Auto / software / hardware / hardware+; hardware saves power, software handles unusual codecs."
+        },
+        {
+          "key": "Default audio channel",
+          "desc": "Auto / auto-safe / stereo / mono / swap stereo."
+        },
+        {
+          "key": "Default aspect ratio",
+          "desc": "Default / 4:3 / 16:9 / fill — handles letterboxing."
+        },
+        {
+          "key": "Default speed",
+          "desc": "0.5×–2.0×."
+        },
+        {
+          "key": "Auto-play next",
+          "desc": "Automatically start the next episode."
+        },
+        {
+          "key": "Default volume",
+          "desc": "Starting volume of the player."
+        },
+        {
+          "key": "Subtitles",
+          "desc": "Font size, border, bottom margin."
+        },
+        {
+          "key": "Lock orientation",
+          "desc": "Auto / portrait / landscape."
+        },
+        {
+          "key": "Swipe-seek multiplier",
+          "desc": "0.5× / 1× / 2×, seek sensitivity for horizontal swipes."
+        },
+        {
+          "key": "Long-press boost",
+          "desc": "Toggle + speed (1.0×–3.0×); hold the screen to boost temporarily."
+        },
+        {
+          "key": "Resume memory",
+          "desc": "Global toggle; saves the playback position every 5 s."
+        },
+        {
+          "key": "Danmaku settings",
+          "desc": "Match episode (manual search) / keyword filter (regex) / time offset (-10~10 s) / region / duration / line height / font size / opacity / hide top·bottom·scroll / follow speed."
+        }
+      ]
+    },
+    "manga": {
+      "title": "📚 Manga Reader",
+      "features": [
+        "5 reading modes: single LTR / single RTL / single vertical / webtoon / webtoon (with spacing)",
+        "Double-tap anchor zoom (2× / 3×), pinch zoom (works across webtoon pages), pan when zoomed",
+        "Background (black / gray / white / auto) + image filters (brightness / contrast / color temp / saturation / hue / invert / grayscale)",
+        "7 screen orientations, tap-zone layouts, side margins, crop edges, page numbers",
+        "Page-flash, chapter transition, keep screen on, rotate page, mouse wheel (desktop)",
+        "Prev chapter resumes at its last page; next pages preload automatically"
+      ],
+      "howto": [
+        "Import a manga source (e.g. GoDa漫画, Bun漫畫)",
+        "Open the Manga category and filter by tag (KR / CN / JP…)",
+        "Open a title → pick a chapter",
+        "Reading: tap tap-zones to turn pages / open menu; double-tap to anchor-zoom; pinch to zoom; drag to pan when zoomed",
+        "Desktop: right-click an image for 'set cover / save / share'; mouse wheel to zoom or turn pages",
+        "Set global defaults in Settings → Manga Reader"
+      ],
+      "controls": [
+        {
+          "key": "☰ Contents",
+          "desc": "Chapter list, tap any chapter to jump."
+        },
+        {
+          "key": "◀ ▶ Prev / Next chapter",
+          "desc": "Switch chapters; prev chapter resumes at its last page, next starts from page one."
+        },
+        {
+          "key": "🔍 Zoom",
+          "desc": "Double-tap anywhere to anchor-zoom (2× / 3× configurable); pinch (also across webtoon pages); drag to pan when zoomed."
+        },
+        {
+          "key": "⚙ Reading settings (center tap)",
+          "desc": "Mode, background, screen orientation, tap-zone layout, side margins, crop, page numbers, page-flash, chapter transition — applied instantly."
+        },
+        {
+          "key": "🎨 Image filters",
+          "desc": "Brightness / contrast / color temp / saturation / hue / invert / grayscale for dim rooms or special art styles."
+        },
+        {
+          "key": "🔄 Rotate page",
+          "desc": "Rotate the whole view 90° to correct upside-down or sideways images."
+        },
+        {
+          "key": "🖱 Mouse wheel (desktop)",
+          "desc": "Wheel to zoom or turn pages, natural / inverted configurable."
+        },
+        {
+          "key": "✂ Set cover / Save / Share",
+          "desc": "Right-click or long-press an image; saved to the reader_images/ directory."
+        },
+        {
+          "key": "💾 Progress",
+          "desc": "Auto-saved; going back a chapter lands exactly on its last page, reading continues seamlessly."
+        },
+        {
+          "key": "↩ Back",
+          "desc": "Return to the detail page; progress is recorded automatically."
+        }
+      ],
+      "settings": [
+        {
+          "key": "Reading mode",
+          "desc": "Single LTR / single RTL / single vertical / webtoon / webtoon (with spacing) — webtoon suits long vertical strips."
+        },
+        {
+          "key": "Background",
+          "desc": "Black / gray / white / auto."
+        },
+        {
+          "key": "Screen orientation",
+          "desc": "7: auto / portrait / landscape / reversed, etc."
+        },
+        {
+          "key": "Tap zones",
+          "desc": "5 layouts (L-shape default / left-right / Kindle / both sides / off) + invert."
+        },
+        {
+          "key": "Side margins",
+          "desc": "0–50%, left/right padding around images."
+        },
+        {
+          "key": "Double-tap zoom",
+          "desc": "Toggle + multiplier (2× / 3×)."
+        },
+        {
+          "key": "Initial zoom",
+          "desc": "Fit width / fit height / original size."
+        },
+        {
+          "key": "Image & filters",
+          "desc": "Brightness / contrast / color temp / saturation / hue / invert / grayscale."
+        },
+        {
+          "key": "Crop edges",
+          "desc": "Crop white borders for a fuller view."
+        },
+        {
+          "key": "Page numbers",
+          "desc": "Show current / total pages while reading."
+        },
+        {
+          "key": "Progress bar position",
+          "desc": "Progress bar fixed on the right side."
+        },
+        {
+          "key": "Keep screen on",
+          "desc": "Prevent screen sleep while reading."
+        },
+        {
+          "key": "Rotate page",
+          "desc": "Rotate 90° to fix orientation."
+        },
+        {
+          "key": "Fullscreen / long-press menu / prevent shrink",
+          "desc": "Immersive fullscreen; long-press opens an action menu; prevent images from shrinking below screen width."
+        },
+        {
+          "key": "Chapter transition / page flash",
+          "desc": "Page-flash duration, delay and color; chapter-switch transition animation."
+        },
+        {
+          "key": "Mouse wheel (desktop)",
+          "desc": "Zoom / page-turn mode, natural / inverted."
+        }
+      ]
+    }
+  }
+},
   network: {
     zh: {
       sections: [
