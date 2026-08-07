@@ -199,7 +199,10 @@ window.CONTENT = {
       { icon: "🔑", title: "源登录鉴权", desc: "源可声明登录需求，保存 Cookie / 登录态后访问需登录的站点，凭据仅存本地。" },
       { icon: "🗂️", title: "本地内容管理", desc: "本地导入的漫画 / 文件支持删除、重命名与按文件名顺序阅读；下载路径可自定义并立即生效（Windows 不再冻结）。" },
       { icon: "🔞", title: "年龄分级体系", desc: "源可声明 ageRating 年龄分级；18+ 源默认隐藏，可在设置中手动开启，保护未成年人。" },
-      { icon: "🎨", title: "Material 3 + 设计基准", desc: "弹层限高合规、语义状态色统一、间距 / 圆角 token 化，窄屏自适应，观感一致。" }
+      { icon: "🎨", title: "Material 3 + 设计基准", desc: "弹层限高合规、语义状态色统一、间距 / 圆角 token 化，窄屏自适应，观感一致。" },
+      { icon: "📈", title: "阅读统计", desc: "自动记录动漫 / 漫画 / 小说的阅读时长，按作品与日期汇总，并用热力图日历呈现你的阅读密度。" },
+      { icon: "🐞", title: "调试与崩溃日志", desc: "内置崩溃日志页，集中展示运行期异常堆栈，遇到疑难问题可一键复制精准上报。" },
+      { icon: "⚙️", title: "重做的设置中心", desc: "设置分类化（高级 / 外观 / 分类），阅读器与播放器支持全局默认 + 单作品覆盖，默认值随手可调。" }
     ],
     en: [
       { icon: "🧩", title: "All-in-One", desc: "Anime / manga / novel / video in a single app, with unified search, favorites and history." },
@@ -216,7 +219,10 @@ window.CONTENT = {
       { icon: "🔑", title: "Source Auth", desc: "Sources can require login; save cookies / session to access member-only sites — credentials stay local only." },
       { icon: "🗂️", title: "Local Content Management", desc: "Delete / rename locally imported manga and files, read image folders in filename order; custom download paths take effect instantly (no more Windows freeze)." },
       { icon: "🔞", title: "Age Rating System", desc: "Sources can declare an ageRating; 18+ sources are hidden by default and can be enabled in Settings — protecting minors." },
-      { icon: "🎨", title: "Material 3 + Design Baseline", desc: "Compliant bottom sheets, unified semantic status colors, tokenized spacing & radii, responsive on narrow screens." }
+      { icon: "🎨", title: "Material 3 + Design Baseline", desc: "Compliant bottom sheets, unified semantic status colors, tokenized spacing & radii, responsive on narrow screens." },
+      { icon: "📈", title: "Reading Stats", desc: "Automatically tracks reading time across anime / manga / novel, summarized by title and date, with a heatmap calendar of your reading density." },
+      { icon: "🐞", title: "Debug & Crash Logs", desc: "A built-in crash-log screen gathers runtime exception stacks so you can copy precise logs when reporting tricky issues." },
+      { icon: "⚙️", title: "Overhauled Settings", desc: "Settings are now categorized (Advanced / Appearance / Categories); readers and player support global defaults plus per-title overrides, all tweakable on the fly." }
     ]
   },
   downloads: {
@@ -241,14 +247,14 @@ window.CONTENT = {
       { q: "如何导入源", a: "在应用内进入「源管理 / 导入源」，粘贴源文件内容或选择文件即可。同名源以版本号较高者覆盖，旧版本不会被误装，安全升级。" },
       { q: "自己写源（共创式架构）", a: "源是一个 JSON 文件，可包含声明式选择器（xpath / css / jsonpath）或内嵌 JS 解析脚本。应用通过 JS 沙箱执行脚本，不把任何站点写死在代码里——这正是「源即插件」的含义。往下滚动可查看完整《源编写教程》。" },
       { q: "数据安全与隐私", a: "NexHub 不收集个人信息，不托管任何媒体内容；所有请求直连第三方源站。请遵守所在地法律法规使用。" },
-      { q: "v0.4.x 是大版本更新，数据安全吗？", a: "v0.4.x 系列是一次较大的功能更新（新增 Bangumi 同步、网络配置、收藏分组与评论、源登录鉴权、详情页重构、UI 设计基准等）。数据格式向后兼容，旧版本收藏与导入的源无需重新导入；建议升级前备份应用数据以防意外。新版本稳定性仍在打磨，遇到问题可在 GitHub 反馈。" }
+      { q: "v0.5.0 是功能增量版，数据安全吗？", a: "v0.5.0 在 v0.4.x 之上引入两块全新能力（阅读统计页、调试 / 崩溃日志），并重做设置中心与播放器设置。数据格式向后兼容，v0.4.5 的收藏、进度、书签、历史、分组、评分、短评可直接沿用，旧源 JSON 无需重新导入；新增的统计盒为追加写入，不影响既有数据。建议升级前备份应用数据以防意外。预览版稳定性仍在打磨，遇到问题可在 GitHub 反馈。" }
     ],
     en: [
       { q: "Getting Started", a: "Install and open the app — built-in sources ship with it. For more content, import community sources from the Source Repository and browse them in the matching category." },
       { q: "How to import a source", a: "In the app, open 'Source Management / Import Source', then paste the source JSON or pick a file. Same-id sources upgrade by the higher version; older versions won't overwrite — safe upgrades." },
       { q: "Write your own source", a: "A source is a JSON file with declarative selectors (xpath / css / jsonpath) or embedded JS. The app runs it in a JS sandbox and hardcodes no site — that is exactly what 'source = plugin' means. Scroll down for the full Source Authoring Tutorial." },
       { q: "Data & privacy", a: "NexHub collects no personal data and hosts no content; all requests go directly to third-party sources. Please use it in compliance with local laws." },
-      { q: "v0.4.x is a major update — is my data safe?", a: "The v0.4.x series is a large feature update (Bangumi sync, network config, favorites grouping & comments, source auth, detail-page rebuild, UI design baseline, etc.). Data is backward-compatible — your existing favorites and imported sources need no re-import. We recommend backing up app data before upgrading. Stability is still being polished; report issues on GitHub." }
+      { q: "v0.5.0 is a feature-incremental release — is my data safe?", a: "v0.5.0 builds on v0.4.x by adding two new capabilities (reading-stats page, debug / crash logs) and overhauling the settings hub and player settings. Data is backward-compatible — your v0.4.5 favorites, progress, bookmarks, history, groups, ratings and comments carry over, and old source JSON needs no re-import. The new stats box is additive and doesn't touch existing data. Back up app data before upgrading; preview builds are still being polished — report issues on GitHub." }
     ]
   },
   guide: {
