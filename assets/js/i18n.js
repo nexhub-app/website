@@ -204,7 +204,6 @@ window.CONTENT = {
       { icon: "🐞", title: "调试与崩溃日志", desc: "内置崩溃日志页，集中展示运行期异常堆栈，遇到疑难问题可一键复制精准上报。" },
       { icon: "⚙️", title: "重做的设置中心", desc: "设置分类化（高级 / 外观 / 分类），阅读器与播放器支持全局默认 + 单作品覆盖，默认值随手可调。" },
       { icon: "📦", title: "库源一键更新", desc: "库源支持版本比对与一键更新，可单条或批量更新，状态一目了然（更新中 / 已更新 / 更新失败 / 全部最新）。" },
-      { icon: "📌", title: "源置顶", desc: "常用源可置顶固定，源列表按需排序，快速访问不再翻找。" },
       { icon: "🌐", title: "镜像增强", desc: "镜像页自动从源获取可用镜像（主域失效也能回退备用域名），并支持一键测速全部镜像。" },
       { icon: "🧩", title: "源能力增强", desc: "脚本解析器支持文本预取与 mirrors 路由透传；评论兼容对象形列表并自动格式化时间戳——源即插件，逻辑留在源里。" }
     ],
@@ -228,7 +227,6 @@ window.CONTENT = {
       { icon: "🐞", title: "Debug & Crash Logs", desc: "A built-in crash-log screen gathers runtime exception stacks so you can copy precise logs when reporting tricky issues." },
       { icon: "⚙️", title: "Overhauled Settings", desc: "Settings are now categorized (Advanced / Appearance / Categories); readers and player support global defaults plus per-title overrides, all tweakable on the fly." },
       { icon: "📦", title: "One-click Source Update", desc: "Library sources support version diff and one-click update — update one or all, with clear status (updating / updated / failed / all up to date)." },
-      { icon: "📌", title: "Pin Sources", desc: "Pin your frequently used sources to the top so they're always within reach." },
       { icon: "🌐", title: "Mirror Enhancements", desc: "The mirror page auto-fetches available mirrors from the source (falls back to built-in domains if the main host fails) and offers one-tap speed test for all mirrors." },
       { icon: "🧩", title: "Stronger Source Engine", desc: "The script resolver now supports text prefetch and mirrors-route passthrough; comments accept object-shaped lists with auto-formatted timestamps — source = plugin, logic stays in the source." }
     ]
