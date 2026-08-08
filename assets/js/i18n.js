@@ -202,7 +202,11 @@ window.CONTENT = {
       { icon: "🎨", title: "Material 3 + 设计基准", desc: "弹层限高合规、语义状态色统一、间距 / 圆角 token 化，窄屏自适应，观感一致。" },
       { icon: "📈", title: "阅读统计", desc: "自动记录动漫 / 漫画 / 小说的阅读时长，按作品与日期汇总，并用热力图日历呈现你的阅读密度。" },
       { icon: "🐞", title: "调试与崩溃日志", desc: "内置崩溃日志页，集中展示运行期异常堆栈，遇到疑难问题可一键复制精准上报。" },
-      { icon: "⚙️", title: "重做的设置中心", desc: "设置分类化（高级 / 外观 / 分类），阅读器与播放器支持全局默认 + 单作品覆盖，默认值随手可调。" }
+      { icon: "⚙️", title: "重做的设置中心", desc: "设置分类化（高级 / 外观 / 分类），阅读器与播放器支持全局默认 + 单作品覆盖，默认值随手可调。" },
+      { icon: "📦", title: "库源一键更新", desc: "库源支持版本比对与一键更新，可单条或批量更新，状态一目了然（更新中 / 已更新 / 更新失败 / 全部最新）。" },
+      { icon: "📌", title: "源置顶", desc: "常用源可置顶固定，源列表按需排序，快速访问不再翻找。" },
+      { icon: "🌐", title: "镜像增强", desc: "镜像页自动从源获取可用镜像（主域失效也能回退备用域名），并支持一键测速全部镜像。" },
+      { icon: "🧩", title: "源能力增强", desc: "脚本解析器支持文本预取与 mirrors 路由透传；评论兼容对象形列表并自动格式化时间戳——源即插件，逻辑留在源里。" }
     ],
     en: [
       { icon: "🧩", title: "All-in-One", desc: "Anime / manga / novel / video in a single app, with unified search, favorites and history." },
@@ -222,7 +226,11 @@ window.CONTENT = {
       { icon: "🎨", title: "Material 3 + Design Baseline", desc: "Compliant bottom sheets, unified semantic status colors, tokenized spacing & radii, responsive on narrow screens." },
       { icon: "📈", title: "Reading Stats", desc: "Automatically tracks reading time across anime / manga / novel, summarized by title and date, with a heatmap calendar of your reading density." },
       { icon: "🐞", title: "Debug & Crash Logs", desc: "A built-in crash-log screen gathers runtime exception stacks so you can copy precise logs when reporting tricky issues." },
-      { icon: "⚙️", title: "Overhauled Settings", desc: "Settings are now categorized (Advanced / Appearance / Categories); readers and player support global defaults plus per-title overrides, all tweakable on the fly." }
+      { icon: "⚙️", title: "Overhauled Settings", desc: "Settings are now categorized (Advanced / Appearance / Categories); readers and player support global defaults plus per-title overrides, all tweakable on the fly." },
+      { icon: "📦", title: "One-click Source Update", desc: "Library sources support version diff and one-click update — update one or all, with clear status (updating / updated / failed / all up to date)." },
+      { icon: "📌", title: "Pin Sources", desc: "Pin your frequently used sources to the top so they're always within reach." },
+      { icon: "🌐", title: "Mirror Enhancements", desc: "The mirror page auto-fetches available mirrors from the source (falls back to built-in domains if the main host fails) and offers one-tap speed test for all mirrors." },
+      { icon: "🧩", title: "Stronger Source Engine", desc: "The script resolver now supports text prefetch and mirrors-route passthrough; comments accept object-shaped lists with auto-formatted timestamps — source = plugin, logic stays in the source." }
     ]
   },
   downloads: {
@@ -247,14 +255,14 @@ window.CONTENT = {
       { q: "如何导入源", a: "在应用内进入「源管理 / 导入源」，粘贴源文件内容或选择文件即可。同名源以版本号较高者覆盖，旧版本不会被误装，安全升级。" },
       { q: "自己写源（共创式架构）", a: "源是一个 JSON 文件，可包含声明式选择器（xpath / css / jsonpath）或内嵌 JS 解析脚本。应用通过 JS 沙箱执行脚本，不把任何站点写死在代码里——这正是「源即插件」的含义。往下滚动可查看完整《源编写教程》。" },
       { q: "数据安全与隐私", a: "NexHub 不收集个人信息，不托管任何媒体内容；所有请求直连第三方源站。请遵守所在地法律法规使用。" },
-      { q: "v0.5.0 是功能增量版，数据安全吗？", a: "v0.5.0 在 v0.4.x 之上引入两块全新能力（阅读统计页、调试 / 崩溃日志），并重做设置中心与播放器设置。数据格式向后兼容，v0.4.5 的收藏、进度、书签、历史、分组、评分、短评可直接沿用，旧源 JSON 无需重新导入；新增的统计盒为追加写入，不影响既有数据。建议升级前备份应用数据以防意外。预览版稳定性仍在打磨，遇到问题可在 GitHub 反馈。" }
+      { q: "NexHub 现在稳定了吗，可以升级吗？", a: "NexHub 的基础功能已经完成——四合一聚合、源即插件、Bangumi 同步、网络配置、收藏分组评论、阅读统计、调试崩溃日志等核心能力均已就绪。从 v0.5.1 起可放心升级，后续版本以修复 bug 与功能进阶为主。数据格式向后兼容，v0.5.0 的收藏、进度、书签、历史、分组、评分、短评可直接沿用，旧源 JSON 无需重新导入；沿用同一签名密钥，可直接覆盖安装。遇到问题可在 GitHub 反馈。" }
     ],
     en: [
       { q: "Getting Started", a: "Install and open the app — built-in sources ship with it. For more content, import community sources from the Source Repository and browse them in the matching category." },
       { q: "How to import a source", a: "In the app, open 'Source Management / Import Source', then paste the source JSON or pick a file. Same-id sources upgrade by the higher version; older versions won't overwrite — safe upgrades." },
       { q: "Write your own source", a: "A source is a JSON file with declarative selectors (xpath / css / jsonpath) or embedded JS. The app runs it in a JS sandbox and hardcodes no site — that is exactly what 'source = plugin' means. Scroll down for the full Source Authoring Tutorial." },
       { q: "Data & privacy", a: "NexHub collects no personal data and hosts no content; all requests go directly to third-party sources. Please use it in compliance with local laws." },
-      { q: "v0.5.0 is a feature-incremental release — is my data safe?", a: "v0.5.0 builds on v0.4.x by adding two new capabilities (reading-stats page, debug / crash logs) and overhauling the settings hub and player settings. Data is backward-compatible — your v0.4.5 favorites, progress, bookmarks, history, groups, ratings and comments carry over, and old source JSON needs no re-import. The new stats box is additive and doesn't touch existing data. Back up app data before upgrading; preview builds are still being polished — report issues on GitHub." }
+      { q: "Is NexHub stable now — can I upgrade?", a: "NexHub's core features are complete: all-in-one aggregation, source = plugin, Bangumi sync, network config, favorites & comments, reading stats and debug/crash logs are all in place. From v0.5.1 you can upgrade with confidence; later releases focus on bug fixes and feature refinement. Data stays backward-compatible — your v0.5.0 favorites, progress, bookmarks, history, groups, ratings and comments carry over, and old source JSON needs no re-import. Same signing key, so just overwrite-install. Report issues on GitHub." }
     ]
   },
   guide: {
