@@ -205,7 +205,10 @@ window.CONTENT = {
       { icon: "⚙️", title: "重做的设置中心", desc: "设置分类化（高级 / 外观 / 分类），阅读器与播放器支持全局默认 + 单作品覆盖，默认值随手可调。" },
       { icon: "📦", title: "库源一键更新", desc: "库源支持版本比对与一键更新，可单条或批量更新，状态一目了然（更新中 / 已更新 / 更新失败 / 全部最新）。" },
       { icon: "🌐", title: "镜像增强", desc: "镜像页自动从源获取可用镜像（主域失效也能回退备用域名），并支持一键测速全部镜像。" },
-      { icon: "🧩", title: "源能力增强", desc: "脚本解析器支持文本预取与 mirrors 路由透传；评论兼容对象形列表并自动格式化时间戳——源即插件，逻辑留在源里。" }
+      { icon: "🧩", title: "源能力增强", desc: "脚本解析器支持文本预取与 mirrors 路由透传；评论兼容对象形列表并自动格式化时间戳——源即插件，逻辑留在源里。" },
+      { icon: "🧭", title: "新手引导", desc: "首次启动 6 步引导：添加源、关联 Bangumi、隐私与合规、主题与语言、授予权限，上手更顺。" },
+      { icon: "📢", title: "软件公告", desc: "远程公告经 CDN 加速，首屏后弹出未读公告，重要更新不再错过。" },
+      { icon: "🔐", title: "Bangumi 登录更稳", desc: "OAuth 登录改为内嵌 WebView 对话框，修复返回时卡死转圈的问题。" }
     ],
     en: [
       { icon: "🧩", title: "All-in-One", desc: "Anime / manga / novel / video in a single app, with unified search, favorites and history." },
@@ -228,7 +231,10 @@ window.CONTENT = {
       { icon: "⚙️", title: "Overhauled Settings", desc: "Settings are now categorized (Advanced / Appearance / Categories); readers and player support global defaults plus per-title overrides, all tweakable on the fly." },
       { icon: "📦", title: "One-click Source Update", desc: "Library sources support version diff and one-click update — update one or all, with clear status (updating / updated / failed / all up to date)." },
       { icon: "🌐", title: "Mirror Enhancements", desc: "The mirror page auto-fetches available mirrors from the source (falls back to built-in domains if the main host fails) and offers one-tap speed test for all mirrors." },
-      { icon: "🧩", title: "Stronger Source Engine", desc: "The script resolver now supports text prefetch and mirrors-route passthrough; comments accept object-shaped lists with auto-formatted timestamps — source = plugin, logic stays in the source." }
+      { icon: "🧩", title: "Stronger Source Engine", desc: "The script resolver now supports text prefetch and mirrors-route passthrough; comments accept object-shaped lists with auto-formatted timestamps — source = plugin, logic stays in the source." },
+      { icon: "🧭", title: "Onboarding", desc: "A 6-step first-run guide: add sources, link Bangumi, privacy & compliance, theme & language, grant permissions." },
+      { icon: "📢", title: "In-app Announcements", desc: "Remote announcements over CDN, shown after first launch so you never miss important updates." },
+      { icon: "🔐", title: "Smoother Bangumi Login", desc: "OAuth now uses an embedded WebView dialog, fixing the spinner/hang on return." }
     ]
   },
   downloads: {
@@ -253,14 +259,14 @@ window.CONTENT = {
       { q: "如何导入源", a: "在应用内进入「源管理 / 导入源」，粘贴源文件内容或选择文件即可。同名源以版本号较高者覆盖，旧版本不会被误装，安全升级。" },
       { q: "自己写源（共创式架构）", a: "源是一个 JSON 文件，可包含声明式选择器（xpath / css / jsonpath）或内嵌 JS 解析脚本。应用通过 JS 沙箱执行脚本，不把任何站点写死在代码里——这正是「源即插件」的含义。往下滚动可查看完整《源编写教程》。" },
       { q: "数据安全与隐私", a: "NexHub 不收集个人信息，不托管任何媒体内容；所有请求直连第三方源站。请遵守所在地法律法规使用。" },
-      { q: "NexHub 现在稳定了吗，可以升级吗？", a: "NexHub 的基础功能已经完成——四合一聚合、源即插件、Bangumi 同步、网络配置、收藏分组评论、阅读统计、调试崩溃日志等核心能力均已就绪。从 v0.5.1 起可放心升级，后续版本以修复 bug 与功能进阶为主。数据格式向后兼容，v0.5.0 的收藏、进度、书签、历史、分组、评分、短评可直接沿用，旧源 JSON 无需重新导入；沿用同一签名密钥，可直接覆盖安装。遇到问题可在 GitHub 反馈。" }
+      { q: "NexHub 现在稳定了吗，可以升级吗？", a: "NexHub 的基础功能已经完成——四合一聚合、源即插件、Bangumi 同步、网络配置、收藏分组评论、阅读统计、调试崩溃日志等核心能力均已就绪。从 v1.0.0 起可作为稳定版长期使用、放心升级，数据格式向后兼容。注意：作者将在 3 天后对底层框架做较大升级，期间可能较长时间不发布新版本；3 天内（框架升级前）反馈的 bug 会及时修复。旧数据与源 JSON 无需重新导入，沿用同一签名密钥可直接覆盖安装。遇到问题可在 GitHub 反馈。" }
     ],
     en: [
       { q: "Getting Started", a: "Install and open the app — built-in sources ship with it. For more content, import community sources from the Source Repository and browse them in the matching category." },
       { q: "How to import a source", a: "In the app, open 'Source Management / Import Source', then paste the source JSON or pick a file. Same-id sources upgrade by the higher version; older versions won't overwrite — safe upgrades." },
       { q: "Write your own source", a: "A source is a JSON file with declarative selectors (xpath / css / jsonpath) or embedded JS. The app runs it in a JS sandbox and hardcodes no site — that is exactly what 'source = plugin' means. Scroll down for the full Source Authoring Tutorial." },
       { q: "Data & privacy", a: "NexHub collects no personal data and hosts no content; all requests go directly to third-party sources. Please use it in compliance with local laws." },
-      { q: "Is NexHub stable now — can I upgrade?", a: "NexHub's core features are complete: all-in-one aggregation, source = plugin, Bangumi sync, network config, favorites & comments, reading stats and debug/crash logs are all in place. From v0.5.1 you can upgrade with confidence; later releases focus on bug fixes and feature refinement. Data stays backward-compatible — your v0.5.0 favorites, progress, bookmarks, history, groups, ratings and comments carry over, and old source JSON needs no re-import. Same signing key, so just overwrite-install. Report issues on GitHub." }
+      { q: "Is NexHub stable now — can I upgrade?", a: "NexHub's core features are complete: all-in-one aggregation, source = plugin, Bangumi sync, network config, favorites & comments, reading stats and debug/crash logs are all in place. From v1.0.0 it is a stable release you can rely on long-term; data stays backward-compatible. Note: the author will do a major framework upgrade in 3 days, so new releases may pause for a while; bugs reported within those 3 days will be fixed promptly. Your data and source JSON need no re-import, and the same signing key means just overwrite-install. Report issues on GitHub." }
     ]
   },
   guide: {
