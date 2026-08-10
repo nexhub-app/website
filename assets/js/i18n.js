@@ -188,53 +188,39 @@ window.CONTENT = {
       { icon: "🧩", title: "四合一聚合", desc: "动漫 / 漫画 / 小说 / 影视 四种媒体集中在同一应用，统一搜索、收藏与历史。" },
       { icon: "🔌", title: "源即插件（共创式）", desc: "解析逻辑全部写在可导入的源文件里。社区自由编写、分享，应用只提供引擎。" },
       { icon: "📥", title: "一键导入源", desc: "在 App 内粘贴或导入源文件即可使用，无需更新应用；同名源按版本号自动升级。" },
-      { icon: "📚", title: "漫画阅读器", desc: "支持分页 / 卷轴、缩放、阅读方向与夜间模式，读起来顺手。" },
-      { icon: "▶️", title: "视频播放 + 弹幕", desc: "基于 media_kit 的播放器，支持弹幕与多线路切换，追番更带感。" },
-      { icon: "📖", title: "小说阅读器", desc: "字体、行距、主题、翻页等样式自由组合，设置即时生效并持久保存。" },
-      { icon: "💻", title: "跨平台", desc: "同一套 Flutter 代码覆盖 Android / iOS / Windows / macOS / Linux。" },
-      { icon: "🌟", title: "开源免费", desc: "代码公开、无广告、无内购，隐私友好。" },
+      { icon: "🗂️", title: "本地内容导入", desc: "小说支持 TXT / EPUB，漫画支持 PDF / CBR / RAR / 7Z 等归档与整文件夹导入（Android 支持 SAF 文件夹），离线也能看。" },
+      { icon: "📚", title: "漫画阅读器", desc: "五种阅读模式、缩放与滤镜、方向与点击区自定义，回上一话精确续读。" },
+      { icon: "▶️", title: "视频播放 + 弹幕", desc: "基于 media_kit 的播放器，支持弹幕、多线路切换与画中画，追番更带感。" },
+      { icon: "📖", title: "小说阅读器", desc: "字体、行距、主题、翻页等样式自由组合，支持 TTS 朗读与简繁转换，设置即时生效并持久保存。" },
       { icon: "📊", title: "Bangumi 同步", desc: "一键将看番进度、收藏与评分同步到 Bangumi（bgm.tv），多端共享你的动画清单。" },
-      { icon: "🌐", title: "网络配置", desc: "自定义代理、镜像站与请求头，应对部分站点被 SNI/ECH 阻断或限流的情况。" },
+      { icon: "🌐", title: "网络配置", desc: "自定义代理、镜像站与请求头，应对部分站点被阻断或限流的情况。" },
       { icon: "💬", title: "收藏分组与评论", desc: "本地收藏支持分组、评分与备注评论，跨媒体统一管理你的追更清单。" },
       { icon: "🔑", title: "源登录鉴权", desc: "源可声明登录需求，保存 Cookie / 登录态后访问需登录的站点，凭据仅存本地。" },
-      { icon: "🗂️", title: "本地内容管理", desc: "本地导入的漫画 / 文件支持删除、重命名与按文件名顺序阅读；下载路径可自定义并立即生效（Windows 不再冻结）。" },
-      { icon: "🔞", title: "年龄分级体系", desc: "源可声明 ageRating 年龄分级；18+ 源默认隐藏，可在设置中手动开启，保护未成年人。" },
-      { icon: "🎨", title: "Material 3 + 设计基准", desc: "弹层限高合规、语义状态色统一、间距 / 圆角 token 化，窄屏自适应，观感一致。" },
-      { icon: "📈", title: "阅读统计", desc: "自动记录动漫 / 漫画 / 小说的阅读时长，按作品与日期汇总，并用热力图日历呈现你的阅读密度。" },
-      { icon: "🐞", title: "调试与崩溃日志", desc: "内置崩溃日志页，集中展示运行期异常堆栈，遇到疑难问题可一键复制精准上报。" },
-      { icon: "⚙️", title: "重做的设置中心", desc: "设置分类化（高级 / 外观 / 分类），阅读器与播放器支持全局默认 + 单作品覆盖，默认值随手可调。" },
-      { icon: "📦", title: "库源一键更新", desc: "库源支持版本比对与一键更新，可单条或批量更新，状态一目了然（更新中 / 已更新 / 更新失败 / 全部最新）。" },
-      { icon: "🌐", title: "镜像增强", desc: "镜像页自动从源获取可用镜像（主域失效也能回退备用域名），并支持一键测速全部镜像。" },
-      { icon: "🧩", title: "源能力增强", desc: "脚本解析器支持文本预取与 mirrors 路由透传；评论兼容对象形列表并自动格式化时间戳——源即插件，逻辑留在源里。" },
-      { icon: "🧭", title: "新手引导", desc: "首次启动 6 步引导：添加源、关联 Bangumi、隐私与合规、主题与语言、授予权限，上手更顺。" },
-      { icon: "📢", title: "软件公告", desc: "远程公告经 CDN 加速，首屏后弹出未读公告，重要更新不再错过。" },
-      { icon: "🔐", title: "Bangumi 登录更稳", desc: "OAuth 登录改为内嵌 WebView 对话框，修复返回时卡死转圈的问题。" }
+      { icon: "📈", title: "阅读统计", desc: "自动记录阅读时长，按作品与日期汇总，并用热力图日历呈现你的阅读密度。" },
+      { icon: "🐞", title: "调试与崩溃日志", desc: "内置崩溃日志页，集中展示异常堆栈，一键复制精准上报。" },
+      { icon: "🔞", title: "年龄分级体系", desc: "源可声明年龄分级；18+ 源默认隐藏，可在设置中手动开启，保护未成年人。" },
+      { icon: "🧭", title: "新手引导", desc: "首次启动 6 步引导：添加源、关联 Bangumi、隐私与合规、主题与语言、授予权限。" },
+      { icon: "💻", title: "跨平台", desc: "同一套 Flutter 代码覆盖 Android / iOS / Windows / macOS / Linux。" },
+      { icon: "🌟", title: "开源免费", desc: "代码公开、无广告、无内购，隐私友好。" }
     ],
     en: [
       { icon: "🧩", title: "All-in-One", desc: "Anime / manga / novel / video in a single app, with unified search, favorites and history." },
       { icon: "🔌", title: "Source = Plugin", desc: "All parsing logic lives in importable source files. The community writes and shares them; the app only ships the engine." },
       { icon: "📥", title: "One-tap Import", desc: "Paste or import a source file in the app — no app update needed. Same-id sources auto-upgrade by version." },
-      { icon: "📚", title: "Manga Reader", desc: "Paged / webtoon mode, zoom, reading direction and night mode — comfortable to read." },
-      { icon: "▶️", title: "Video + Danmaku", desc: "A media_kit based player with danmaku (bullet comments) and multi-source switching." },
-      { icon: "📖", title: "Novel Reader", desc: "Freely combine fonts, spacing, themes and page-turn styles; settings apply instantly and persist." },
-      { icon: "💻", title: "Cross-Platform", desc: "One Flutter codebase across Android / iOS / Windows / macOS / Linux." },
-      { icon: "🌟", title: "Open & Free", desc: "Public code, no ads, no in-app purchases, privacy friendly." },
+      { icon: "🗂️", title: "Local Content Import", desc: "Novels in TXT / EPUB; manga from PDF, CBR, RAR, 7Z archives or whole folders (Android SAF supported). Read offline." },
+      { icon: "📚", title: "Manga Reader", desc: "Five reading modes, zoom & filters, custom orientation and tap zones, precise resume at the last page." },
+      { icon: "▶️", title: "Video + Danmaku", desc: "A media_kit based player with danmaku (bullet comments), multi-source switching and picture-in-picture." },
+      { icon: "📖", title: "Novel Reader", desc: "Freely combine fonts, spacing, themes and page-turn styles; TTS read-aloud and simplified/traditional conversion. Settings apply instantly and persist." },
       { icon: "📊", title: "Bangumi Sync", desc: "One-tap sync your watch progress, collections and ratings to Bangumi (bgm.tv) — share your anime list across devices." },
-      { icon: "🌐", title: "Network Config", desc: "Set custom proxies, mirrors and request headers to handle sites blocked or rate-limited via SNI/ECH." },
+      { icon: "🌐", title: "Network Config", desc: "Set custom proxies, mirrors and request headers to handle blocked or rate-limited sites." },
       { icon: "💬", title: "Favorites & Comments", desc: "Group, rate and annotate your local favorites; manage your tracking list across all media types." },
       { icon: "🔑", title: "Source Auth", desc: "Sources can require login; save cookies / session to access member-only sites — credentials stay local only." },
-      { icon: "🗂️", title: "Local Content Management", desc: "Delete / rename locally imported manga and files, read image folders in filename order; custom download paths take effect instantly (no more Windows freeze)." },
-      { icon: "🔞", title: "Age Rating System", desc: "Sources can declare an ageRating; 18+ sources are hidden by default and can be enabled in Settings — protecting minors." },
-      { icon: "🎨", title: "Material 3 + Design Baseline", desc: "Compliant bottom sheets, unified semantic status colors, tokenized spacing & radii, responsive on narrow screens." },
-      { icon: "📈", title: "Reading Stats", desc: "Automatically tracks reading time across anime / manga / novel, summarized by title and date, with a heatmap calendar of your reading density." },
-      { icon: "🐞", title: "Debug & Crash Logs", desc: "A built-in crash-log screen gathers runtime exception stacks so you can copy precise logs when reporting tricky issues." },
-      { icon: "⚙️", title: "Overhauled Settings", desc: "Settings are now categorized (Advanced / Appearance / Categories); readers and player support global defaults plus per-title overrides, all tweakable on the fly." },
-      { icon: "📦", title: "One-click Source Update", desc: "Library sources support version diff and one-click update — update one or all, with clear status (updating / updated / failed / all up to date)." },
-      { icon: "🌐", title: "Mirror Enhancements", desc: "The mirror page auto-fetches available mirrors from the source (falls back to built-in domains if the main host fails) and offers one-tap speed test for all mirrors." },
-      { icon: "🧩", title: "Stronger Source Engine", desc: "The script resolver now supports text prefetch and mirrors-route passthrough; comments accept object-shaped lists with auto-formatted timestamps — source = plugin, logic stays in the source." },
+      { icon: "📈", title: "Reading Stats", desc: "Automatically tracks reading time, summarized by title and date, with a heatmap calendar of your reading density." },
+      { icon: "🐞", title: "Debug & Crash Logs", desc: "A built-in crash-log screen gathers runtime exception stacks so you can copy precise logs when reporting issues." },
+      { icon: "🔞", title: "Age Rating System", desc: "Sources can declare an age rating; 18+ sources are hidden by default and can be enabled in Settings — protecting minors." },
       { icon: "🧭", title: "Onboarding", desc: "A 6-step first-run guide: add sources, link Bangumi, privacy & compliance, theme & language, grant permissions." },
-      { icon: "📢", title: "In-app Announcements", desc: "Remote announcements over CDN, shown after first launch so you never miss important updates." },
-      { icon: "🔐", title: "Smoother Bangumi Login", desc: "OAuth now uses an embedded WebView dialog, fixing the spinner/hang on return." }
+      { icon: "💻", title: "Cross-Platform", desc: "One Flutter codebase across Android / iOS / Windows / macOS / Linux." },
+      { icon: "🌟", title: "Open & Free", desc: "Public code, no ads, no in-app purchases, privacy friendly." }
     ]
   },
   downloads: {
@@ -259,14 +245,14 @@ window.CONTENT = {
       { q: "如何导入源", a: "在应用内进入「源管理 / 导入源」，粘贴源文件内容或选择文件即可。同名源以版本号较高者覆盖，旧版本不会被误装，安全升级。" },
       { q: "自己写源（共创式架构）", a: "源是一个 JSON 文件，可包含声明式选择器（xpath / css / jsonpath）或内嵌 JS 解析脚本。应用通过 JS 沙箱执行脚本，不把任何站点写死在代码里——这正是「源即插件」的含义。往下滚动可查看完整《源编写教程》。" },
       { q: "数据安全与隐私", a: "NexHub 不收集个人信息，不托管任何媒体内容；所有请求直连第三方源站。请遵守所在地法律法规使用。" },
-      { q: "NexHub 现在稳定了吗，可以升级吗？", a: "NexHub 的基础功能已经完成——四合一聚合、源即插件、Bangumi 同步、网络配置、收藏分组评论、阅读统计、调试崩溃日志等核心能力均已就绪。从 v1.0.0 起可作为稳定版长期使用、放心升级，数据格式向后兼容。注意：作者将在 3 天后对底层框架做较大升级，期间可能较长时间不发布新版本；3 天内（框架升级前）反馈的 bug 会及时修复。旧数据与源 JSON 无需重新导入，沿用同一签名密钥可直接覆盖安装。遇到问题可在 GitHub 反馈。" }
+      { q: "NexHub 现在稳定了吗，可以升级吗？", a: "NexHub 的基础功能已经完成——四合一聚合、源即插件、Bangumi 同步、网络配置、收藏分组评论、阅读统计、调试崩溃日志等核心能力均已就绪。从 v1.0.0 起可作为稳定版长期使用、放心升级，v1.1.0 新增完整的本地内容导入体系（EPUB / PDF / 多格式归档 / 文件夹）。数据格式向后兼容：旧数据与源 JSON 无需重新导入，沿用同一签名密钥可直接覆盖安装。遇到问题可在 GitHub 反馈。" }
     ],
     en: [
       { q: "Getting Started", a: "Install and open the app — built-in sources ship with it. For more content, import community sources from the Source Repository and browse them in the matching category." },
       { q: "How to import a source", a: "In the app, open 'Source Management / Import Source', then paste the source JSON or pick a file. Same-id sources upgrade by the higher version; older versions won't overwrite — safe upgrades." },
       { q: "Write your own source", a: "A source is a JSON file with declarative selectors (xpath / css / jsonpath) or embedded JS. The app runs it in a JS sandbox and hardcodes no site — that is exactly what 'source = plugin' means. Scroll down for the full Source Authoring Tutorial." },
       { q: "Data & privacy", a: "NexHub collects no personal data and hosts no content; all requests go directly to third-party sources. Please use it in compliance with local laws." },
-      { q: "Is NexHub stable now — can I upgrade?", a: "NexHub's core features are complete: all-in-one aggregation, source = plugin, Bangumi sync, network config, favorites & comments, reading stats and debug/crash logs are all in place. From v1.0.0 it is a stable release you can rely on long-term; data stays backward-compatible. Note: the author will do a major framework upgrade in 3 days, so new releases may pause for a while; bugs reported within those 3 days will be fixed promptly. Your data and source JSON need no re-import, and the same signing key means just overwrite-install. Report issues on GitHub." }
+      { q: "Is NexHub stable now — can I upgrade?", a: "NexHub's core features are complete: all-in-one aggregation, source = plugin, Bangumi sync, network config, favorites & comments, reading stats and debug/crash logs are all in place. From v1.0.0 it is a stable release you can rely on long-term; v1.1.0 adds a full local content import pipeline (EPUB / PDF / multi-format archives / folders). Data stays backward-compatible: your data and source JSON need no re-import, and the same signing key means just overwrite-install. Report issues on GitHub." }
     ]
   },
   guide: {
@@ -281,9 +267,11 @@ window.CONTENT = {
         "TTS 朗读：语速 / 睡眠定时 / 后台朗读",
         "自动翻页、简繁转换、文字阴影、夜间跟随策略",
         "书内搜索、书签、整本缓存下载",
+        "支持导入本地 TXT / EPUB 文件，离线也能读",
         "阅读进度自动保存；上一章自动回到章末页"
       ],
       "howto": [
+        "本地阅读：在「书架 → 本地」导入 TXT / EPUB 文件或文件夹，离线也能看",
         "在「源仓库」导入小说源（如笔趣阁、八一中文）",
         "进入「小说」分类，搜索或浏览书名",
         "点开书籍 → 自动拉取目录",
@@ -548,9 +536,11 @@ window.CONTENT = {
         "背景（黑 / 灰 / 白 / 自动）+ 画面滤镜（亮度 / 对比度 / 色温 / 饱和度 / 色相 / 反色 / 灰度）",
         "屏幕方向 7 种、点击区布局、左右留白、裁边、显示页码",
         "翻页闪光、章节过渡、屏幕常亮、旋转页面、鼠标滚轮（桌面）",
+        "支持导入本地 PDF / CBR / RAR / 7Z 等归档与文件夹，离线也能读",
         "回上一话自动回到上话末页；下一页自动预加载"
       ],
       "howto": [
+        "本地阅读：在「书架 → 本地」导入 PDF / CBR / RAR / 7Z 等文件或文件夹，离线也能看",
         "导入漫画源（如 GoDa漫画、Bun漫畫）",
         "进入「漫画」分类，按标签筛选（韩漫 / 国漫 / 日漫…）",
         "点开漫画 → 选话",
@@ -679,9 +669,11 @@ window.CONTENT = {
         "TTS read-aloud: speed / sleep timer / background reading",
         "Auto page-turn, simplified ⇄ traditional conversion, text shadow, night-follow policy",
         "In-book search, bookmarks, whole-book offline cache",
+        "Import local TXT / EPUB files to read offline",
         "Progress auto-saved; prev chapter resumes at its last page"
       ],
       "howto": [
+        "Local reading: import TXT / EPUB files or folders via Bookshelf → Local to read offline",
         "Import a novel source in Source Repository (e.g. 笔趣阁, 八一中文)",
         "Open the Novel category, search or browse titles",
         "Open a book → table of contents is fetched",
@@ -946,9 +938,11 @@ window.CONTENT = {
         "Background (black / gray / white / auto) + image filters (brightness / contrast / color temp / saturation / hue / invert / grayscale)",
         "7 screen orientations, tap-zone layouts, side margins, crop edges, page numbers",
         "Page-flash, chapter transition, keep screen on, rotate page, mouse wheel (desktop)",
+        "Import local PDF, CBR, RAR, 7Z archives or folders to read offline",
         "Prev chapter resumes at its last page; next pages preload automatically"
       ],
       "howto": [
+        "Local reading: import PDF, CBR, RAR, 7Z files or folders via Bookshelf → Local to read offline",
         "Import a manga source (e.g. GoDa漫画, Bun漫畫)",
         "Open the Manga category and filter by tag (KR / CN / JP…)",
         "Open a title → pick a chapter",
