@@ -245,14 +245,14 @@ window.CONTENT = {
       { q: "如何导入源", a: "在应用内进入「源管理 / 导入源」，粘贴源文件内容或选择文件即可。同名源以版本号较高者覆盖，旧版本不会被误装，安全升级。" },
       { q: "自己写源（共创式架构）", a: "源是一个 JSON 文件，可包含声明式选择器（xpath / css / jsonpath）或内嵌 JS 解析脚本。应用通过 JS 沙箱执行脚本，不把任何站点写死在代码里——这正是「源即插件」的含义。往下滚动可查看完整《源编写教程》。" },
       { q: "数据安全与隐私", a: "NexHub 不收集个人信息，不托管任何媒体内容；所有请求直连第三方源站。请遵守所在地法律法规使用。" },
-      { q: "NexHub 现在稳定了吗，可以升级吗？", a: "NexHub 的基础功能已经完成——四合一聚合、源即插件、Bangumi 同步、网络配置、收藏分组评论、阅读统计、调试崩溃日志等核心能力均已就绪。从 v1.0.0 起可作为稳定版长期使用、放心升级，v1.1.0 新增完整的本地内容导入体系（EPUB / PDF / 多格式归档 / 文件夹）。数据格式向后兼容：旧数据与源 JSON 无需重新导入，沿用同一签名密钥可直接覆盖安装。遇到问题可在 GitHub 反馈。" }
+      { q: "NexHub 现在稳定了吗，可以升级吗？", a: "NexHub 的基础功能已经完成——四合一聚合、源即插件、Bangumi 同步、网络配置、收藏分组评论、阅读统计、调试崩溃日志等核心能力均已就绪。从 v1.0.0 起可作为稳定版长期使用、放心升级；v1.1.0 起提供完整的本地内容导入体系（EPUB / PDF / 多格式归档 / 文件夹），v1.2.0 重点修复了本地下载 / 导入的稳定性与三大阅读器体验，并新增「运行日志」便于反馈排障。数据格式向后兼容：旧数据与源 JSON 无需重新导入，沿用同一签名密钥可直接覆盖安装。遇到问题可在 GitHub 反馈。" }
     ],
     en: [
       { q: "Getting Started", a: "Install and open the app — built-in sources ship with it. For more content, import community sources from the Source Repository and browse them in the matching category." },
       { q: "How to import a source", a: "In the app, open 'Source Management / Import Source', then paste the source JSON or pick a file. Same-id sources upgrade by the higher version; older versions won't overwrite — safe upgrades." },
       { q: "Write your own source", a: "A source is a JSON file with declarative selectors (xpath / css / jsonpath) or embedded JS. The app runs it in a JS sandbox and hardcodes no site — that is exactly what 'source = plugin' means. Scroll down for the full Source Authoring Tutorial." },
       { q: "Data & privacy", a: "NexHub collects no personal data and hosts no content; all requests go directly to third-party sources. Please use it in compliance with local laws." },
-      { q: "Is NexHub stable now — can I upgrade?", a: "NexHub's core features are complete: all-in-one aggregation, source = plugin, Bangumi sync, network config, favorites & comments, reading stats and debug/crash logs are all in place. From v1.0.0 it is a stable release you can rely on long-term; v1.1.0 adds a full local content import pipeline (EPUB / PDF / multi-format archives / folders). Data stays backward-compatible: your data and source JSON need no re-import, and the same signing key means just overwrite-install. Report issues on GitHub." }
+      { q: "Is NexHub stable now — can I upgrade?", a: "NexHub's core features are complete: all-in-one aggregation, source = plugin, Bangumi sync, network config, favorites & comments, reading stats and debug/crash logs are all in place. From v1.0.0 it is a stable release you can rely on long-term; v1.1.0 adds a full local content import pipeline (EPUB / PDF / multi-format archives / folders), and v1.2.0 focuses on local download / import stability and the three readers, plus a new Run Log for easier bug reports. Data stays backward-compatible: your data and source JSON need no re-import, and the same signing key means just overwrite-install. Report issues on GitHub." }
     ]
   },
   guide: {
@@ -268,6 +268,7 @@ window.CONTENT = {
         "自动翻页、简繁转换、文字阴影、夜间跟随策略",
         "书内搜索、书签、整本缓存下载",
         "支持导入本地 TXT / EPUB 文件，离线也能读",
+        "本地小说下载：逐章 TXT + 插图，大 EPUB / TXT 加载更流畅",
         "阅读进度自动保存；上一章自动回到章末页"
       ],
       "howto": [
@@ -277,7 +278,9 @@ window.CONTENT = {
         "点开书籍 → 自动拉取目录",
         "选择章节开始阅读：单击按热区翻页，左侧 1/3 上下滑动调亮度",
         "单击屏幕中央呼出菜单，调整字体 / 主题 / 翻页 / 自动翻页，改动即时生效",
-        "想改默认值？到「设置 → 小说阅读器」统一调整"
+        "想改默认值？到「设置 → 小说阅读器」统一调整",
+        "本地小说下载默认保存为逐章 TXT（含插图 images/ 子目录），离线阅读更稳；大文件翻页更流畅",
+        "排查问题：设置 → 高级 → 运行日志，可查看下载 / 解析错误并一键复制反馈"
       ],
       "controls": [
         {
@@ -401,7 +404,8 @@ window.CONTENT = {
         "手势完整：单击显隐、双击左 / 中 / 右 = 快退 / 暂停 / 快进、长按加速、左半屏亮度、右半屏音量、横滑定位",
         "字幕、自动连播、续播记忆（每 5 秒存档）",
         "画中画（平台支持时）、截图、定时关闭、外部播放、分享",
-        "播放统计：软硬解 / 码率 / 掉帧"
+        "播放统计：软硬解 / 码率 / 掉帧",
+        "本地下载视频（含 HLS / SAF）修复后可正常播放"
       ],
       "howto": [
         "导入影视 / 动漫源（如 233动漫、花子动漫）",
@@ -409,7 +413,10 @@ window.CONTENT = {
         "点开番剧 → 选集",
         "播放页：单击显隐控制栏；双击中间播放 / 暂停、双击左右快退 / 快进；长按临时加速；左半屏竖滑亮度、右半屏竖滑音量；横滑定位",
         "控制栏开关弹幕；长按弹幕按钮进弹幕设置",
-        "默认值可在「设置 → 播放器」统一调整"
+        "默认值可在「设置 → 播放器」统一调整",
+        "本地下载视频：已修复 SAF / HLS(.ts) 一直加载的问题，下载后可直接播放",
+        "视频下载改为「先嗅探真实地址、再下载」，成功率更高",
+        "Android 下载路径在「设置 → 下载」用系统文件夹选择器指定，下载内容可被正常读取"
       ],
       "controls": [
         {
@@ -546,7 +553,9 @@ window.CONTENT = {
         "点开漫画 → 选话",
         "阅读：单击热区翻页 / 呼出菜单；双击任意处锚点缩放；双指捏合缩放；放大后拖动平移",
         "桌面端：右键图片弹「设为封面 / 保存 / 分享」；鼠标滚轮缩放或翻页",
-        "默认值在「设置 → 漫画阅读器」统一调整"
+        "默认值在「设置 → 漫画阅读器」统一调整",
+        "本地下载漫画已修复 SAF 文件名被系统改写导致打不开的问题，下载后直接阅读",
+        "Android 下载路径在「设置 → 下载」用系统文件夹选择器指定，下载内容可被正常读取"
       ],
       "controls": [
         {
@@ -670,6 +679,7 @@ window.CONTENT = {
         "Auto page-turn, simplified ⇄ traditional conversion, text shadow, night-follow policy",
         "In-book search, bookmarks, whole-book offline cache",
         "Import local TXT / EPUB files to read offline",
+        "Local novel download: per-chapter TXT + images, large EPUB / TXT load faster",
         "Progress auto-saved; prev chapter resumes at its last page"
       ],
       "howto": [
@@ -679,7 +689,9 @@ window.CONTENT = {
         "Open a book → table of contents is fetched",
         "Pick a chapter: tap tap-zones to turn pages; swipe up/down on the left 1/3 to adjust brightness",
         "Tap the center to open the menu and tweak font / theme / page-turn / auto-page, applied instantly",
-        "Set global defaults in Settings → Novel Reader"
+        "Set global defaults in Settings → Novel Reader",
+        "Local novel download saves per-chapter TXT (with an images/ folder) for stable offline reading; large files turn pages smoothly",
+        "Troubleshoot: Settings → Advanced → Run Log shows download / parse errors you can copy for bug reports"
       ],
       "controls": [
         {
@@ -803,7 +815,8 @@ window.CONTENT = {
         "Full gestures: tap to toggle UI, double-tap left/center/right = rewind/pause/forward, long-press boost, left-half brightness, right-half volume, swipe to seek",
         "Subtitles, auto-play next, resume memory (saved every 5 s)",
         "PiP (when platform supports), screenshot, sleep timer, external player, share",
-        "Playback stats: software/hardware decode, bitrate, dropped frames"
+        "Playback stats: software/hardware decode, bitrate, dropped frames",
+        "Locally downloaded video (incl. HLS / SAF) now plays correctly"
       ],
       "howto": [
         "Import a video/anime source (e.g. 233动漫, 花子动漫)",
@@ -811,7 +824,10 @@ window.CONTENT = {
         "Open a show → pick an episode",
         "In player: tap to toggle UI; double-tap center play/pause, left/right rewind/forward; long-press to boost; left-half swipe brightness, right-half volume; swipe to seek",
         "Toggle danmaku from the bar; long-press the danmaku button for danmaku settings",
-        "Set global defaults in Settings → Player"
+        "Set global defaults in Settings → Player",
+        "Locally downloaded video: the SAF / HLS(.ts) endless-loading issue is fixed — downloads play directly",
+        "Video download now sniffs the real URL before saving, improving success rate",
+        "On Android, set the download path in Settings → Download via the system folder picker so downloads are readable"
       ],
       "controls": [
         {
@@ -948,7 +964,9 @@ window.CONTENT = {
         "Open a title → pick a chapter",
         "Reading: tap tap-zones to turn pages / open menu; double-tap to anchor-zoom; pinch to zoom; drag to pan when zoomed",
         "Desktop: right-click an image for 'set cover / save / share'; mouse wheel to zoom or turn pages",
-        "Set global defaults in Settings → Manga Reader"
+        "Set global defaults in Settings → Manga Reader",
+        "Locally downloaded manga: the SAF filename-rewrite issue (file unopenable) is fixed — downloads open directly",
+        "On Android, set the download path in Settings → Download via the system folder picker so downloads are readable"
       ],
       "controls": [
         {
