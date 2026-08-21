@@ -269,7 +269,14 @@ window.CONTENT = {
         "书内搜索、书签、整本缓存下载",
         "支持导入本地 TXT / EPUB 文件，离线也能读",
         "本地小说下载：逐章 TXT + 插图，大 EPUB / TXT 加载更流畅",
-        "阅读进度自动保存；上一章自动回到章末页"
+        "阅读进度自动保存；上一章自动回到章末页",
+        "新增：Legado（阅读）书源导入兼容，自动转成本地源",
+        "新增：书内搜索跳到命中位置 + 并行拉取，大书搜索更快更准",
+        "新增：阅读总结 / 速览（离线摘要 + 云端 AI 摘要，模式可切）",
+        "新增：音量键翻页（默认开）、滚轮翻页（可反转方向）",
+        "新增：TXT 内部章节细化（按「第X章 / 回 / 卷」切分，与 EPUB 同构）",
+        "修正：进度恢复抗字号 / 边距变化，翻到首页退出不再回退上一章末页",
+        "修正：GBK / GB2312 站点乱码（自动探测 meta charset）"
       ],
       "howto": [
         "本地阅读：在「书架 → 本地」导入 TXT / EPUB 文件或文件夹，离线也能看",
@@ -322,6 +329,18 @@ window.CONTENT = {
         {
           "key": "🔤 简繁转换",
           "desc": "一键在简体 / 繁体之间切换正文。"
+        },
+        {
+          "key": "📐 阅读总结 / 速览",
+          "desc": "离线抽取式摘要 + 云端 AI 摘要，快速回顾全书脉络，模式可切换。"
+        },
+        {
+          "key": "🔊 音量键翻页",
+          "desc": "手机侧键翻页（默认开启），双手不离开屏幕也能翻页。"
+        },
+        {
+          "key": "🖱 滚轮翻页（桌面）",
+          "desc": "翻页模式下鼠标滚轮翻页，方向可反转。"
         },
         {
           "key": "↩ 返回",
@@ -405,7 +424,14 @@ window.CONTENT = {
         "字幕、自动连播、续播记忆（每 5 秒存档）",
         "画中画（平台支持时）、截图、定时关闭、外部播放、分享",
         "播放统计：软硬解 / 码率 / 掉帧",
-        "本地下载视频（含 HLS / SAF）修复后可正常播放"
+        "本地下载视频（含 HLS / SAF）修复后可正常播放",
+        "新增：多源自动选源 + 故障回退（线路失败自动轮换候选）",
+        "新增：跨作品播放队列（加入 / 下一部 / 队列管理，跨作品自动连播）",
+        "新增：后台播放 + 通知栏（锁屏 / 切后台继续播放）",
+        "新增：画中画生命周期（进 / 出小窗恢复位置续播）",
+        "新增：跳过片头 / 片尾、自动连播倒计时、睡眠按集数",
+        "新增：双击 seek 累加、底部细进度条、弹幕同文本去重",
+        "新增：本地视频封面（文件夹优先 + 截帧）、横滑取消手势"
       ],
       "howto": [
         "导入影视 / 动漫源（如 233动漫、花子动漫）",
@@ -476,6 +502,26 @@ window.CONTENT = {
           "desc": "展开选集列表点击跳转；开启自动连播后一集结束自动播下一集。"
         },
         {
+          "key": "🔀 多源自动选源 / 故障回退",
+          "desc": "进集按记忆线路优先解析；某线路失败自动轮换下一个候选并提示，全试过才报「链接失效」。"
+        },
+        {
+          "key": "📃 跨作品播放队列",
+          "desc": "更多菜单「加入队列 / 下一部 / 队列管理」，跨作品自动连播；启动可恢复最近队列；本地 / 直连视频也能入队。"
+        },
+        {
+          "key": "🎧 后台播放 / 通知栏",
+          "desc": "锁屏或切到后台继续播放（音频类内容），通知栏显示播放控制。"
+        },
+        {
+          "key": "⏩ 跳过片头 / 片尾",
+          "desc": "设置跳过区间，自动跳过片头片尾；一集结束前显示连播倒计时。"
+        },
+        {
+          "key": "⏲ 睡眠按集数",
+          "desc": "按剩余集数定时停止（而非仅按分钟），看完若干集自动停。"
+        },
+        {
           "key": "ℹ 媒体信息 / 统计",
           "desc": "查看分辨率、码率、解码方式（软 / 硬解）、掉帧等播放统计。"
         },
@@ -532,6 +578,22 @@ window.CONTENT = {
         {
           "key": "弹幕设置",
           "desc": "匹配剧集（手动搜索）/ 关键词过滤（正则）/ 时间偏移（-10~10s）/ 显示区域 / 持续时间 / 行高 / 字体大小 / 不透明度 / 隐藏顶部·底部·滚动 / 跟随倍速。"
+        },
+        {
+          "key": "自动选源 / 故障回退",
+          "desc": "开启后按记忆的线路优先解析；某线路失败自动尝试下一个，提升连通率。"
+        },
+        {
+          "key": "后台播放",
+          "desc": "锁屏或切后台时继续播放（音频类内容），并在通知栏显示控制。"
+        },
+        {
+          "key": "跳过片头 / 片尾",
+          "desc": "设定跳过区间，自动跳过片头与片尾。"
+        },
+        {
+          "key": "睡眠定时",
+          "desc": "可按分钟或按剩余集数停止播放（看完若干集自动停）。"
         }
       ]
     },
@@ -544,7 +606,13 @@ window.CONTENT = {
         "屏幕方向 7 种、点击区布局、左右留白、裁边、显示页码",
         "翻页闪光、章节过渡、屏幕常亮、旋转页面、鼠标滚轮（桌面）",
         "支持导入本地 PDF / CBR / RAR / 7Z 等归档与文件夹，离线也能读",
-        "回上一话自动回到上话末页；下一页自动预加载"
+        "回上一话自动回到上话末页；下一页自动预加载",
+        "新增：书签（为当前页加书签，列表可跳转 / 删除）",
+        "新增：图片收藏图库（长按 / 右键图片保存，集中查看）",
+        "新增：自然排序（2.jpg < 10.jpg 顺序正确，不再字典序错乱）",
+        "新增：阅读中自动下载后续内容（离线更顺）",
+        "新增：缩放倍数指示、顶栏章节绝对 URL、全屏快捷键仅绑 F11、音量键翻页",
+        "修复：连续阅读、双击缩放三态、本地回上一话末页等大批实机问题"
       ],
       "howto": [
         "本地阅读：在「书架 → 本地」导入 PDF / CBR / RAR / 7Z 等文件或文件夹，离线也能看",
@@ -589,6 +657,18 @@ window.CONTENT = {
         {
           "key": "✂ 设为封面 / 保存 / 分享",
           "desc": "桌面右键或长按图片弹出；保存到 reader_images/ 目录。"
+        },
+        {
+          "key": "🔖 书签",
+          "desc": "为当前页添加书签；书签列表可跳转、删除，方便回看。"
+        },
+        {
+          "key": "🖼 图片收藏",
+          "desc": "长按 / 右键图片「保存」归入图片收藏，集中查看喜欢的分镜。"
+        },
+        {
+          "key": "🔊 音量键翻页",
+          "desc": "手机侧键翻页（与小说一致），双手不离开屏幕也能翻页。"
         },
         {
           "key": "💾 进度",
@@ -680,7 +760,14 @@ window.CONTENT = {
         "In-book search, bookmarks, whole-book offline cache",
         "Import local TXT / EPUB files to read offline",
         "Local novel download: per-chapter TXT + images, large EPUB / TXT load faster",
-        "Progress auto-saved; prev chapter resumes at its last page"
+        "Progress auto-saved; prev chapter resumes at its last page",
+        "New: Legado (阅读) source import — auto-converted to a local source",
+        "New: in-book search jumps to the match and fetches in parallel — faster and more accurate on large books",
+        "New: reading summary / overview (offline extract + cloud AI summary, switchable)",
+        "New: volume-key page-turn (on by default) and mouse-wheel page-turn (reversible)",
+        "New: TXT internal chapter splitting (by 'Chapter X / Hui / Juan' headings, same as EPUB)",
+        "Fix: progress restore resists font/margin changes; opening the first page then exiting no longer falls back to the previous chapter",
+        "Fix: GBK / GB2312 mojibake (auto-detected from meta charset)"
       ],
       "howto": [
         "Local reading: import TXT / EPUB files or folders via Bookshelf → Local to read offline",
@@ -733,6 +820,18 @@ window.CONTENT = {
         {
           "key": "🔤 Conversion",
           "desc": "One-tap switch between simplified and traditional Chinese."
+        },
+        {
+          "key": "📐 Reading summary / overview",
+          "desc": "Offline extracted summary plus cloud AI summary; quickly review the book's arc, mode switchable."
+        },
+        {
+          "key": "🔊 Volume-key page-turn",
+          "desc": "Turn pages with the phone side keys (on by default)."
+        },
+        {
+          "key": "🖱 Wheel page-turn (desktop)",
+          "desc": "Mouse wheel turns pages in page mode; direction reversible."
         },
         {
           "key": "↩ Back",
@@ -816,7 +915,14 @@ window.CONTENT = {
         "Subtitles, auto-play next, resume memory (saved every 5 s)",
         "PiP (when platform supports), screenshot, sleep timer, external player, share",
         "Playback stats: software/hardware decode, bitrate, dropped frames",
-        "Locally downloaded video (incl. HLS / SAF) now plays correctly"
+        "Locally downloaded video (incl. HLS / SAF) now plays correctly",
+        "New: multi-source auto-select with failover (auto-tries the next line if one fails)",
+        "New: cross-work play queue (add / play next / manage; auto-plays across works; local & direct video supported)",
+        "New: background playback + notification (keeps playing when locked or in background)",
+        "New: picture-in-picture lifecycle (resumes position on enter/exit)",
+        "New: skip intro / outro, auto-next countdown, sleep-by-episodes",
+        "New: double-tap seek accumulation, bottom thin progress bar, danmaku dedupe",
+        "New: local video cover (folder-first + frame capture), swipe-cancel gesture"
       ],
       "howto": [
         "Import a video/anime source (e.g. 233动漫, 花子动漫)",
@@ -887,6 +993,26 @@ window.CONTENT = {
           "desc": "Open the episode list and jump; with auto-play enabled the next episode starts automatically."
         },
         {
+          "key": "🔀 Multi-source auto-select / failover",
+          "desc": "On enter, prefers the remembered line; if a line fails it auto-tries the next candidate and notifies you — only reports 'link dead' after all are tried."
+        },
+        {
+          "key": "📃 Cross-work play queue",
+          "desc": "From the 'more' menu: add to queue / play next / manage; auto-plays across works; last queue restored on launch; local & direct video also supported."
+        },
+        {
+          "key": "🎧 Background playback / notification",
+          "desc": "Keeps playing when locked or in background (audio content); shows playback controls in the notification shade."
+        },
+        {
+          "key": "⏩ Skip intro / outro",
+          "desc": "Set a skip range to auto-skip intros and outros; a countdown shows before the next episode starts."
+        },
+        {
+          "key": "⏲ Sleep by episodes",
+          "desc": "Stop after a chosen number of remaining episodes (not just by minutes)."
+        },
+        {
           "key": "ℹ Media info / stats",
           "desc": "Resolution, bitrate, decode mode (software/hardware), dropped frames and more."
         },
@@ -943,6 +1069,22 @@ window.CONTENT = {
         {
           "key": "Danmaku settings",
           "desc": "Match episode (manual search) / keyword filter (regex) / time offset (-10~10 s) / region / duration / line height / font size / opacity / hide top·bottom·scroll / follow speed."
+        },
+        {
+          "key": "Auto-select source / failover",
+          "desc": "When on, prefers the remembered line and auto-tries the next one on failure, improving connectivity."
+        },
+        {
+          "key": "Background playback",
+          "desc": "Keep playing when locked or in background (audio content), with notification controls."
+        },
+        {
+          "key": "Skip intro / outro",
+          "desc": "Set a skip range to auto-skip intros and outros."
+        },
+        {
+          "key": "Sleep timer",
+          "desc": "Stop after a set time in minutes, or after a chosen number of remaining episodes."
         }
       ]
     },
@@ -955,7 +1097,13 @@ window.CONTENT = {
         "7 screen orientations, tap-zone layouts, side margins, crop edges, page numbers",
         "Page-flash, chapter transition, keep screen on, rotate page, mouse wheel (desktop)",
         "Import local PDF, CBR, RAR, 7Z archives or folders to read offline",
-        "Prev chapter resumes at its last page; next pages preload automatically"
+        "Prev chapter resumes at its last page; next pages preload automatically",
+        "New: bookmarks (mark the current page; list supports jump / delete)",
+        "New: image collection (long-press / right-click to save, viewed together)",
+        "New: natural sort (2.jpg < 10.jpg correct; no more lexicographic mix-up)",
+        "New: auto-download following pages while reading (smoother offline)",
+        "New: zoom-ratio indicator, absolute chapter URL in the top bar, fullscreen key bound to F11 only, volume-key page-turn",
+        "Fix: continuous reading, triple-state double-tap zoom, prev-chapter resume and many real-device issues"
       ],
       "howto": [
         "Local reading: import PDF, CBR, RAR, 7Z files or folders via Bookshelf → Local to read offline",
@@ -1000,6 +1148,18 @@ window.CONTENT = {
         {
           "key": "✂ Set cover / Save / Share",
           "desc": "Right-click or long-press an image; saved to the reader_images/ directory."
+        },
+        {
+          "key": "🔖 Bookmark",
+          "desc": "Mark the current page; the bookmark list supports jumping and deleting."
+        },
+        {
+          "key": "🖼 Image collection",
+          "desc": "Long-press / right-click an image to 'save' it into your image collection for later viewing."
+        },
+        {
+          "key": "🔊 Volume-key page-turn",
+          "desc": "Turn pages with the phone side keys (same as the novel reader)."
         },
         {
           "key": "💾 Progress",
