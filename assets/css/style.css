@@ -43,6 +43,8 @@
 
 * { box-sizing: border-box; }
 
+img { max-width: 100%; height: auto; }
+
 html { scroll-behavior: smooth; }
 
 body {
@@ -327,13 +329,14 @@ a { color: inherit; text-decoration: none; }
 .doc-bc-sep { opacity: 0.5; }
 .doc-header { margin-bottom: 36px; }
 .doc-title { font-size: clamp(28px, 4vw, 38px); font-weight: 900; margin: 0 0 12px; color: var(--text); letter-spacing: -0.4px; }
-.doc-lead { font-size: 17px; color: var(--muted); line-height: 1.7; margin: 0; max-width: 720px; }
+.doc-lead { font-size: 17px; color: var(--muted); line-height: 1.7; margin: 0; max-width: 720px; overflow-wrap: anywhere; }
 
 .doc-section { margin-bottom: 44px; }
 .doc-h2 {
   display: flex;
   align-items: center;
   gap: 10px;
+  flex-wrap: wrap;
   font-size: 24px;
   font-weight: 800;
   color: var(--text);
@@ -350,7 +353,7 @@ a { color: inherit; text-decoration: none; }
   transition: opacity 0.15s ease;
 }
 .doc-h2:hover .doc-anchor { opacity: 1; }
-.doc-section-body p { margin: 0 0 14px; color: var(--text); font-size: 15px; line-height: 1.8; }
+.doc-section-body p { margin: 0 0 14px; color: var(--text); font-size: 15px; line-height: 1.8; overflow-wrap: anywhere; }
 .doc-section-body p:last-child { margin-bottom: 0; }
 .doc-section-body a { color: var(--primary); text-decoration: underline; text-underline-offset: 3px; }
 .doc-section-body a:hover { color: var(--primary-2); }
@@ -414,12 +417,14 @@ a { color: inherit; text-decoration: none; }
     background: var(--surface);
     border-right: 1px solid var(--border);
     box-shadow: var(--shadow);
-    padding: 18px 16px;
+    padding: 18px 16px calc(18px + env(safe-area-inset-bottom, 0px));
     z-index: 40;
     transform: translateX(-100%);
     transition: transform 0.25s ease;
   }
   .doc-nav.open .doc-nav-scroll { transform: translateX(0); }
+  .doc-nav-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.42); z-index: 35; }
+  .doc-nav-backdrop.show { display: block; }
   .doc-nav-toggle {
     display: inline-flex;
     align-items: center;
@@ -435,6 +440,18 @@ a { color: inherit; text-decoration: none; }
     margin-bottom: 10px;
   }
   .doc-nav-toggle svg { stroke: currentColor; }
+  /* 手机端：把右侧「本页内容」大纲以内联名卡片的形式放回正文顶部，避免内容“消失” */
+  .doc-toc { display: block; order: -1; margin: 0 0 16px; position: static; }
+  .doc-toc-scroll {
+    position: static;
+    max-height: none;
+    overflow: visible;
+    padding: 14px 16px;
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+  }
+  .doc-toc-title { margin-bottom: 8px; }
   .doc-back { margin-bottom: 14px; }
   .doc-title { font-size: 28px; }
   .doc-h2 { font-size: 22px; scroll-margin-top: 76px; }
@@ -478,6 +495,8 @@ a { color: inherit; text-decoration: none; }
   .grid-3 { grid-template-columns: repeat(2, 1fr); }
 }
 @media (max-width: 680px) {
+  .section { padding: 52px 0; }
+  .doc-layout { padding-bottom: calc(48px + env(safe-area-inset-bottom, 0px)); }
   .nav-links {
     position: fixed; top: 64px; left: 0; right: 0;
     flex-direction: column; gap: 0; background: var(--bg); border-bottom: 1px solid var(--border);

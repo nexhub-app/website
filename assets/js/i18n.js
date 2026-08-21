@@ -1500,7 +1500,7 @@ window.CONTENT = {
       "id": "basic",
       "title": "二、基础字段（每个源都有）",
       "group": "basic",
-      "body": "每个源的「头部」都是这些通用字段。填好后 App 才能识别、管理与升级你的源。\n\n注意：源模型不会读取 author / lang / builtin 这三个键——写进文件也会被忽略，请勿把它们当作功能字段。\n\n年龄分级（ageRating）也属于基础字段：可填 general（全年龄）/ teen（青少年 16+）/ mature（成人 18+），兼容别名如 all / 16 / r18 / nsfw 等；缺省为 general。mature 在默认设置下会自动对未开启年龄确认的用户隐藏。\n\n解析方式（parser.type）的详细取值见第十二、十三节。",
+      "body": "每个源的「头部」都是这些通用字段。填好后 App 才能识别、管理与升级你的源。\n\n注意：源模型不会读取 lang / builtin 这两个键——写进文件也会被忽略，请勿当作功能字段；author（作者）已是正式字段，会显示在源详情中。\n\n年龄分级（ageRating）也属于基础字段：可填 general（全年龄）/ teen（青少年 16+）/ mature（成人 18+），兼容别名如 all / 16 / r18 / nsfw 等；缺省为 general。mature 在默认设置下会自动对未开启年龄确认的用户隐藏。\n\n解析方式（parser.type）的详细取值见第十二、十三节。",
       "fields": [
         {
           "k": "id",
@@ -1509,6 +1509,10 @@ window.CONTENT = {
         {
           "k": "name",
           "v": "显示名称，如「GoDa漫画」。"
+        },
+        {
+          "k": "author",
+          "v": "可选，源作者名（显示在源详情中，方便溯源与致谢）。"
         },
         {
           "k": "version",
@@ -1858,8 +1862,25 @@ window.CONTENT = {
       "code": "\"network\": { \"proxy\": \"direct\", \"dns\": \"system\" },\n\"comments\": {\n  \"provider\": \"source\",\n  \"routes\": { \"list\": { \"url\": \"/api/comments?book={id}\", \"responseType\": \"json\" } },\n  \"selectors\": { \"items\": \"$.list\", \"content\": \"$.content\", \"author\": \"$.user\" },\n  \"login\": {\n    \"url\": \"https://example.com/login\",\n    \"checkCookie\": \"sessionid\",\n    \"checkUrl\": \"https://example.com/me\",\n    \"loggedInSelector\": \".user-info\"\n  }\n}\n// 手动 Cookie 登录：直接在 site.cookies 粘贴整段会话 Cookie\n\"site\": { \"baseUrl\": \"https://example.com\", \"cookies\": \"sessionid=abc123; uid=42\" }"
     },
     {
+      "id": "best_practice",
+      "title": "十五、源编写推荐做法（最佳实践）",
+      "group": "advanced",
+      "body": "把前面各模块串起来，下面是一份「写好一个源」的推荐做法清单，照着走能少踩坑：\n\n1. 先填基础字段（id / name / version / type / site / parser / author），保证 App 能识别、管理与溯源。\n2. 只做一个模块先跑通：通常从 search 或 latest 开始，用浏览器开发者工具（F12）核对真实 HTML/JSON 与你的选择器是否匹配。\n3. 声明式优先：能用 jsonpath / css / xpath 解决就别写脚本，更易维护也更稳。\n4. 相对链接补 baseUrl：封面 / 详情链接若是相对路径，App 会按 site.baseUrl 自动拼接，确认 baseUrl 写对。\n5. 异步走 __meta 协议：任何「先请求接口再解析」都返回 {__meta:true,__fetchUrl,__processor}，这是沙箱里唯一安全的异步通道。\n6. 别把站点常量写死进 App：所有规则留在源文件里，站点改版只改源即可。\n7. 加公告与镜像：域名不稳时用 announcement 告知用户、用 site.mirrors 兜底。\n8. 自测导入：在 App 内「导入源」粘贴 JSON，确认无报错后再分享。",
+      "fields": [
+        {
+          "k": "推荐流程",
+          "v": "基础字段 → 单模块跑通 → 声明式优先 → 补 baseUrl → __meta 异步 → 自测导入。"
+        },
+        {
+          "k": "常见坑",
+          "v": "JSON 转义错误、选择器返回空、相对链接未补 baseUrl、脚本抛异常、站点常量写死进 App。"
+        }
+      ],
+      "code": "{\n  \"id\": \"my_source\",\n  \"name\": \"我的源\",\n  \"version\": 1,\n  \"type\": \"animeSource\",\n  \"author\": \"你的名字\",\n  \"site\": { \"domain\": \"example.com\", \"baseUrl\": \"https://example.com\" },\n  \"parser\": { \"type\": \"hybrid\", \"overrides\": { \"search\": { \"type\": \"jsonpath\" } } },\n  \"routes\": { \"search\": { \"url\": \"/s?wd={keyword}&page={page}\", \"method\": \"get\", \"responseType\": \"json\" } },\n  \"selectors\": { \"list\": \"$.list\", \"title\": \"$.vod_name\", \"cover\": \"$.vod_pic\", \"id\": \"$.vod_id\" }\n}"
+    },
+    {
       "id": "collection",
-      "title": "十五、采集 API 接口说明",
+      "title": "十六、采集 API 接口说明",
       "group": "advanced",
       "body": "「采集 API」指的是一个源对外暴露的「抓取接口集合」——也就是 routes 里定义的一个个端点（search / latest / detail / video / images …），以及每个端点用 selectors 或 overrides 声明的抽取规则。App 的引擎按这套约定逐个调用端点、把站点数据变成统一结构。\n\n端点与覆盖层：\n· 每个端点先在 routes 里定义 url（支持 {keyword}/{page}/{id}/{url}/{detailUrl} 占位符）、method、responseType、headers、params。\n· 抽取方式由 parser.overrides.<端点> 决定：builtin / xpath / jsonpath / css / script / webview / webview-html。\n· 声明式端点用 selectors.<端点> 指定选择器；脚本端点用 overrides.<端点>.script 提供函数。\n\n异步协议 __meta：当端点需要先请求另一个接口才能解析（例如视频先调 API 拿真实地址），脚本返回 { __meta:true, __fetchUrl, __processor }。引擎会先预取 __fetchUrl，再把结果交给 __processor 同步处理。这是沙箱里唯一安全的异步通道。\n\n常用端点一览：search（搜索）、latest（最新）、explore / category（发现/分类）、detail（详情+目录）、episodes（剧集列表）、video（视频地址）、chapters（漫画话列表）、images（漫画图片）、week（周更表）。具体字段名见各模块小节与「源字段完整参考」。",
       "fields": [
@@ -1884,7 +1905,7 @@ window.CONTENT = {
     },
     {
       "id": "example_novel",
-      "title": "十六、完整示例：小说源（Legado 兼容）",
+      "title": "十七、完整示例：小说源（Legado 兼容）",
       "group": "advanced",
       "body": "下面是一个完整可运行的小说源示例（Legado 兼容格式）。注意：小说源【不】使用 id / name / type / site 这些顶层字段，而是用 bookSourceName / bookSourceUrl / bookSourceType / ruleSearch / ruleToc / ruleContent / ruleBookInfo 等 Legado 字段；解析通过 parser.overrides.content 的脚本处理正文。把 example.com 换成真实站点、选择器换成真实规则即可导入。",
       "fields": null,
@@ -1892,7 +1913,7 @@ window.CONTENT = {
     },
     {
       "id": "example_media",
-      "title": "十七、完整示例：影视源（animeSource）",
+      "title": "十八、完整示例：影视源（animeSource）",
       "group": "advanced",
       "body": "下面是一个完整可运行的影视源示例（animeSource）。影视源核心在 video 端点：这里用 webview 方式抽取真实播放地址（适合 m3u8 / 需执行页面 JS 才能拿到地址的站点）。注意 anime 源必须包含 latest 路由。把 example.com 换成真实站点即可导入。",
       "fields": null,
@@ -1900,7 +1921,7 @@ window.CONTENT = {
     },
     {
       "id": "example_manga",
-      "title": "十八、完整示例：漫画源（GoDa漫画 · mangaSource）",
+      "title": "十九、完整示例：漫画源（GoDa漫画 · mangaSource）",
       "group": "advanced",
       "body": "下面是以内置源「GoDa漫画」（godamh.com）为蓝本的完整漫画源示例（mangaSource）。漫画源比影视/小说多两个关键端点：chapters（话列表）与 images（该话图片）。\n\n要点：\n· chapters 常需二次请求——脚本先取页面里的 data-mid，再返回 {__meta:true, __fetchUrl, __processor} 让引擎预取章节 API（本示例用 v2.apikk.top），随后由 __processChapters 同步处理（异步约定见第十三节）。\n· 图片地址通常加密：把解密逻辑写在 overrides.images.script 的 parseImages 里，返回图片 URL 数组。\n· 分类标签（selectors.category.tags）的 id 是站点真实的 slug（如 古风=gufeng，无连字符），别自己发明。\n\n为便于阅读，本示例把真实源里冗长的正则/解密脚本压缩成了骨架（直接导入会得到空结果），请把各 script 替换成真实解析逻辑后再使用。",
       "fields": null,
@@ -1908,7 +1929,7 @@ window.CONTENT = {
     },
     {
       "id": "debug",
-      "title": "十九、调试与导入",
+      "title": "二十、调试与导入",
       "group": "advanced",
       "body": "写好后如何验证？\n1. 用浏览器开发者工具（F12）核对真实页面的 HTML/JSON 结构与选择器是否匹配。\n2. 在 App 内「导入源」粘贴 JSON，若解析失败，检查 JSON 格式（注意转义引号与换行）。\n3. 脚本类源可在 overrides 里用 context.log() 打印中间结果辅助定位。\n4. 先在本地用一份最小数据源跑通一个模块（如 search），再逐步补全 detail / video / images。\n5. 分享：把 JSON 文件发给朋友，或提交到社区源仓库，别人一键导入即可。",
       "fields": [
@@ -1929,7 +1950,7 @@ window.CONTENT = {
     },
     {
       "id": "fields",
-      "title": "二十、源字段完整参考",
+      "title": "二十一、源字段完整参考",
       "group": "advanced",
       "body": "下面按「顶层字段 / site / parser / routes / 选择器 / 高级块」给出一份较完整的字段速查。除 id、name、type、site、parser 外，其余字段均可选；源模型会忽略未知键（如 author / lang / builtin），请勿把它们当功能字段使用。\n\n完整约束以仓库源码 lib/core/models/plugin_config.dart 为准，本表覆盖日常编写最常用的字段。",
       "fields": [
@@ -2066,7 +2087,7 @@ window.CONTENT = {
       "id": "basic",
       "title": "2. Basic fields (every source)",
       "group": "basic",
-      "body": "Every source starts with these common header fields. Fill them in first so the app can identify, manage and upgrade your source.\n\nNote: the source model does NOT read author / lang / builtin keys — they are silently ignored, so don't rely on them as functional fields.\n\nAge rating (ageRating) is also a basic field: general (all) / teen (13+/16+) / mature (18+), with aliases like all / 16 / r18 / nsfw accepted; default general. mature is hidden by default from users who have not enabled age confirmation.\n\nThe parser.type values are detailed in sections 12-13.",
+      "body": "Every source starts with these common header fields. Fill them in first so the app can identify, manage and upgrade your source.\n\nNote: the source model does NOT read lang / builtin keys — they are silently ignored, so don't rely on them as functional fields. author is now a real field shown on the source detail page.\n\nAge rating (ageRating) is also a basic field: general (all) / teen (13+/16+) / mature (18+), with aliases like all / 16 / r18 / nsfw accepted; default general. mature is hidden by default from users who have not enabled age confirmation.\n\nThe parser.type values are detailed in sections 12-13.",
       "fields": [
         {
           "k": "id",
@@ -2075,6 +2096,10 @@ window.CONTENT = {
         {
           "k": "name",
           "v": "Display name, e.g. 'GoDa Manga'."
+        },
+        {
+          "k": "author",
+          "v": "Optional. Source author name (shown on the source detail page, for attribution)."
         },
         {
           "k": "version",
@@ -2424,8 +2449,25 @@ window.CONTENT = {
       "code": "\"network\": { \"proxy\": \"direct\", \"dns\": \"system\" },\n\"comments\": {\n  \"provider\": \"source\",\n  \"routes\": { \"list\": { \"url\": \"/api/comments?book={id}\", \"responseType\": \"json\" } },\n  \"selectors\": { \"items\": \"$.list\", \"content\": \"$.content\", \"author\": \"$.user\" },\n  \"login\": {\n    \"url\": \"https://example.com/login\",\n    \"checkCookie\": \"sessionid\",\n    \"checkUrl\": \"https://example.com/me\",\n    \"loggedInSelector\": \".user-info\"\n  }\n}\n// Manual cookie login: paste the whole session cookie into site.cookies\n\"site\": { \"baseUrl\": \"https://example.com\", \"cookies\": \"sessionid=abc123; uid=42\" }"
     },
     {
+      "id": "best_practice",
+      "title": "15. Recommended source-authoring practices",
+      "group": "advanced",
+      "body": "A synthesis of the earlier modules — here is a recommended checklist for writing a solid source, follow it to avoid common pitfalls:\n\n1. Fill the basic fields first (id / name / version / type / site / parser / author) so the app can identify, manage and attribute the source.\n2. Get one module working before the rest: usually start with search or latest, and use browser DevTools (F12) to confirm the real HTML/JSON matches your selectors.\n3. Prefer declarative: use jsonpath / css / xpath when possible instead of scripts — easier to maintain and more stable.\n4. Join relative links to baseUrl: if cover / detail links are relative, the app joins them with site.baseUrl; make sure baseUrl is correct.\n5. Use the __meta protocol for async: any 'request another API then parse' returns {__meta:true,__fetchUrl,__processor} — the only safe async channel in the sandbox.\n6. Never hardcode site constants into the app: keep all rules in the source file, so a site change only needs a source update.\n7. Add announcement and mirrors: when the domain is unstable, use announcement to inform users and site.mirrors as a fallback.\n8. Self-test the import: paste the JSON in the app's 'Import Source' and confirm no errors before sharing.",
+      "fields": [
+        {
+          "k": "Recommended flow",
+          "v": "Basic fields → one module working → declarative-first → join baseUrl → __meta async → self-test import."
+        },
+        {
+          "k": "Common pitfalls",
+          "v": "JSON escaping errors, empty selector results, relative links not joined to baseUrl, script exceptions, site constants hardcoded into the app."
+        }
+      ],
+      "code": "{\n  \"id\": \"my_source\",\n  \"name\": \"我的源\",\n  \"version\": 1,\n  \"type\": \"animeSource\",\n  \"author\": \"你的名字\",\n  \"site\": { \"domain\": \"example.com\", \"baseUrl\": \"https://example.com\" },\n  \"parser\": { \"type\": \"hybrid\", \"overrides\": { \"search\": { \"type\": \"jsonpath\" } } },\n  \"routes\": { \"search\": { \"url\": \"/s?wd={keyword}&page={page}\", \"method\": \"get\", \"responseType\": \"json\" } },\n  \"selectors\": { \"list\": \"$.list\", \"title\": \"$.vod_name\", \"cover\": \"$.vod_pic\", \"id\": \"$.vod_id\" }\n}"
+    },
+    {
       "id": "collection",
-      "title": "15. Collection API interface",
+      "title": "16. Collection API interface",
       "group": "advanced",
       "body": "The 'collection API' is the set of scrape endpoints a source exposes — i.e. the endpoints defined in routes (search / latest / detail / video / images …) and the extraction rules declared per endpoint via selectors or overrides. The app engine calls each endpoint in turn, turning site data into a unified structure.\n\nEndpoints and overrides:\n· Each endpoint first defines url in routes (supports {keyword}/{page}/{id}/{url}/{detailUrl} placeholders), method, responseType, headers, params.\n· How it is parsed is decided by parser.overrides.<endpoint>: builtin / xpath / jsonpath / css / script / webview / webview-html.\n· Declarative endpoints use selectors.<endpoint>; script endpoints use overrides.<endpoint>.script.\n\nAsync protocol __meta: when an endpoint must call another API before parsing (e.g. video first calls an API to get the real URL), the script returns { __meta:true, __fetchUrl, __processor }. The engine prefetches __fetchUrl, then hands the result to __processor synchronously. This is the only safe async channel in the sandbox.\n\nCommon endpoints: search, latest, explore / category, detail (+contents), episodes, video, chapters (manga), images (manga), week (schedule). Exact field names are in each module section and the 'Complete Source Field Reference'.",
       "fields": [
@@ -2450,7 +2492,7 @@ window.CONTENT = {
     },
     {
       "id": "example_novel",
-      "title": "16. Full example: novel source (Legado)",
+      "title": "17. Full example: novel source (Legado)",
       "group": "advanced",
       "body": "A complete runnable novel source example (Legado-compatible format). Note: novel sources do NOT use the id / name / type / site top-level keys; instead they use Legado keys like bookSourceName / bookSourceUrl / bookSourceType / ruleSearch / ruleToc / ruleContent / ruleBookInfo; parsing is handled by parser.overrides.content. Replace example.com with a real site and the selectors with real rules, then import.",
       "fields": null,
@@ -2458,7 +2500,7 @@ window.CONTENT = {
     },
     {
       "id": "example_media",
-      "title": "17. Full example: anime source (animeSource)",
+      "title": "18. Full example: anime source (animeSource)",
       "group": "advanced",
       "body": "A complete runnable anime source example (animeSource). The core is the video endpoint: here we use webview to extract the real play URL (good for m3u8 / sites where the page must execute JS to reveal the URL). Note an anime source MUST include a latest route. Replace example.com with a real site and import.",
       "fields": null,
@@ -2466,7 +2508,7 @@ window.CONTENT = {
     },
     {
       "id": "example_manga",
-      "title": "18. Full example: manga source (GoDa Manga / mangaSource)",
+      "title": "19. Full example: manga source (GoDa Manga / mangaSource)",
       "group": "advanced",
       "body": "This is a complete manga source example modeled on the built-in 'GoDa Manga' source (godamh.com). Manga sources have two key endpoints beyond anime/novel: chapters (chapter list) and images (that chapter's images).\n\nKey points:\n· chapters often needs a second request — the script first grabs data-mid from the page, then returns {__meta:true, __fetchUrl, __processor} so the engine prefetches the chapter API (here v2.apikk.top), then __processChapters handles it synchronously (async rules in section 13).\n· Image URLs are usually encrypted: put the decryption in parseImages under overrides.images.script and return the image URL array.\n· Category tags (selectors.category.tags) ids are the site's real slugs (e.g. 古风 = gufeng, no hyphen) — don't invent them.\n\nFor readability the real source's long regex/decryption scripts are condensed to skeletons here (importing as-is yields empty results); replace each script with real parsing logic before use.",
       "fields": null,
@@ -2474,7 +2516,7 @@ window.CONTENT = {
     },
     {
       "id": "debug",
-      "title": "19. Debug & import",
+      "title": "20. Debug & import",
       "group": "advanced",
       "body": "How to verify after writing?\n1. Use browser DevTools (F12) to confirm the real page's HTML/JSON structure matches your selectors.\n2. In the app, 'Import Source' and paste the JSON. If parsing fails, check JSON format (escaped quotes and newlines).\n3. Script sources can use context.log() inside overrides to print intermediate results.\n4. Start with a minimal source that only gets one module working (e.g. search), then progressively add detail / video / images.\n5. Share: send the JSON to friends, or submit to the community source repo — anyone can import it with one tap.",
       "fields": [
@@ -2495,7 +2537,7 @@ window.CONTENT = {
     },
     {
       "id": "fields",
-      "title": "20. Complete Source Field Reference",
+      "title": "21. Complete Source Field Reference",
       "group": "advanced",
       "body": "A fairly complete field cheat-sheet, grouped as top-level / site / parser / routes / selectors / advanced blocks. Everything except id, name, type, site and parser is optional; unknown keys (e.g. author / lang / builtin) are ignored by the model — do not treat them as functional fields.\n\nThe authoritative constraints live in lib/core/models/plugin_config.dart; this table covers the fields used most often when writing a source.",
       "fields": [
