@@ -130,12 +130,52 @@
   function renderDownloads() {
     var box = document.getElementById("downloadGrid");
     if (!box) return;
-    var arr = (CONTENT.downloads && CONTENT.downloads[state.lang]) || CONTENT.downloads.zh;
+    var dict = I18N[state.lang] || I18N.zh;
+    var dl = CONTENT.downloads || {};
+    var arr = dl[state.lang] || dl.zh || [];
+    var ch = dl.channels || {};
+    var repo = ch.repo || REPO;
+    var stableTag = ch.stableTag || "latest";
+    var betaTag = ch.betaTag || "";
+    var mirror = ch.mirror || "";
+
+    // GitHub: latest → /releases/latest/download/<file>；指定 tag → /releases/download/<tag>/<file>
+    function releaseUrl(tag, file) {
+      return tag === "latest"
+        ? repo + "/releases/latest/download/" + file
+        : repo + "/releases/download/" + tag + "/" + file;
+    }
+
     box.innerHTML = arr.map(function (d) {
+      var btns = "";
+      if (d.asset) {
+        var stable = releaseUrl(stableTag, d.asset);
+        btns += '<a class="btn btn-primary" href="' + stable + '" target="_blank" rel="noopener">' +
+          esc(dict["download.stable"]) + "</a>";
+        if (betaTag) {
+          btns += '<a class="btn btn-outline" href="' + releaseUrl(betaTag, d.asset) +
+            '" target="_blank" rel="noopener">' + esc(dict["download.beta"]) + "</a>";
+        }
+        if (mirror) {
+          btns += '<a class="btn btn-outline" href="' + mirror + stable +
+            '" target="_blank" rel="noopener">' + esc(dict["download.mirror"]) + "</a>";
+        }
+        if (d.alts && d.alts.length) {
+          btns += '<div class="dl-alts">' + esc(dict["download.alts"]) + " " +
+            d.alts.map(function (a) {
+              return '<a href="' + releaseUrl(stableTag, a) + '" target="_blank" rel="noopener">' + esc(a) + "</a>";
+            }).join(" · ") + "</div>";
+        }
+      } else {
+        btns += '<a class="btn btn-primary" href="' + repo + '/releases/latest" target="_blank" rel="noopener">' +
+          esc(d.btn) + "</a>";
+      }
+      btns += '<a class="btn btn-outline" href="' + repo + '/releases" target="_blank" rel="noopener">' +
+        esc(dict["download.allReleases"]) + "</a>";
       return '<div class="card dl">' +
         '<div class="dl-head"><span class="icon">' + d.icon + '</span><span class="name">' + esc(d.name) + "</span></div>" +
         '<div class="desc">' + esc(d.desc) + "</div>" +
-        '<a class="btn btn-primary" href="' + REPO + '/releases/latest" target="_blank" rel="noopener">' + esc(d.btn) + "</a>" +
+        '<div class="dl-btns">' + btns + "</div>" +
         '<div class="note">' + esc(d.note) + "</div></div>";
     }).join("");
   }

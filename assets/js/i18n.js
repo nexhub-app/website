@@ -42,7 +42,12 @@ window.I18N = {
     "features.subtitle": "为「聚合」而生，把选择权和扩展权交还给用户。",
     "download.title": "下载 NexHub",
     "download.subtitle": "选择你的平台，获取最新版本。所有安装包在 GitHub Releases 发布。",
-    "download.hint": "👆 点击对应平台的按钮前往 GitHub Releases 下载最新版。",
+    "download.hint": "👆 直接下载 = 直接获取安装包文件；跳转下载 = 经镜像加速跳转，GitHub 打不开时用它。",
+    "download.stable": "直接下载（稳定版）",
+    "download.beta": "直接下载（测试版）",
+    "download.mirror": "跳转下载（镜像加速）",
+    "download.allReleases": "全部版本（GitHub Releases）",
+    "download.alts": "其他包：",
     "docs.title": "文档与常见问题",
     "docs.subtitle": "快速上手、导入源，以及「源即插件」共创式架构说明与源编写教程。",
     "docs.tutorialTitle": "源编写教程",
@@ -121,7 +126,12 @@ window.I18N = {
     "features.subtitle": "Built for aggregation — giving choice and extensibility back to users.",
     "download.title": "Download NexHub",
     "download.subtitle": "Pick your platform and grab the latest build. All packages are published on GitHub Releases.",
-    "download.hint": "👆 Tap your platform to open GitHub Releases and get the latest version.",
+    "download.hint": "👆 Direct download fetches the installer file; jump download goes through an accelerated mirror — use it when GitHub is unreachable.",
+    "download.stable": "Direct download (stable)",
+    "download.beta": "Direct download (beta)",
+    "download.mirror": "Jump download (mirror)",
+    "download.allReleases": "All releases (GitHub Releases)",
+    "download.alts": "Other packages:",
     "docs.title": "Docs & FAQ",
     "docs.subtitle": "Getting started, importing sources, the community-plugin architecture, and a full source-authoring tutorial.",
     "docs.tutorialTitle": "Source Authoring Tutorial",
@@ -225,19 +235,25 @@ window.CONTENT = {
   },
   downloads: {
     zh: [
-      { id: "android", icon: "🤖", name: "Android", desc: "适用于手机与平板（Android 5.0+）。提供按架构分包：arm64-v8a / armeabi-v7a / x86_64，按设备选择。", btn: "下载 APK", note: "安装时需在系统设置中允许「未知来源」。" },
+      { id: "android", icon: "🤖", name: "Android", desc: "适用于手机与平板（Android 5.0+）。提供按架构分包：arm64-v8a / armeabi-v7a / x86_64，按设备选择；也提供通用 APK（单文件全架构，无需挑架构）。", btn: "下载 APK", asset: "app-release.apk", alts: ["app-arm64-v8a-release.apk", "app-armeabi-v7a-release.apk", "app-x86_64-release.apk"], note: "安装时需在系统设置中允许「未知来源」。" },
       { id: "ios", icon: "🍎", name: "iOS", desc: "适用于 iPhone / iPad。", btn: "获取（TestFlight）", note: "通过 TestFlight 或自签安装；企业证书版请留意有效期。" },
-      { id: "windows", icon: "🪟", name: "Windows", desc: "Windows 10 / 11 桌面客户端。", btn: "下载 EXE / ZIP", note: "若被 SmartScreen 拦截，选择「仍要运行」。" },
-      { id: "macos", icon: "🍏", name: "macOS", desc: "支持 Intel 与 Apple 芯片。", btn: "下载 DMG", note: "首次打开需在「系统设置 - 隐私与安全性」中允许。" },
-      { id: "linux", icon: "🐧", name: "Linux", desc: "提供 AppImage / deb 等格式。", btn: "下载", note: "请根据发行版选择对应包。" }
+      { id: "windows", icon: "🪟", name: "Windows", desc: "Windows 10 / 11 桌面客户端。", btn: "下载 EXE / ZIP", asset: "NexHub-windows-x64.zip", note: "若被 SmartScreen 拦截，选择「仍要运行」。" },
+      { id: "macos", icon: "🍏", name: "macOS", desc: "支持 Intel 与 Apple 芯片。", btn: "下载 DMG", asset: "NexHub-macos.dmg", alts: ["NexHub-macos.zip"], note: "首次打开需在「系统设置 - 隐私与安全性」中允许。" },
+      { id: "linux", icon: "🐧", name: "Linux", desc: "提供 AppImage / deb 等格式。", btn: "下载", asset: "NexHub-linux-x64.AppImage", alts: ["NexHub-linux-x64.deb", "NexHub-linux-x64.tar.gz"], note: "请根据发行版选择对应包。" }
     ],
     en: [
-      { id: "android", icon: "🤖", name: "Android", desc: "For phones & tablets (Android 5.0+).", btn: "Download APK", note: "Allow 'Install unknown apps' in system settings." },
+      { id: "android", icon: "🤖", name: "Android", desc: "For phones & tablets (Android 5.0+). Split by ABI: arm64-v8a / armeabi-v7a / x86_64 — pick yours; a universal APK (all ABIs in one file) is also provided.", btn: "Download APK", asset: "app-release.apk", alts: ["app-arm64-v8a-release.apk", "app-armeabi-v7a-release.apk", "app-x86_64-release.apk"], note: "Allow 'Install unknown apps' in system settings." },
       { id: "ios", icon: "🍎", name: "iOS", desc: "For iPhone / iPad.", btn: "Get (TestFlight)", note: "Via TestFlight or sideload; watch enterprise cert expiry." },
-      { id: "windows", icon: "🪟", name: "Windows", desc: "Desktop client for Windows 10 / 11.", btn: "Download EXE / ZIP", note: "If SmartScreen blocks it, choose 'Run anyway'." },
-      { id: "macos", icon: "🍏", name: "macOS", desc: "Intel & Apple Silicon supported.", btn: "Download DMG", note: "On first open, allow it in System Settings → Privacy & Security." },
-      { id: "linux", icon: "🐧", name: "Linux", desc: "AppImage / deb and more.", btn: "Download", note: "Pick the package for your distro." }
-    ]
+      { id: "windows", icon: "🪟", name: "Windows", desc: "Desktop client for Windows 10 / 11.", btn: "Download EXE / ZIP", asset: "NexHub-windows-x64.zip", note: "If SmartScreen blocks it, choose 'Run anyway'." },
+      { id: "macos", icon: "🍏", name: "macOS", desc: "Intel & Apple Silicon supported.", btn: "Download DMG", asset: "NexHub-macos.dmg", alts: ["NexHub-macos.zip"], note: "On first open, allow it in System Settings → Privacy & Security." },
+      { id: "linux", icon: "🐧", name: "Linux", desc: "AppImage / deb and more.", btn: "Download", asset: "NexHub-linux-x64.AppImage", alts: ["NexHub-linux-x64.deb", "NexHub-linux-x64.tar.gz"], note: "Pick the package for your distro." }
+    ],
+    channels: {
+      repo: "https://github.com/nexhub-app/nexhub",
+      stableTag: "latest",
+      betaTag: "v2.0.0-beta.2",
+      mirror: "https://ghfast.top/"
+    }
   },
   docs: {
     zh: [
@@ -270,13 +286,39 @@ window.CONTENT = {
         "支持导入本地 TXT / EPUB 文件，离线也能读",
         "本地小说下载：逐章 TXT + 插图，大 EPUB / TXT 加载更流畅",
         "阅读进度自动保存；上一章自动回到章末页",
+        "寡行控制：避免段落末行只剩一两个字孤零零吊在页首 / 页尾",
+        "点按分区翻页：屏幕分区，各区动作可配置",
+        "书签（书 / 章 / 页三级）与笔记（按书 / 按章）",
+        "EPUB 懒加载 + NCX / spine 目录；TXT 按内部标题切分章节",
+        "TXT 导出；WebDAV 备份 / 恢复（收藏 + 进度，可跨设备迁移）",
+        "阅读时可选后台常亮，与睡眠定时搭配使用",
+        "书架空分组自动隐藏，长列表不被空分类填满",
         "新增：Legado（阅读）书源导入兼容，自动转成本地源",
         "新增：书内搜索跳到命中位置 + 并行拉取，大书搜索更快更准",
         "新增：阅读总结 / 速览（离线摘要 + 云端 AI 摘要，模式可切）",
         "新增：音量键翻页（默认开）、滚轮翻页（可反转方向）",
         "新增：TXT 内部章节细化（按「第X章 / 回 / 卷」切分，与 EPUB 同构）",
         "修正：进度恢复抗字号 / 边距变化，翻到首页退出不再回退上一章末页",
-        "修正：GBK / GB2312 站点乱码（自动探测 meta charset）"
+        "修正：GBK / GB2312 站点乱码（自动探测 meta charset）",
+        "新增：搜索历史（记录并快速复用近期搜索词）",
+        "新增：替换规则 / 高亮规则（排版期正文净化 + 高亮，书籍级开关，不重拉全书）",
+        "新增（2.0.0-beta.2）：双页模式（宽屏翻页左右并排，进度以左页为准）",
+        "新增（2.0.0-beta.2）：整本页码（页眉 / 页脚跨章累计全书页位）",
+        "新增（2.0.0-beta.2）：双语 / 段落翻译（接入 AI 翻译，原文 / 译文对照，译文按书缓存）",
+        "新增（2.0.0-beta.2）：AI 章节配图（按内容生成插图，图文混排）",
+        "新增（2.0.0-beta.2）：AI 阅读总结 / 内容摘要（按全书或章节生成摘要）",
+        "新增（2.0.0-beta.2）：阅读器内正文编辑（已编辑章节带角标，可「恢复原文」）",
+        "新增（2.0.0-beta.2）：墨水屏主题（炭灰正文 + 朱批强调色，夜间回退亮色文字）",
+        "新增（2.0.0-beta.2）：书源 JS 简繁函数 t2s() / s2t()",
+        "新增（2.0.0-beta.2）：压缩包批量导入（zip / cbz / rar / 7z 内 txt / epub 解包入库）",
+        "新增（2.0.0-beta.2）：便携文档解析（Mobi / PDF 文本层，纯 Dart）",
+        "新增（2.0.0-beta.2）：阅读进度细粒度 WebDAV 云同步（逐书单文件，冲突自动裁决）",
+        "新增（2.0.0-beta.2）：EPUB 导出自定义模板 + WebDAV 上传",
+        "新增（2.0.0-beta.2）：划线 / 高亮 / 摘录 / 分享（文艺分享卡片，可换源重定位）",
+        "新增（2.0.0-beta.2）：朗读通知栏控制、阅读中预下载、平滑自动翻页、书签角标自定义图",
+        "新增（2.0.0-beta.2）：在线多音色 TTS（自定义 HTTP 模板 + 角色→音色映射）",
+        "新增（2.0.0-beta.2）：长正文多页并发抓取（nextContentUrl 并发保序拼接，加快大章加载）",
+        "新增（2.0.0-beta.2）：滚动模式插图样式 / 对齐（banner / card，可选左 / 中 / 右对齐）"
       ],
       "howto": [
         "本地阅读：在「书架 → 本地」导入 TXT / EPUB 文件或文件夹，离线也能看",
@@ -431,7 +473,25 @@ window.CONTENT = {
         "新增：画中画生命周期（进 / 出小窗恢复位置续播）",
         "新增：跳过片头 / 片尾、自动连播倒计时、睡眠按集数",
         "新增：双击 seek 累加、底部细进度条、弹幕同文本去重",
-        "新增：本地视频封面（文件夹优先 + 截帧）、横滑取消手势"
+        "新增：本地视频封面（文件夹优先 + 截帧）、横滑取消手势",
+        "修正：本地 / 直链视频打开即自动播放，不再停在暂停态",
+        "修正：横滑 seek 方向（此前右滑反而快退，与双击快进矛盾）",
+        "修正：画面比例设置真正生效（容器跟随比例，4:3 / 填充视觉正确）",
+        "修正：切集失败自动回滚并提示，不再停在「新集索引 + 旧画面」",
+        "修正：退出 / 切后台时最后几秒的进度不再丢失",
+        "新增：m3u8 可下载（HLS 分段拼接；加密分片保持已知限制）",
+        "新增：控制栏隐藏租约（拖进度 / 开面板时不自动隐藏）、双击防抖",
+        "新增（2.0.0-beta.2）：超分辨率（Anime4K，效率 / 质量两档，按需开启）",
+        "新增（2.0.0-beta.2）：系统画中画完整生命周期（记录位置、退出续播、小窗三动作、条件进入）",
+        "新增（2.0.0-beta.2）：投屏完整生命周期（位置双向同步、错误上报、断开自动暂停）",
+        "新增（2.0.0-beta.2）：桌面端画中画（缩小窗口置顶，可拖动，关闭后恢复原窗口）",
+        "新增（2.0.0-beta.2）：弹幕发送上传（登录弹弹play 后可发送，未登录就地登录）",
+        "新增（2.0.0-beta.2）：缓存策略降级（蜂窝 / 低内存自动降档，切换即时生效）",
+        "新增（2.0.0-beta.2）：错误分级重试（切集自动重开自愈，减少卡死）",
+        "新增（2.0.0-beta.2）：声明式播放器菜单",
+        "新增（2.0.0-beta.2）：字幕按视频记忆（外部字幕 / 样式按 URL 记忆）",
+        "新增（2.0.0-beta.2）：防重叠轨道算法、seek 后弹幕位置稳定",
+        "新增（2.0.0-beta.2）：播放器抽象层与异步会话取消统一（提升稳定性）"
       ],
       "howto": [
         "导入影视 / 动漫源（如 233动漫、花子动漫）",
@@ -612,7 +672,19 @@ window.CONTENT = {
         "新增：自然排序（2.jpg < 10.jpg 顺序正确，不再字典序错乱）",
         "新增：阅读中自动下载后续内容（离线更顺）",
         "新增：缩放倍数指示、顶栏章节绝对 URL、全屏快捷键仅绑 F11、音量键翻页",
-        "修复：连续阅读、双击缩放三态、本地回上一话末页等大批实机问题"
+        "修复：连续阅读、双击缩放三态、本地回上一话末页等大批实机问题",
+        "修复：缩放手势一组（条漫未放大可捏合、放大后单指不误翻页、双击不双触发、锚点跟随手指、回 1x 清偏移）",
+        "修复：进度写入可靠性（退出先落盘防抖中的进度，恢复期不回写污染存档）",
+        "亮度双轨：正值写系统亮度，负值压到最低并叠加黑遮罩",
+        "修复：条漫负 margin 崩溃（Flutter 3.47 框架断言）",
+        "桌面端：window_manager 真实全屏（F11 进入 / Esc 退出）、方向键与 PageUp·Down 翻页、± 缩放、N·P 上下话、右键呼出图片菜单",
+        "新增（2.0.0-beta.2）：夜览暖色盖层（独立开关 + 强度滑杆）",
+        "新增（2.0.0-beta.2）：睡眠定时（按分钟 15–90 或按话数 1–3）",
+        "新增（2.0.0-beta.2）：资源 / 内存优化（归档临时目录回收、缓存按内存预算、退后台冲刷进度）",
+        "新增（2.0.0-beta.2）：双击三态循环、E-Ink 刷新、ICC 校色（6 种色彩预设）",
+        "新增（2.0.0-beta.2）：自动收藏封面",
+        "新增（2.0.0-beta.2）：预加载数量可配（1–16）",
+        "新增（2.0.0-beta.2）：键盘快捷键补全、鼠标滚轮速度可调、鼠标光标反馈、放大态边缘滑动切页、缩放锚点可配、图片加载失败重试"
       ],
       "howto": [
         "本地阅读：在「书架 → 本地」导入 PDF / CBR / RAR / 7Z 等文件或文件夹，离线也能看",
@@ -761,13 +833,39 @@ window.CONTENT = {
         "Import local TXT / EPUB files to read offline",
         "Local novel download: per-chapter TXT + images, large EPUB / TXT load faster",
         "Progress auto-saved; prev chapter resumes at its last page",
+        "Widow/orphan control: never leaves one or two characters dangling at the top or bottom of a page",
+        "Tap zones for page turning (screen split into configurable zones)",
+        "Bookmarks (book / chapter / page) and notes (per book / per chapter)",
+        "EPUB lazy loading with NCX / spine TOC; TXT split into chapters by internal headings",
+        "TXT export; WebDAV backup / restore (favorites + progress, move between devices)",
+        "Optional screen wake lock while reading, paired with the sleep timer",
+        "Empty shelf groups are hidden automatically so long lists aren't filled with empty categories",
         "New: Legado (阅读) source import — auto-converted to a local source",
         "New: in-book search jumps to the match and fetches in parallel — faster and more accurate on large books",
         "New: reading summary / overview (offline extract + cloud AI summary, switchable)",
         "New: volume-key page-turn (on by default) and mouse-wheel page-turn (reversible)",
         "New: TXT internal chapter splitting (by 'Chapter X / Hui / Juan' headings, same as EPUB)",
         "Fix: progress restore resists font/margin changes; opening the first page then exiting no longer falls back to the previous chapter",
-        "Fix: GBK / GB2312 mojibake (auto-detected from meta charset)"
+        "Fix: GBK / GB2312 mojibake (auto-detected from meta charset)",
+        "New: replace rules / highlight rules (per-book toggle, no full re-fetch)",
+        "New: search history (recent search terms, quickly reusable)",
+        "New (2.0.0-beta.2): dual-page mode (side-by-side pages in landscape, progress follows the left page)",
+        "New (2.0.0-beta.2): whole-book page numbers (header/footer counts across all chapters)",
+        "New (2.0.0-beta.2): bilingual / paragraph translation (AI translation, original/translation side-by-side, cached per book)",
+        "New (2.0.0-beta.2): AI chapter illustration (generated art inline, mixed text & images)",
+        "New (2.0.0-beta.2): AI reading summary (summaries per book or per chapter)",
+        "New (2.0.0-beta.2): in-reader text editing (edited chapters flagged, 'restore original' available)",
+        "New (2.0.0-beta.2): e-ink theme (charcoal text + vermilion accent, falls back to light text at night)",
+        "New (2.0.0-beta.2): source JS simplified⇄traditional helpers t2s() / s2t()",
+        "New (2.0.0-beta.2): batch archive import (unpack txt/epub inside zip/cbz/rar/7z)",
+        "New (2.0.0-beta.2): portable doc parsing (Mobi / PDF text layer, pure Dart)",
+        "New (2.0.0-beta.2): fine-grained WebDAV reading-progress sync (per-book files, auto conflict resolution)",
+        "New (2.0.0-beta.2): EPUB export with custom template + WebDAV upload",
+        "New (2.0.0-beta.2): highlight / annotate / share (share cards, re-locatable after source switch)",
+        "New (2.0.0-beta.2): TTS notification controls, pre-download while reading, smooth auto-page, custom bookmark badge",
+        "New (2.0.0-beta.2): online multi-voice TTS (custom HTTP template + character→voice mapping)",
+        "New (2.0.0-beta.2): long-chapter multi-page concurrent fetch (nextContentUrl, ordered merging)",
+        "New (2.0.0-beta.2): scroll-mode illustration styles / alignment (banner / card, left / center / right)"
       ],
       "howto": [
         "Local reading: import TXT / EPUB files or folders via Bookshelf → Local to read offline",
@@ -922,7 +1020,25 @@ window.CONTENT = {
         "New: picture-in-picture lifecycle (resumes position on enter/exit)",
         "New: skip intro / outro, auto-next countdown, sleep-by-episodes",
         "New: double-tap seek accumulation, bottom thin progress bar, danmaku dedupe",
-        "New: local video cover (folder-first + frame capture), swipe-cancel gesture"
+        "New: local video cover (folder-first + frame capture), swipe-cancel gesture",
+        "Fix: local / direct-link video now starts playing immediately instead of pausing on open",
+        "Fix: horizontal swipe-seek direction (right-swipe used to rewind, conflicting with double-tap forward)",
+        "Fix: aspect-ratio setting now takes effect (container follows the ratio; 4:3 and fill look right)",
+        "Fix: failed episode switch rolls back and reports an error instead of freezing on the old frame",
+        "Fix: the last few seconds of progress are no longer lost when exiting or backgrounding",
+        "New: m3u8 download (HLS segment concatenation; encrypted segments remain a known limitation)",
+        "New: control-bar hold lease (no auto-hide while dragging or a panel is open), double-tap debounce",
+        "New (2.0.0-beta.2): super-resolution (Anime4K, efficiency / quality modes, on demand)",
+        "New (2.0.0-beta.2): full system-PiP lifecycle (save position, resume on exit, mini-window actions, conditional entry)",
+        "New (2.0.0-beta.2): full cast lifecycle (two-way position sync, error reporting, auto-pause on disconnect)",
+        "New (2.0.0-beta.2): desktop picture-in-picture (pinned mini window, draggable, restores on close)",
+        "New (2.0.0-beta.2): danmaku send (after signing in to DandanPlay; sign-in inline if needed)",
+        "New (2.0.0-beta.2): cache degrade (auto-downgrade on cellular / low-memory, switches instantly)",
+        "New (2.0.0-beta.2): graded error retry (auto-reopen on episode switch, fewer freezes)",
+        "New (2.0.0-beta.2): declarative player menu",
+        "New (2.0.0-beta.2): subtitle memory per video (external subtitle / style remembered by URL)",
+        "New (2.0.0-beta.2): anti-overlap track algorithm, stable danmaku position after seek",
+        "New (2.0.0-beta.2): unified player abstraction & async session cancellation (stability)"
       ],
       "howto": [
         "Import a video/anime source (e.g. 233动漫, 花子动漫)",
@@ -1103,7 +1219,19 @@ window.CONTENT = {
         "New: natural sort (2.jpg < 10.jpg correct; no more lexicographic mix-up)",
         "New: auto-download following pages while reading (smoother offline)",
         "New: zoom-ratio indicator, absolute chapter URL in the top bar, fullscreen key bound to F11 only, volume-key page-turn",
-        "Fix: continuous reading, triple-state double-tap zoom, prev-chapter resume and many real-device issues"
+        "Fix: continuous reading, triple-state double-tap zoom, prev-chapter resume and many real-device issues",
+        "Fix: zoom gesture set (pinch works un-zoomed in webtoon, single tap no longer turns pages while zoomed, double-tap no longer fires both page-turn and zoom, anchor follows the finger, offsets cleared at 1x)",
+        "Fix: progress-write reliability (pending debounced progress flushed on exit; no write-back pollution while restoring)",
+        "Dual-track brightness: positive values write system brightness, negative values pin it to minimum and overlay a black scrim",
+        "Fix: webtoon negative-margin crash (Flutter 3.47 framework assertion)",
+        "Desktop: true fullscreen via window_manager (F11 / Esc), arrow keys & PageUp/Down paging, ± zoom, N/P chapter, right-click image menu",
+        "New (2.0.0-beta.2): night-light warm overlay (independent toggle + intensity slider)",
+        "New (2.0.0-beta.2): sleep timer (by minutes 15–90 or by chapters 1–3)",
+        "New (2.0.0-beta.2): resource & memory optimization (archive temp cleanup, memory-budget cache, progress flush on background)",
+        "New (2.0.0-beta.2): triple-state double-tap, E-Ink refresh, ICC color (6 presets)",
+        "New (2.0.0-beta.2): auto-favorite cover",
+        "New (2.0.0-beta.2): configurable preload count (1–16)",
+        "New (2.0.0-beta.2): keyboard shortcut completion, adjustable scroll-wheel speed, cursor feedback, edge-swipe paging while zoomed, configurable zoom anchor, image load-failure retry"
       ],
       "howto": [
         "Local reading: import PDF, CBR, RAR, 7Z files or folders via Bookshelf → Local to read offline",
@@ -1988,7 +2116,7 @@ window.CONTENT = {
       "id": "advanced",
       "title": "十四、进阶：源级网络 / 评论 / 登录（v0.4.0）",
       "group": "advanced",
-      "body": "v0.4.0 起，源还能声明一些「站点级」能力，让 App 在不改引擎的前提下适配更复杂的站点：\n· network（可选）：源级网络覆盖。子键 proxy / dns / hosts / sni / ech，逐项选「继承全局」或「单独覆盖」。缺省即继承全局设置，非法值只告警、不会让源无法启用。\n· comments（可选）：声明该源的评论能力。provider 默认 source（评论来自源站）；routes 声明 list / replies / post / reply / like / report 等路由（未声明的按钮不渲染）；selectors 用同一套 JSONPath/CSS/XPath 引擎抽取内容。\n· 登录（可选，comments.login 段 + site.cookies），两种方式：\n  - WebView 登录：login.url 填登录页地址，App 用 WebView 打开让用户登录，成功后捕获会话 Cookie 存本地；可用 login.checkUrl + login.loggedInSelector 做登录态二次探测（GET checkUrl，选择器命中非空即已登录）。\n  - Cookie 登录：login.checkCookie 填「Cookie 中代表已登录的键名」，App 据此快速判断登录态；也可以在 site.cookies 直接粘贴整段会话 Cookie，全源请求自动携带。\n凭据只存本地，不会上传；未声明登录时，该源按「只读 / 免登录」处理。",
+      "body": "v0.4.0 起，源还能声明一些「站点级」能力，让 App 在不改引擎的前提下适配更复杂的站点：\n· network（可选）：源级网络覆盖。子键 proxy / dns / hosts / sni / ech，逐项选「继承全局」或「单独覆盖」。缺省即继承全局设置，非法值只告警、不会让源无法启用。\n· comments（可选）：声明该源的评论能力。provider 默认 source（评论来自源站）；routes 声明 list / replies / post / reply / like / report 等路由（未声明的按钮不渲染）；selectors 用同一套 JSONPath/CSS/XPath 引擎抽取内容。\n· 登录（可选，声明在 comments.login 段）：三种方式，可组合——\n  1) WebView 登录：login.url 填登录页地址，App 用 WebView 打开让用户登录，成功后捕获会话 Cookie 存本地。\n  2) Cookie 登录：login.checkCookie 填「代表已登录的 Cookie 键名」，App 据此快速判定；也可在 site.cookies 直接粘贴整段会话 Cookie，全源请求自动携带。\n  3) API Key 登录：login.sendTokenAs 设为 \"key\"，用户在「源详情 → 登录」面板粘贴密钥，App 存本地密钥库，并在受保护请求上追加 Authorization: <authScheme> <密钥>（默认前缀 Key）。适合「登录给的是 access_token，但收藏 / 个人页却要单独 API Key」的站点（部分站点的新版 API 明确要求 Key <api_key>，而非 Bearer）。\n· 令牌携带方式 login.sendTokenAs：null（只靠 Cookie）/ \"bearer\"（Authorization: Bearer <checkCookie 对应 Cookie 值>）/ \"key\"（Authorization: <authScheme> <手动密钥>，即 API Key 登录）。\n· 登录态二次确认：login.checkUrl + login.loggedInSelector（GET checkUrl，选择器命中非空即视为登录有效）。\n凭据只存本地，不会上传；未声明登录时，该源按「只读 / 免登录」处理。",
       "fields": [
         {
           "k": "network",
@@ -2011,32 +2139,60 @@ window.CONTENT = {
           "v": "登录态二次探测：GET checkUrl，选择器命中非空即登录有效。"
         },
         {
+          "k": "comments.login.sendTokenAs",
+          "v": "令牌携带方式（登录类型）：null 只靠 Cookie；bearer → Authorization: Bearer <checkCookie 的 Cookie 值>；key → Authorization: <authScheme> <手动密钥>，即 API Key 登录。"
+        },
+        {
+          "k": "comments.login.authScheme",
+          "v": "仅 sendTokenAs==key 生效：Authorization 头前缀，默认 Key；站点要求 Token / Bearer 等前缀时改这里。"
+        },
+        {
+          "k": "comments.login.apiKeyParam",
+          "v": "仅 sendTokenAs==key 生效：密钥在本地密钥库的参数名，默认 apiKey（按 sourceId:apiKeyParam 存储）。"
+        },
+        {
           "k": "site.cookies",
-          "v": "手动 Cookie 登录：直接把会话 Cookie 字符串填到 site.cookies，全源请求自动携带。"
+          "v": "手动 Cookie 登录：把整段会话 Cookie 填到 site.cookies，全源请求自动携带。"
         },
         {
           "k": "生效优先级",
           "v": "用户覆盖 > 源 network 块 > 全局设置 > 默认值；改完即时生效，无需重启。"
         }
       ],
-      "code": "\"network\": { \"proxy\": \"direct\", \"dns\": \"system\" },\n\"comments\": {\n  \"provider\": \"source\",\n  \"routes\": { \"list\": { \"url\": \"/api/comments?book={id}\", \"responseType\": \"json\" } },\n  \"selectors\": { \"items\": \"$.list\", \"content\": \"$.content\", \"author\": \"$.user\" },\n  \"login\": {\n    \"url\": \"https://example.com/login\",\n    \"checkCookie\": \"sessionid\",\n    \"checkUrl\": \"https://example.com/me\",\n    \"loggedInSelector\": \".user-info\"\n  }\n}\n// 手动 Cookie 登录：直接在 site.cookies 粘贴整段会话 Cookie\n\"site\": { \"baseUrl\": \"https://example.com\", \"cookies\": \"sessionid=abc123; uid=42\" }"
+      "code": "\"network\": { \"proxy\": \"direct\", \"dns\": \"system\" },\n\"comments\": {\n  \"provider\": \"source\",\n  \"routes\": { \"list\": { \"url\": \"/api/comments?book={id}\", \"responseType\": \"json\" } },\n  \"selectors\": { \"items\": \"$.list\", \"content\": \"$.content\", \"author\": \"$.user\" },\n  \"login\": {\n    \"url\": \"https://example.com/login\",\n    \"checkCookie\": \"sessionid\",\n    \"checkUrl\": \"https://example.com/me\",\n    \"loggedInSelector\": \".user-info\"\n  }\n}\n// 手动 Cookie 登录：直接在 site.cookies 粘贴整段会话 Cookie\n\"site\": { \"baseUrl\": \"https://example.com\", \"cookies\": \"sessionid=abc123; uid=42\" }\n// API Key 登录（同样写在 comments.login 段内）：sendTokenAs=key\n\"login\": {\n  \"sendTokenAs\": \"key\",    // 追加 Authorization: <authScheme> <用户粘贴的密钥>\n  \"authScheme\": \"Key\",     // 默认 Key；站点要求其他前缀时改这里\n  \"apiKeyParam\": \"apiKey\"  // 密钥存本地密钥库的参数名，默认 apiKey\n}"
     },
     {
-      "id": "best_practice",
-      "title": "十五、源编写推荐做法（最佳实践）",
+      "id": "recommend",
+      "title": "十五、源的猜你喜欢编写教程",
       "group": "advanced",
-      "body": "把前面各模块串起来，下面是一份「写好一个源」的推荐做法清单，照着走能少踩坑：\n\n1. 先填基础字段（id / name / version / type / site / parser / author），保证 App 能识别、管理与溯源。\n2. 只做一个模块先跑通：通常从 search 或 latest 开始，用浏览器开发者工具（F12）核对真实 HTML/JSON 与你的选择器是否匹配。\n3. 声明式优先：能用 jsonpath / css / xpath 解决就别写脚本，更易维护也更稳。\n4. 相对链接补 baseUrl：封面 / 详情链接若是相对路径，App 会按 site.baseUrl 自动拼接，确认 baseUrl 写对。\n5. 异步走 __meta 协议：任何「先请求接口再解析」都返回 {__meta:true,__fetchUrl,__processor}，这是沙箱里唯一安全的异步通道。\n6. 别把站点常量写死进 App：所有规则留在源文件里，站点改版只改源即可。\n7. 加公告与镜像：域名不稳时用 announcement 告知用户、用 site.mirrors 兜底。\n8. 自测导入：在 App 内「导入源」粘贴 JSON，确认无报错后再分享。",
+      "body": "「猜你喜欢」是详情页的推荐区块，用来展示「看了这部的人还看了什么」。给源加上它，用户不必退回搜索就能继续发现内容。\n\n三种写法（按源类型选，也可并存）：\n1) 推荐路由（推荐，影视 / 漫画 / 小说通用）：在 routes 里声明 recommend（优先）或 related，引擎打开详情时会带上 {id} 变量调用该接口，结果渲染成「猜你喜欢」区块；两者都未声明则不渲染该区块。\n2) 漫画（mangaSource）：在 selectors.detail 里加 recommendations 对象，用 list / title / cover / url 从详情页直接抽取推荐列表（内置源 GoDa漫画、Komiic、FavComic 采用此写法）。\n3) 小说（Legado 兼容）：用 ruleBookInfo.recommendations 抽取推荐书名列表。\n\n注意：推荐结果复用列表解析引擎，字段与 search / latest 一致（id / title / cover / detailUrl），多数情况下照抄 search 的 selectors 就能跑通。",
       "fields": [
         {
-          "k": "推荐流程",
-          "v": "基础字段 → 单模块跑通 → 声明式优先 → 补 baseUrl → __meta 异步 → 自测导入。"
+          "k": "routes.recommend",
+          "v": "推荐接口（优先）：详情页打开时带 {id} 变量调用，结果渲染为「猜你喜欢」。"
         },
         {
-          "k": "常见坑",
-          "v": "JSON 转义错误、选择器返回空、相对链接未补 baseUrl、脚本抛异常、站点常量写死进 App。"
+          "k": "routes.related",
+          "v": "备选推荐接口；未声明 recommend 时使用，行为一致。"
+        },
+        {
+          "k": "selectors.recommend",
+          "v": "推荐结果的抽取选择器（与 search / latest 同结构：list / title / cover / id）；未声明时复用 selectors.search。"
+        },
+        {
+          "k": "selectors.detail.recommendations（漫画）",
+          "v": "对象 { list, title, cover, url }，直接从详情页抽取推荐列表。"
+        },
+        {
+          "k": "ruleBookInfo.recommendations（小说）",
+          "v": "Legado 兼容字段，推荐书名选择器。"
+        },
+        {
+          "k": "不渲染条件",
+          "v": "recommend 与 related 都未声明时，详情页不显示推荐区块。"
         }
       ],
-      "code": "{\n  \"id\": \"my_source\",\n  \"name\": \"我的源\",\n  \"version\": 1,\n  \"type\": \"animeSource\",\n  \"author\": \"你的名字\",\n  \"site\": { \"domain\": \"example.com\", \"baseUrl\": \"https://example.com\" },\n  \"parser\": { \"type\": \"hybrid\", \"overrides\": { \"search\": { \"type\": \"jsonpath\" } } },\n  \"routes\": { \"search\": { \"url\": \"/s?wd={keyword}&page={page}\", \"method\": \"get\", \"responseType\": \"json\" } },\n  \"selectors\": { \"list\": \"$.list\", \"title\": \"$.vod_name\", \"cover\": \"$.vod_pic\", \"id\": \"$.vod_id\" }\n}"
+      "code": "// 写法一（通用）：recommend 路由 + 选择器\n{\n  \"routes\": {\n    \"recommend\": { \"url\": \"/api/recommend?id={id}\", \"method\": \"get\", \"responseType\": \"json\" }\n  },\n  \"selectors\": {\n    \"recommend\": {\n      \"list\": \"$.list\",\n      \"title\": \"$.vod_name\",\n      \"cover\": \"$.vod_pic\",\n      \"id\": \"$.vod_id\"\n    }\n  }\n}\n\n// 写法二（漫画）：selectors.detail.recommendations 从详情页直接抽\n\"detail\": {\n  \"title\": \"h1.text-xl@text\",\n  \"recommendations\": {\n    \"list\": \".recommend-list a[href^=\\\"/manga/\\\"]\",\n    \"title\": \"h3@text\",\n    \"cover\": \"img@src||data-src\",\n    \"url\": \"@href\"\n  }\n}"
     },
     {
       "id": "collection",
@@ -2575,7 +2731,7 @@ window.CONTENT = {
       "id": "advanced",
       "title": "14. Advanced: source-level network / comments / login (v0.4.0)",
       "group": "advanced",
-      "body": "Since v0.4.0 a source can also declare some 'site-level' capabilities, letting the app adapt to more complex sites without engine changes:\n· network (optional): source-level network override. Sub-keys proxy / dns / hosts / sni / ech, each set to 'inherit global' or a specific override. Defaults to global; invalid values only warn and never disable the source.\n· comments (optional): declares the source's comment capability. provider defaults to source (comments from the site); routes declares list / replies / post / reply / like / report (undeclared buttons are not rendered); selectors reuse the same JSONPath/CSS/XPath engine.\n· login (optional, comments.login + site.cookies), two ways:\n  - WebView login: set login.url to the login page; the app opens it in a WebView, captures the session cookie after login and stores it locally; optionally use login.checkUrl + login.loggedInSelector for a session probe (GET checkUrl; non-empty selector match = logged in).\n  - Cookie login: set login.checkCookie to the cookie key that indicates logged-in so the app can quickly check the session; you can also paste the whole session cookie into site.cookies and all source requests will carry it.\nCredentials stay local only; if login is not declared, the source is treated as read-only / no-login.",
+      "body": "Since v0.4.0 a source can also declare 'site-level' capabilities so the app adapts to harder sites without engine changes:\n· network (optional): source-level network override. Sub-keys proxy / dns / hosts / sni / ech, each 'inherit global' or a specific override. Defaults to global; invalid values only warn and never disable the source.\n· comments (optional): declares the source's comment capability. provider defaults to source; routes declares list / replies / post / reply / like / report (undeclared buttons are not rendered); selectors reuse the same JSONPath/CSS/XPath engine.\n· login (optional, declared in comments.login): three ways, combinable —\n  1) WebView login: set login.url to the login page; the app opens it in a WebView and captures the session cookie locally after login.\n  2) Cookie login: set login.checkCookie to the cookie key that means 'logged in' for a fast check; you can also paste a whole session cookie into site.cookies and every source request carries it.\n  3) API key login: set login.sendTokenAs to \"key\"; the user pastes the key in Source details → Login, the app stores it in the local key store and appends Authorization: <authScheme> <key> to protected requests (prefix defaults to Key). For sites where login yields an access_token but favorites/profile need a separate API key (some sites' newer APIs explicitly require Key <api_key>, not Bearer).\n· Token carrier login.sendTokenAs: null (cookie only) / \"bearer\" (Authorization: Bearer <cookie value of checkCookie>) / \"key\" (Authorization: <authScheme> <manual key>, i.e. API key login).\n· Secondary session check: login.checkUrl + login.loggedInSelector (GET checkUrl; a non-empty selector match means the session is valid).\nCredentials stay local only; without a login declaration the source is treated as read-only / no-login.",
       "fields": [
         {
           "k": "network",
@@ -2587,43 +2743,71 @@ window.CONTENT = {
         },
         {
           "k": "comments.login.url",
-          "v": "WebView login page URL; the app opens it for login and captures the session cookie (stored locally only)."
+          "v": "WebView login page URL; the app opens it for login and captures the session cookie (local only)."
         },
         {
           "k": "comments.login.checkCookie",
-          "v": "Cookie login: if this key appears in the cookie, the user is considered logged in (fast check)."
+          "v": "Cookie login: this cookie key means logged in (fast check)."
         },
         {
           "k": "comments.login.checkUrl / loggedInSelector",
-          "v": "Session probe: GET checkUrl; non-empty selector match means login is valid."
+          "v": "Session probe: GET checkUrl; a non-empty selector match means the session is valid."
+        },
+        {
+          "k": "comments.login.sendTokenAs",
+          "v": "Token carrier (login type): null = cookie only; bearer → Authorization: Bearer <cookie value of checkCookie>; key → Authorization: <authScheme> <manual key>, i.e. API key login."
+        },
+        {
+          "k": "comments.login.authScheme",
+          "v": "Only when sendTokenAs==key: Authorization prefix, default Key; change it if the site wants Token / Bearer etc."
+        },
+        {
+          "k": "comments.login.apiKeyParam",
+          "v": "Only when sendTokenAs==key: key name in the local key store, default apiKey (stored as sourceId:apiKeyParam)."
         },
         {
           "k": "site.cookies",
-          "v": "Manual cookie login: paste the session cookie string into site.cookies; all source requests carry it."
+          "v": "Manual cookie login: paste the whole session cookie into site.cookies; every request carries it."
         },
         {
           "k": "precedence",
           "v": "User override > source network block > global > default; applies instantly, no restart."
         }
       ],
-      "code": "\"network\": { \"proxy\": \"direct\", \"dns\": \"system\" },\n\"comments\": {\n  \"provider\": \"source\",\n  \"routes\": { \"list\": { \"url\": \"/api/comments?book={id}\", \"responseType\": \"json\" } },\n  \"selectors\": { \"items\": \"$.list\", \"content\": \"$.content\", \"author\": \"$.user\" },\n  \"login\": {\n    \"url\": \"https://example.com/login\",\n    \"checkCookie\": \"sessionid\",\n    \"checkUrl\": \"https://example.com/me\",\n    \"loggedInSelector\": \".user-info\"\n  }\n}\n// Manual cookie login: paste the whole session cookie into site.cookies\n\"site\": { \"baseUrl\": \"https://example.com\", \"cookies\": \"sessionid=abc123; uid=42\" }"
+      "code": "\"network\": { \"proxy\": \"direct\", \"dns\": \"system\" },\n\"comments\": {\n  \"provider\": \"source\",\n  \"routes\": { \"list\": { \"url\": \"/api/comments?book={id}\", \"responseType\": \"json\" } },\n  \"selectors\": { \"items\": \"$.list\", \"content\": \"$.content\", \"author\": \"$.user\" },\n  \"login\": {\n    \"url\": \"https://example.com/login\",\n    \"checkCookie\": \"sessionid\",\n    \"checkUrl\": \"https://example.com/me\",\n    \"loggedInSelector\": \".user-info\"\n  }\n}\n// Manual cookie login: paste the whole session cookie into site.cookies\n\"site\": { \"baseUrl\": \"https://example.com\", \"cookies\": \"sessionid=abc123; uid=42\" }\n// API key login (same comments.login block): sendTokenAs=key\n\"login\": {\n  \"sendTokenAs\": \"key\",    // appends Authorization: <authScheme> <pasted key>\n  \"authScheme\": \"Key\",     // default Key; change if the site wants another prefix\n  \"apiKeyParam\": \"apiKey\"  // key name in the local key store, default apiKey\n}"
     },
     {
-      "id": "best_practice",
-      "title": "15. Recommended source-authoring practices",
+      "id": "recommend",
+      "title": "15. Writing 'You may also like'",
       "group": "advanced",
-      "body": "A synthesis of the earlier modules — here is a recommended checklist for writing a solid source, follow it to avoid common pitfalls:\n\n1. Fill the basic fields first (id / name / version / type / site / parser / author) so the app can identify, manage and attribute the source.\n2. Get one module working before the rest: usually start with search or latest, and use browser DevTools (F12) to confirm the real HTML/JSON matches your selectors.\n3. Prefer declarative: use jsonpath / css / xpath when possible instead of scripts — easier to maintain and more stable.\n4. Join relative links to baseUrl: if cover / detail links are relative, the app joins them with site.baseUrl; make sure baseUrl is correct.\n5. Use the __meta protocol for async: any 'request another API then parse' returns {__meta:true,__fetchUrl,__processor} — the only safe async channel in the sandbox.\n6. Never hardcode site constants into the app: keep all rules in the source file, so a site change only needs a source update.\n7. Add announcement and mirrors: when the domain is unstable, use announcement to inform users and site.mirrors as a fallback.\n8. Self-test the import: paste the JSON in the app's 'Import Source' and confirm no errors before sharing.",
+      "body": "'You may also like' is the recommendation block on the detail page. Adding it lets readers keep discovering without going back to search.\n\nThree ways (pick per source type, can coexist):\n1) Recommendation route (recommended, works for anime / manga / novel): declare recommend (preferred) or related in routes; when the detail page opens the engine calls it with the {id} variable and renders the results as the block. If neither exists, the block is not rendered.\n2) Manga (mangaSource): add a recommendations object under selectors.detail with list / title / cover / url to extract the list straight from the detail page (used by the built-in GoDa, Komiic and FavComic sources).\n3) Novel (Legado): use ruleBookInfo.recommendations to extract recommended titles.\n\nNote: recommendations reuse the list parsing engine, with the same fields as search / latest (id / title / cover / detailUrl) — in most cases copying your search selectors just works.",
       "fields": [
         {
-          "k": "Recommended flow",
-          "v": "Basic fields → one module working → declarative-first → join baseUrl → __meta async → self-test import."
+          "k": "routes.recommend",
+          "v": "Recommendation endpoint (preferred): called with the {id} variable when the detail page opens; results render as the block."
         },
         {
-          "k": "Common pitfalls",
-          "v": "JSON escaping errors, empty selector results, relative links not joined to baseUrl, script exceptions, site constants hardcoded into the app."
+          "k": "routes.related",
+          "v": "Fallback recommendation endpoint; used when recommend is absent, same behaviour."
+        },
+        {
+          "k": "selectors.recommend",
+          "v": "Extraction selectors for recommendations (same shape as search / latest: list / title / cover / id); falls back to selectors.search."
+        },
+        {
+          "k": "selectors.detail.recommendations (manga)",
+          "v": "Object { list, title, cover, url } to extract the list straight from the detail page."
+        },
+        {
+          "k": "ruleBookInfo.recommendations (novel)",
+          "v": "Legado-compatible field, selector for recommended titles."
+        },
+        {
+          "k": "Not rendered when",
+          "v": "Neither recommend nor related is declared — the detail page then hides the block."
         }
       ],
-      "code": "{\n  \"id\": \"my_source\",\n  \"name\": \"我的源\",\n  \"version\": 1,\n  \"type\": \"animeSource\",\n  \"author\": \"你的名字\",\n  \"site\": { \"domain\": \"example.com\", \"baseUrl\": \"https://example.com\" },\n  \"parser\": { \"type\": \"hybrid\", \"overrides\": { \"search\": { \"type\": \"jsonpath\" } } },\n  \"routes\": { \"search\": { \"url\": \"/s?wd={keyword}&page={page}\", \"method\": \"get\", \"responseType\": \"json\" } },\n  \"selectors\": { \"list\": \"$.list\", \"title\": \"$.vod_name\", \"cover\": \"$.vod_pic\", \"id\": \"$.vod_id\" }\n}"
+      "code": "// 写法一（通用）：recommend 路由 + 选择器\n{\n  \"routes\": {\n    \"recommend\": { \"url\": \"/api/recommend?id={id}\", \"method\": \"get\", \"responseType\": \"json\" }\n  },\n  \"selectors\": {\n    \"recommend\": {\n      \"list\": \"$.list\",\n      \"title\": \"$.vod_name\",\n      \"cover\": \"$.vod_pic\",\n      \"id\": \"$.vod_id\"\n    }\n  }\n}\n\n// 写法二（漫画）：selectors.detail.recommendations 从详情页直接抽\n\"detail\": {\n  \"title\": \"h1.text-xl@text\",\n  \"recommendations\": {\n    \"list\": \".recommend-list a[href^=\\\"/manga/\\\"]\",\n    \"title\": \"h3@text\",\n    \"cover\": \"img@src||data-src\",\n    \"url\": \"@href\"\n  }\n}"
     },
     {
       "id": "collection",
