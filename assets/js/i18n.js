@@ -235,14 +235,14 @@ window.CONTENT = {
   },
   downloads: {
     zh: [
-      { id: "android", icon: "🤖", name: "Android", desc: "适用于手机与平板（Android 5.0+）。提供按架构分包：arm64-v8a / armeabi-v7a / x86_64，按设备选择；也提供通用 APK（单文件全架构，无需挑架构）。", btn: "下载 APK", asset: "app-release.apk", alts: ["app-arm64-v8a-release.apk", "app-armeabi-v7a-release.apk", "app-x86_64-release.apk"], note: "安装时需在系统设置中允许「未知来源」。" },
+      { id: "android", icon: "🤖", name: "Android", desc: "适用于手机与平板（Android 5.0+）。推荐 arm64-v8a 架构（绝大多数现代设备）；另提供 armeabi-v7a、x86_64 及通用 APK 备选。", btn: "下载 APK", asset: "app-arm64-v8a-release.apk", alts: ["app-armeabi-v7a-release.apk", "app-x86_64-release.apk", "app-release.apk"], note: "安装时需在系统设置中允许「未知来源」。" },
       { id: "ios", icon: "🍎", name: "iOS", desc: "适用于 iPhone / iPad。", btn: "获取（TestFlight）", note: "通过 TestFlight 或自签安装；企业证书版请留意有效期。" },
       { id: "windows", icon: "🪟", name: "Windows", desc: "Windows 10 / 11 桌面客户端。", btn: "下载 EXE / ZIP", asset: "NexHub-windows-x64.zip", note: "若被 SmartScreen 拦截，选择「仍要运行」。" },
       { id: "macos", icon: "🍏", name: "macOS", desc: "支持 Intel 与 Apple 芯片。", btn: "下载 DMG", asset: "NexHub-macos.dmg", alts: ["NexHub-macos.zip"], note: "首次打开需在「系统设置 - 隐私与安全性」中允许。" },
       { id: "linux", icon: "🐧", name: "Linux", desc: "提供 AppImage / deb 等格式。", btn: "下载", asset: "NexHub-linux-x64.AppImage", alts: ["NexHub-linux-x64.deb", "NexHub-linux-x64.tar.gz"], note: "请根据发行版选择对应包。" }
     ],
     en: [
-      { id: "android", icon: "🤖", name: "Android", desc: "For phones & tablets (Android 5.0+). Split by ABI: arm64-v8a / armeabi-v7a / x86_64 — pick yours; a universal APK (all ABIs in one file) is also provided.", btn: "Download APK", asset: "app-release.apk", alts: ["app-arm64-v8a-release.apk", "app-armeabi-v7a-release.apk", "app-x86_64-release.apk"], note: "Allow 'Install unknown apps' in system settings." },
+      { id: "android", icon: "🤖", name: "Android", desc: "For phones & tablets (Android 5.0+). arm64-v8a is recommended (most modern devices); armeabi-v7a, x86_64 and a universal APK are also provided as fallbacks.", btn: "Download APK", asset: "app-arm64-v8a-release.apk", alts: ["app-armeabi-v7a-release.apk", "app-x86_64-release.apk", "app-release.apk"], note: "Allow 'Install unknown apps' in system settings." },
       { id: "ios", icon: "🍎", name: "iOS", desc: "For iPhone / iPad.", btn: "Get (TestFlight)", note: "Via TestFlight or sideload; watch enterprise cert expiry." },
       { id: "windows", icon: "🪟", name: "Windows", desc: "Desktop client for Windows 10 / 11.", btn: "Download EXE / ZIP", asset: "NexHub-windows-x64.zip", note: "If SmartScreen blocks it, choose 'Run anyway'." },
       { id: "macos", icon: "🍏", name: "macOS", desc: "Intel & Apple Silicon supported.", btn: "Download DMG", asset: "NexHub-macos.dmg", alts: ["NexHub-macos.zip"], note: "On first open, allow it in System Settings → Privacy & Security." },
@@ -1480,10 +1480,11 @@ window.CONTENT = {
             { type: "p", text: "SNI（Server Name Indication，服务器名称指示）是 TLS 握手里的一个字段，告诉服务器「我要访问哪个域名」，服务器据此返回对应证书。NexHub 默认用请求的目标域名作为 SNI。" },
             { type: "table", rows: [
               { k: "启用自定义 SNI", v: "开关，默认关闭。" },
-              { k: "默认 SNI 值", v: "自定义的默认 SNI 字符串。模型还支持「域名→SNI」后缀映射（如 example.org 通配其子域），但当前 UI 只编辑默认值。" },
+              { k: "默认 SNI 值", v: "自定义的默认 SNI 字符串。模型还支持「域名→SNI」后缀映射 domainSni（如 { \"example.org\": \"real.com\" }，键可用 .example.com 后缀通配其子域），但当前 UI 只编辑默认值。" },
               { k: "免 SNI 模式", v: "默认 SNI 值填 - 时，握手不发送 server_name，用于绕过基于 SNI 的探测或封锁。" }
             ] },
             { type: "p", text: "生效范围：NexHub 在直连 HTTPS 路径下按你的设置构造 SNI（默认取域名、自定义字符串、- 免 SNI、domainSni 后缀通配）。这是纯 Dart 实现的运行时控制，真实握手即生效。" },
+            { type: "callout", variant: "info", text: "免 SNI + Hosts 组合：把目标域名用 Hosts 钉到可达 IP，再设 SNI 为 -，即可绕过「按 SNI 做连接阻断」的站点——Cloudflare 等边缘节点会接受无 SNI 的握手，并依据 HTTP 请求头里的 Host 字段路由到正确站点。" },
             { type: "p", text: "什么时候用：目标站点基于 SNI 做封锁或探测，需要发送与实际 host 不同的 SNI、或干脆不发 SNI 才能连通时。" },
             { type: "p", text: "什么时候不要用：走外部代理（如支持 SNI/ECH 的本地代理内核）时，SNI 由代理隧道决定，本设置不生效，保持关闭即可。" }
           ]
@@ -1492,14 +1493,14 @@ window.CONTENT = {
           id: "net-ech",
           title: "八、ECH（实验性）",
           blocks: [
-            { type: "callout", variant: "warn", text: "实验性：受 Dart TLS 栈限制，可能无法在所有路径生效。" },
-            { type: "p", text: "ECH（Encrypted Client Hello，加密客户端问候）是 TLS 的一个扩展，把 SNI 加密，让旁观者连「你在访问哪个域名」都看不到。" },
+            { type: "callout", variant: "warn", text: "实验性 · 诚实的限制：受 Dart TLS 栈（BoringSSL 封装）限制，ECH 在运行时暂未接通，当前版本实际不生效。" },
+            { type: "p", text: "ECH（Encrypted Client Hello，加密客户端问候）是 TLS 的一个扩展，把 SNI 加密，让旁观者连「你在访问哪个域名」都看不到。它比单纯的免 SNI 更进一步：连 SNI 内容也对网络中间人不可见。" },
             { type: "table", rows: [
               { k: "启用 ECH", v: "开关，默认关闭。" },
               { k: "ECH 配置列表", v: "Base64 编码的 ECH 配置字符串。" }
             ] },
-            { type: "p", text: "为什么是实验性：Dart 的 TLS 栈（BoringSSL 封装）没有暴露 ECH 的 API，社区也没有可用插件。所以这一块的 UI 和持久化是完整的（你能填、能存），但运行时实际不生效。" },
-            { type: "p", text: "什么时候用：当前版本 ECH 实际无法生效，建议保持关闭。这个开关是为将来 Dart/Flutter 支持 ECH 时预留的。" }
+            { type: "p", text: "为什么是实验性：Dart 的 TLS 栈没有暴露 ECH 的 API，社区也没有可用插件。所以这一块的 UI 和持久化是完整的（你能填、能存），但运行时实际不生效——开与不开对当前版本没有区别。" },
+            { type: "p", text: "当前建议：受限站点请优先使用 SNI（免 SNI / 自定义值）+ Hosts 组合，或经支持 ECH 的本地代理内核（手动代理）。ECH 开关是为将来 Dart/Flutter 支持时预留的，届时无需改配置即可生效。" }
           ]
         },
         {
@@ -1683,10 +1684,11 @@ window.CONTENT = {
             { type: "p", text: "SNI (Server Name Indication) is a TLS handshake field that tells the server 'which domain I want', so it returns the matching certificate. NexHub defaults to using the request's target domain as the SNI." },
             { type: "table", rows: [
               { k: "Enable custom SNI", v: "Switch, off by default." },
-              { k: "Default SNI value", v: "A custom default SNI string. The model also supports a 'domain→SNI' suffix map (e.g. example.org matches its subdomains), but the current UI only edits the default value." },
+              { k: "Default SNI value", v: "A custom default SNI string. The model also supports a 'domain→SNI' suffix map (domainSni, e.g. { \"example.org\": \"real.com\" }, where a .example.org key matches all subdomains), but the current UI only edits the default value." },
               { k: "Skip-SNI mode", v: "When the default SNI value is -, the handshake sends no server_name — useful to bypass SNI-based probes or blocking." }
             ] },
             { type: "p", text: "Scope: for direct HTTPS, NexHub builds the SNI from your settings (default domain, custom string, - to skip, or domainSni suffix wildcard). This is a native Dart runtime control — the real handshake honors it." },
+            { type: "callout", variant: "info", text: "Skip-SNI + Hosts combo: pin the target domain to a reachable IP via Hosts and set SNI to -, and you can bypass sites that block by SNI — edge nodes like Cloudflare accept the SNI-less handshake and route by the Host header in the HTTP request." },
             { type: "p", text: "When to use: when the target blocks or probes based on SNI, and you need to send a different SNI than the actual host, or send none at all, to connect." },
             { type: "p", text: "When not to: when going through an external proxy (e.g. a local proxy core that supports SNI/ECH), the proxy tunnel decides SNI and this setting has no effect — leave it off." }
           ]
@@ -1695,14 +1697,14 @@ window.CONTENT = {
           id: "net-ech",
           title: "8. ECH (Experimental)",
           blocks: [
-            { type: "callout", variant: "warn", text: "Experimental: limited by the Dart TLS stack; may not take effect on all paths." },
-            { type: "p", text: "ECH (Encrypted Client Hello) is a TLS extension that encrypts the SNI, so observers can't even see 'which domain you're visiting'." },
+            { type: "callout", variant: "warn", text: "Experimental — honest limitation: limited by the Dart TLS stack (BoringSSL wrapper), ECH does NOT take effect at runtime in the current version." },
+            { type: "p", text: "ECH (Encrypted Client Hello) is a TLS extension that encrypts the SNI, so observers can't even see 'which domain you're visiting'. It goes further than skip-SNI alone: even the SNI content is hidden from network intermediaries." },
             { type: "table", rows: [
               { k: "Enable ECH", v: "Switch, off by default." },
               { k: "ECH config list", v: "A base64-encoded ECH config string." }
             ] },
-            { type: "p", text: "Why experimental: the Dart TLS stack (a BoringSSL wrapper) doesn't expose an ECH API, and there's no community plugin. So the UI and persistence are complete (you can fill it in and save), but at runtime it does NOT take effect." },
-            { type: "p", text: "When to use: ECH doesn't actually work in the current version; keep it off. This switch is reserved for when Dart/Flutter eventually supports ECH." }
+            { type: "p", text: "Why experimental: the Dart TLS stack doesn't expose an ECH API, and there's no community plugin. So the UI and persistence are complete (you can fill it in and save), but at runtime it does NOT take effect — on or off makes no difference in the current version." },
+            { type: "p", text: "Current recommendation: for restricted sites, prefer SNI (skip-SNI / custom value) + Hosts, or go through a local proxy core that supports ECH (manual proxy). The ECH switch is reserved for when Dart/Flutter adds support — it will then work without changing your config." }
           ]
         },
         {
@@ -2124,11 +2126,19 @@ window.CONTENT = {
       "id": "advanced",
       "title": "十四、进阶：源级网络 / 评论 / 登录（v0.4.0）",
       "group": "advanced",
-      "body": "v0.4.0 起，源还能声明一些「站点级」能力，让 App 在不改引擎的前提下适配更复杂的站点：\n· network（可选）：源级网络覆盖。子键 proxy / dns / hosts / sni / ech，逐项选「继承全局」或「单独覆盖」。缺省即继承全局设置，非法值只告警、不会让源无法启用。\n· comments（可选）：声明该源的评论能力。provider 默认 source（评论来自源站）；routes 声明 list / replies / post / reply / like / report 等路由（未声明的按钮不渲染）；selectors 用同一套 JSONPath/CSS/XPath 引擎抽取内容。\n· 登录（可选，声明在 comments.login 段）：三种方式，可组合——\n  1) WebView 登录：login.url 填登录页地址，App 用 WebView 打开让用户登录，成功后捕获会话 Cookie 存本地。\n  2) Cookie 登录：login.checkCookie 填「代表已登录的 Cookie 键名」，App 据此快速判定；也可在 site.cookies 直接粘贴整段会话 Cookie，全源请求自动携带。\n  3) API Key 登录：login.sendTokenAs 设为 \"key\"，用户在「源详情 → 登录」面板粘贴密钥，App 存本地密钥库，并在受保护请求上追加 Authorization: <authScheme> <密钥>（默认前缀 Key）。适合「登录给的是 access_token，但收藏 / 个人页却要单独 API Key」的站点（部分站点的新版 API 明确要求 Key <api_key>，而非 Bearer）。\n· 令牌携带方式 login.sendTokenAs：null（只靠 Cookie）/ \"bearer\"（Authorization: Bearer <checkCookie 对应 Cookie 值>）/ \"key\"（Authorization: <authScheme> <手动密钥>，即 API Key 登录）。\n· 登录态二次确认：login.checkUrl + login.loggedInSelector（GET checkUrl，选择器命中非空即视为登录有效）。\n凭据只存本地，不会上传；未声明登录时，该源按「只读 / 免登录」处理。",
+      "body": "v0.4.0 起，源还能声明一些「站点级」能力，让 App 在不改引擎的前提下适配更复杂的站点：\n· network（可选）：源级网络覆盖。子键 proxy / dns / hosts / sni / ech，逐项选「继承全局」或「单独覆盖」。缺省即继承全局设置，非法值只告警、不会让源无法启用。其中 sni 对直连 HTTPS 真实生效（defaultSni 填 - 即免 SNI，配合 hosts 钉 IP 可绕过按 SNI 的封锁）；ech 受 Dart TLS 栈限制运行时暂未接通，仅作预留。\n· comments（可选）：声明该源的评论能力。provider 默认 source（评论来自源站）；routes 声明 list / replies / post / reply / like / report 等路由（未声明的按钮不渲染）；selectors 用同一套 JSONPath/CSS/XPath 引擎抽取内容。\n· 登录（可选，声明在 comments.login 段）：三种方式，可组合——\n  1) WebView 登录：login.url 填登录页地址，App 用 WebView 打开让用户登录，成功后捕获会话 Cookie 存本地。\n  2) Cookie 登录：login.checkCookie 填「代表已登录的 Cookie 键名」，App 据此快速判定；也可在 site.cookies 直接粘贴整段会话 Cookie，全源请求自动携带。\n  3) API Key 登录：login.sendTokenAs 设为 \"key\"，用户在「源详情 → 登录」面板粘贴密钥，App 存本地密钥库，并在受保护请求上追加 Authorization: <authScheme> <密钥>（默认前缀 Key）。适合「登录给的是 access_token，但收藏 / 个人页却要单独 API Key」的站点（部分站点的新版 API 明确要求 Key <api_key>，而非 Bearer）。\n· 令牌携带方式 login.sendTokenAs：null（只靠 Cookie）/ \"bearer\"（Authorization: Bearer <checkCookie 对应 Cookie 值>）/ \"key\"（Authorization: <authScheme> <手动密钥>，即 API Key 登录）。\n· 登录态二次确认：login.checkUrl + login.loggedInSelector（GET checkUrl，选择器命中非空即视为登录有效）。\n凭据只存本地，不会上传；未声明登录时，该源按「只读 / 免登录」处理。",
       "fields": [
         {
           "k": "network",
           "v": "源级代理 / DNS / Hosts / SNI / ECH 覆盖；缺省继承全局设置。"
+        },
+        {
+          "k": "network.sni",
+          "v": "SNI 覆盖，如 { \"enabled\": true, \"defaultSni\": \"-\" }；- 为免 SNI，普通域名以该域名作 SNI，另可用 domainSni 做「域名→SNI」后缀通配。对直连 HTTPS 真实生效，走代理时不生效。"
+        },
+        {
+          "k": "network.ech",
+          "v": "ECH 覆盖（如 { \"enabled\": true, \"configs\": [...] }）。受 Dart TLS 栈限制运行时暂未接通，UI/存储预留，等底层支持后生效。"
         },
         {
           "k": "comments.provider / routes / selectors",
@@ -2372,7 +2382,7 @@ window.CONTENT = {
         },
         {
           "k": "network",
-          "v": "可选。源级网络覆盖：proxy / dns / hosts / sni / ech；缺省继承全局，非法值只告警不阻断启用。"
+          "v": "可选。源级网络覆盖：proxy / dns / hosts / sni / ech；缺省继承全局，非法值只告警不阻断启用。（其中 sni 对直连 HTTPS 真实生效，ech 运行时暂未接通）"
         },
         {
           "k": "announcement",
@@ -2739,11 +2749,19 @@ window.CONTENT = {
       "id": "advanced",
       "title": "14. Advanced: source-level network / comments / login (v0.4.0)",
       "group": "advanced",
-      "body": "Since v0.4.0 a source can also declare 'site-level' capabilities so the app adapts to harder sites without engine changes:\n· network (optional): source-level network override. Sub-keys proxy / dns / hosts / sni / ech, each 'inherit global' or a specific override. Defaults to global; invalid values only warn and never disable the source.\n· comments (optional): declares the source's comment capability. provider defaults to source; routes declares list / replies / post / reply / like / report (undeclared buttons are not rendered); selectors reuse the same JSONPath/CSS/XPath engine.\n· login (optional, declared in comments.login): three ways, combinable —\n  1) WebView login: set login.url to the login page; the app opens it in a WebView and captures the session cookie locally after login.\n  2) Cookie login: set login.checkCookie to the cookie key that means 'logged in' for a fast check; you can also paste a whole session cookie into site.cookies and every source request carries it.\n  3) API key login: set login.sendTokenAs to \"key\"; the user pastes the key in Source details → Login, the app stores it in the local key store and appends Authorization: <authScheme> <key> to protected requests (prefix defaults to Key). For sites where login yields an access_token but favorites/profile need a separate API key (some sites' newer APIs explicitly require Key <api_key>, not Bearer).\n· Token carrier login.sendTokenAs: null (cookie only) / \"bearer\" (Authorization: Bearer <cookie value of checkCookie>) / \"key\" (Authorization: <authScheme> <manual key>, i.e. API key login).\n· Secondary session check: login.checkUrl + login.loggedInSelector (GET checkUrl; a non-empty selector match means the session is valid).\nCredentials stay local only; without a login declaration the source is treated as read-only / no-login.",
+      "body": "Since v0.4.0 a source can also declare 'site-level' capabilities so the app adapts to harder sites without engine changes:\n· network (optional): source-level network override. Sub-keys proxy / dns / hosts / sni / ech, each 'inherit global' or a specific override. Defaults to global; invalid values only warn and never disable the source. Of these, sni is runtime-effective for direct HTTPS (defaultSni "-" = skip SNI; combined with hosts pinning an IP it bypasses SNI-based blocking); ech is reserved — limited by the Dart TLS stack, not yet wired at runtime.\n· comments (optional): declares the source's comment capability. provider defaults to source; routes declares list / replies / post / reply / like / report (undeclared buttons are not rendered); selectors reuse the same JSONPath/CSS/XPath engine.\n· login (optional, declared in comments.login): three ways, combinable —\n  1) WebView login: set login.url to the login page; the app opens it in a WebView and captures the session cookie locally after login.\n  2) Cookie login: set login.checkCookie to the cookie key that means 'logged in' for a fast check; you can also paste a whole session cookie into site.cookies and every source request carries it.\n  3) API key login: set login.sendTokenAs to \"key\"; the user pastes the key in Source details → Login, the app stores it in the local key store and appends Authorization: <authScheme> <key> to protected requests (prefix defaults to Key). For sites where login yields an access_token but favorites/profile need a separate API key (some sites' newer APIs explicitly require Key <api_key>, not Bearer).\n· Token carrier login.sendTokenAs: null (cookie only) / \"bearer\" (Authorization: Bearer <cookie value of checkCookie>) / \"key\" (Authorization: <authScheme> <manual key>, i.e. API key login).\n· Secondary session check: login.checkUrl + login.loggedInSelector (GET checkUrl; a non-empty selector match means the session is valid).\nCredentials stay local only; without a login declaration the source is treated as read-only / no-login.",
       "fields": [
         {
           "k": "network",
           "v": "Source-level proxy / DNS / Hosts / SNI / ECH override; defaults to global."
+        },
+        {
+          "k": "network.sni",
+          "v": "SNI override, e.g. { \"enabled\": true, \"defaultSni\": \"-\" }; \"-\" skips SNI, a plain domain uses that as SNI, domainSni maps 'domain→SNI' with suffix wildcard. Effective for direct HTTPS; ignored when using a proxy."
+        },
+        {
+          "k": "network.ech",
+          "v": "ECH override (e.g. { \"enabled\": true, \"configs\": [...] }). Reserved — limited by the Dart TLS stack, not yet wired at runtime; takes effect once the stack supports it."
         },
         {
           "k": "comments.provider / routes / selectors",
@@ -2987,7 +3005,7 @@ window.CONTENT = {
         },
         {
           "k": "network",
-          "v": "Optional. Source-level network override: proxy / dns / hosts / sni / ech; inherits global by default, invalid values only warn."
+          "v": "Optional. Source-level network override: proxy / dns / hosts / sni / ech; inherits global by default, invalid values only warn. (sni is runtime-effective for direct HTTPS; ech is not yet wired at runtime)"
         },
         {
           "k": "announcement",
