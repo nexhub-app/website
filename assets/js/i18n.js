@@ -251,7 +251,7 @@ window.CONTENT = {
     channels: {
       repo: "https://github.com/nexhub-app/nexhub",
       stableTag: "latest",
-      betaTag: "v2.0.0-beta.2",
+      betaTag: "v2.0.0-beta.3",
       mirror: "https://ghfast.top/"
     }
   },
@@ -261,14 +261,14 @@ window.CONTENT = {
       { q: "如何导入源", a: "在应用内进入「源管理 / 导入源」，粘贴源文件内容或选择文件即可。同名源以版本号较高者覆盖，旧版本不会被误装，安全升级。" },
       { q: "自己写源（共创式架构）", a: "源是一个 JSON 文件，可包含声明式选择器（xpath / css / jsonpath）或内嵌 JS 解析脚本。应用通过 JS 沙箱执行脚本，不把任何站点写死在代码里——这正是「源即插件」的含义。往下滚动可查看完整《源编写教程》。" },
       { q: "数据安全与隐私", a: "NexHub 不收集个人信息，不托管任何媒体内容；所有请求直连第三方源站。请遵守所在地法律法规使用。" },
-      { q: "NexHub 现在稳定了吗，可以升级吗？", a: "NexHub 的基础功能已经完成——四合一聚合、源即插件、Bangumi 同步、网络配置、收藏分组评论、阅读统计、调试崩溃日志等核心能力均已就绪。从 v1.0.0 起可作为稳定版长期使用、放心升级；v1.1.0 起提供完整的本地内容导入体系（EPUB / PDF / 多格式归档 / 文件夹），v1.2.0 重点修复了本地下载 / 导入的稳定性与三大阅读器体验，并新增「运行日志」便于反馈排障。数据格式向后兼容：旧数据与源 JSON 无需重新导入，沿用同一签名密钥可直接覆盖安装。遇到问题可在 GitHub 反馈。" }
+      { q: "NexHub 现在稳定了吗，可以升级吗？", a: "NexHub 的基础功能已经完成——四合一聚合、源即插件、Bangumi 同步、网络配置、收藏分组评论、阅读统计、调试崩溃日志等核心能力均已就绪。从 v1.0.0 起可作为稳定版长期使用、放心升级；v1.1.0 起提供完整的本地内容导入体系（EPUB / PDF / 多格式归档 / 文件夹），v1.2.0 重点打磨了本地下载 / 导入的稳定性与三大阅读器体验，并加入「运行日志」便于反馈排障。数据格式向后兼容：旧数据与源 JSON 无需重新导入，沿用同一签名密钥可直接覆盖安装。遇到问题可在 GitHub 反馈。" }
     ],
     en: [
       { q: "Getting Started", a: "Install and open the app — built-in sources ship with it. For more content, import community sources from the Source Repository and browse them in the matching category." },
       { q: "How to import a source", a: "In the app, open 'Source Management / Import Source', then paste the source JSON or pick a file. Same-id sources upgrade by the higher version; older versions won't overwrite — safe upgrades." },
       { q: "Write your own source", a: "A source is a JSON file with declarative selectors (xpath / css / jsonpath) or embedded JS. The app runs it in a JS sandbox and hardcodes no site — that is exactly what 'source = plugin' means. Scroll down for the full Source Authoring Tutorial." },
       { q: "Data & privacy", a: "NexHub collects no personal data and hosts no content; all requests go directly to third-party sources. Please use it in compliance with local laws." },
-      { q: "Is NexHub stable now — can I upgrade?", a: "NexHub's core features are complete: all-in-one aggregation, source = plugin, Bangumi sync, network config, favorites & comments, reading stats and debug/crash logs are all in place. From v1.0.0 it is a stable release you can rely on long-term; v1.1.0 adds a full local content import pipeline (EPUB / PDF / multi-format archives / folders), and v1.2.0 focuses on local download / import stability and the three readers, plus a new Run Log for easier bug reports. Data stays backward-compatible: your data and source JSON need no re-import, and the same signing key means just overwrite-install. Report issues on GitHub." }
+      { q: "Is NexHub stable now — can I upgrade?", a: "NexHub's core features are complete: all-in-one aggregation, source = plugin, Bangumi sync, network config, favorites & comments, reading stats and debug/crash logs are all in place. From v1.0.0 it is a stable release you can rely on long-term; v1.1.0 provides a full local content import pipeline (EPUB / PDF / multi-format archives / folders), and v1.2.0 focuses on local download / import stability and the three readers, with a Run Log for easier bug reports. Data stays backward-compatible: your data and source JSON need no re-import, and the same signing key means just overwrite-install. Report issues on GitHub." }
     ]
   },
   guide: {
@@ -489,7 +489,10 @@ window.CONTENT = {
         "错误分级重试：切集自动重开自愈，减少卡死",
         "播放器菜单可由源声明式配置",
         "字幕按视频记忆：外部字幕与样式按 URL 记忆",
-        "防重叠轨道算法，seek 后弹幕位置稳定"
+        "防重叠轨道算法，seek 后弹幕位置稳定",
+        "视频字幕实时翻译：字幕面板开关（跨会话记忆），逐句翻译，无字幕时截帧画面 OCR 兜底",
+        "译文底部覆盖层可选显示原文，按语言持久缓存",
+        "翻译异常归一处理，瞬时抖动不再丢句"
       ],
       "howto": [
         "导入影视 / 动漫源（如 233动漫、花子动漫）",
@@ -498,8 +501,8 @@ window.CONTENT = {
         "播放页：单击显隐控制栏；双击中间播放 / 暂停、双击左右快退 / 快进；长按临时加速；左半屏竖滑亮度、右半屏竖滑音量；横滑定位",
         "控制栏开关弹幕；长按弹幕按钮进弹幕设置",
         "默认值可在「设置 → 播放器」统一调整",
-        "本地下载视频：已修复 SAF / HLS(.ts) 一直加载的问题，下载后可直接播放",
-        "视频下载改为「先嗅探真实地址、再下载」，成功率更高",
+        "本地下载视频（含 SAF / HLS .ts）下载后可直接播放",
+        "视频下载先嗅探真实地址、再保存，成功率更高",
         "Android 下载路径在「设置 → 下载」用系统文件夹选择器指定，下载内容可被正常读取"
       ],
       "controls": [
@@ -681,7 +684,10 @@ window.CONTENT = {
         "双击三态循环、E-Ink 刷新、ICC 校色（6 种色彩预设）",
         "自动收藏封面",
         "预加载数量可配（1–16）",
-        "键盘快捷键补全、鼠标滚轮速度可调、鼠标光标反馈、放大态边缘滑动切页、缩放锚点可配、图片加载失败重试"
+        "键盘快捷键补全、鼠标滚轮速度可调、鼠标光标反馈、放大态边缘滑动切页、缩放锚点可配、图片加载失败重试",
+        "漫画页翻译：翻页自动对当前页做 OCR + 翻译，译文气泡按版面叠加，按作品记忆、失败可重试",
+        "翻译接口可在 AI 设置页单独配置（留空回落通用翻译），阅读设置面板开关可控",
+        "漫画翻译并发限流，快速翻页不再触发接口限流"
       ],
       "howto": [
         "本地阅读：在「书架 → 本地」导入 PDF / CBR / RAR / 7Z 等文件或文件夹，离线也能看",
@@ -691,7 +697,7 @@ window.CONTENT = {
         "阅读：单击热区翻页 / 呼出菜单；双击任意处锚点缩放；双指捏合缩放；放大后拖动平移",
         "桌面端：右键图片弹「设为封面 / 保存 / 分享」；鼠标滚轮缩放或翻页",
         "默认值在「设置 → 漫画阅读器」统一调整",
-        "本地下载漫画已修复 SAF 文件名被系统改写导致打不开的问题，下载后直接阅读",
+        "本地下载漫画：下载后直接打开阅读",
         "Android 下载路径在「设置 → 下载」用系统文件夹选择器指定，下载内容可被正常读取"
       ],
       "controls": [
@@ -1033,7 +1039,10 @@ window.CONTENT = {
         "Graded error retry: auto-reopens on episode switch to recover instead of freezing",
         "The player menu can be configured declaratively by the source",
         "Subtitle memory per video: external subtitles and styles are remembered by URL",
-        "Anti-overlap track algorithm that keeps danmaku positions stable after seeking"
+        "Anti-overlap track algorithm that keeps danmaku positions stable after seeking",
+        "Realtime subtitle translation: a subtitle-panel toggle (remembered across sessions) translates line by line; frame OCR as a fallback when no subtitle track",
+        "Translated overlay optionally shows the original text, cached per language",
+        "Normalized translation errors so brief network blips no longer drop lines"
       ],
       "howto": [
         "Import a video/anime source (e.g. 233动漫, 花子动漫)",
@@ -1042,8 +1051,8 @@ window.CONTENT = {
         "In player: tap to toggle UI; double-tap center play/pause, left/right rewind/forward; long-press to boost; left-half swipe brightness, right-half volume; swipe to seek",
         "Toggle danmaku from the bar; long-press the danmaku button for danmaku settings",
         "Set global defaults in Settings → Player",
-        "Locally downloaded video: the SAF / HLS(.ts) endless-loading issue is fixed — downloads play directly",
-        "Video download now sniffs the real URL before saving, improving success rate",
+        "Locally downloaded video (including HLS / SAF) plays directly",
+        "Video download sniffs the real URL before saving, improving success rate",
         "On Android, set the download path in Settings → Download via the system folder picker so downloads are readable"
       ],
       "controls": [
@@ -1225,7 +1234,10 @@ window.CONTENT = {
         "Triple-state double-tap cycle, E-Ink refresh, ICC color calibration (6 presets)",
         "Automatic favorite cover",
         "Configurable preload count (1–16)",
-        "Complete keyboard shortcuts, adjustable mouse-wheel speed, cursor feedback, edge-swipe page-turn while zoomed, configurable zoom anchor, image load retry"
+        "Complete keyboard shortcuts, adjustable mouse-wheel speed, cursor feedback, edge-swipe page-turn while zoomed, configurable zoom anchor, image load retry",
+        "Comic page translation: auto OCR + translate the current page on turn, translated bubbles overlaid by layout, remembered per work, retryable on failure",
+        "Translation endpoint configurable in AI settings (falls back to the general one when blank), toggle in the reader settings",
+        "Concurrency-limited comic translation so fast page turns no longer hit rate limits"
       ],
       "howto": [
         "Local reading: import PDF, CBR, RAR, 7Z files or folders via Bookshelf → Local to read offline",
@@ -1235,7 +1247,7 @@ window.CONTENT = {
         "Reading: tap tap-zones to turn pages / open menu; double-tap to anchor-zoom; pinch to zoom; drag to pan when zoomed",
         "Desktop: right-click an image for 'set cover / save / share'; mouse wheel to zoom or turn pages",
         "Set global defaults in Settings → Manga Reader",
-        "Locally downloaded manga: the SAF filename-rewrite issue (file unopenable) is fixed — downloads open directly",
+        "Locally downloaded manga opens directly (SAF filename rewrite handled)",
         "On Android, set the download path in Settings → Download via the system folder picker so downloads are readable"
       ],
       "controls": [
