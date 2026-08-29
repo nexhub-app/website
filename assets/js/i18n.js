@@ -1474,17 +1474,18 @@ window.CONTENT = {
         },
         {
           id: "net-sni",
-          title: "七、SNI（实验性）",
+          title: "七、SNI（运行时生效）",
           blocks: [
-            { type: "callout", variant: "warn", text: "实验性：受 Dart TLS 栈限制，可能无法在所有路径生效。" },
+            { type: "callout", variant: "info", text: "已对直连 HTTPS 生效：可自定义 SNI，或填 - 免 SNI 以绕过基于 SNI 的封锁。仅直连路径生效；走外部代理时由代理隧道自理。" },
             { type: "p", text: "SNI（Server Name Indication，服务器名称指示）是 TLS 握手里的一个字段，告诉服务器「我要访问哪个域名」，服务器据此返回对应证书。NexHub 默认用请求的目标域名作为 SNI。" },
             { type: "table", rows: [
               { k: "启用自定义 SNI", v: "开关，默认关闭。" },
-              { k: "默认 SNI 值", v: "自定义的默认 SNI 字符串。模型里还支持「域名→SNI」映射，但当前 UI 只编辑默认值。" }
+              { k: "默认 SNI 值", v: "自定义的默认 SNI 字符串。模型还支持「域名→SNI」后缀映射（如 example.org 通配其子域），但当前 UI 只编辑默认值。" },
+              { k: "免 SNI 模式", v: "默认 SNI 值填 - 时，握手不发送 server_name，用于绕过基于 SNI 的探测或封锁。" }
             ] },
-            { type: "p", text: "为什么是实验性：Dart 的 TLS 栈用请求的 host 作为 SNI，「域前置」（发送和实际 host 不同的 SNI）无法通过标准路径生效。运行时对主流量尽力应用 DNS/Hosts 定向连接，但 TLS 的 SNI 仍由 HttpClient 按请求 host 决定。" },
-            { type: "p", text: "什么时候用：极少数高级场景需要自定义 SNI。普通用户保持关闭即可。" },
-            { type: "p", text: "什么时候不要用：不理解 SNI 是什么时，不要开。开了也大概率不生效，徒增困惑。" }
+            { type: "p", text: "生效范围：NexHub 在直连 HTTPS 路径下按你的设置构造 SNI（默认取域名、自定义字符串、- 免 SNI、domainSni 后缀通配）。这是纯 Dart 实现的运行时控制，真实握手即生效。" },
+            { type: "p", text: "什么时候用：目标站点基于 SNI 做封锁或探测，需要发送与实际 host 不同的 SNI、或干脆不发 SNI 才能连通时。" },
+            { type: "p", text: "什么时候不要用：走外部代理（如支持 SNI/ECH 的本地代理内核）时，SNI 由代理隧道决定，本设置不生效，保持关闭即可。" }
           ]
         },
         {
@@ -1676,17 +1677,18 @@ window.CONTENT = {
         },
         {
           id: "net-sni",
-          title: "7. SNI (Experimental)",
+          title: "7. SNI (Runtime effective)",
           blocks: [
-            { type: "callout", variant: "warn", text: "Experimental: limited by the Dart TLS stack; may not take effect on all paths." },
+            { type: "callout", variant: "info", text: "Effective for direct HTTPS: you can set a custom SNI, or enter - to skip SNI and bypass SNI-based blocking. Only the direct path is affected; when using an external proxy the proxy tunnel handles SNI." },
             { type: "p", text: "SNI (Server Name Indication) is a TLS handshake field that tells the server 'which domain I want', so it returns the matching certificate. NexHub defaults to using the request's target domain as the SNI." },
             { type: "table", rows: [
               { k: "Enable custom SNI", v: "Switch, off by default." },
-              { k: "Default SNI value", v: "A custom default SNI string. The model also supports a 'domain→SNI' map, but the current UI only edits the default value." }
+              { k: "Default SNI value", v: "A custom default SNI string. The model also supports a 'domain→SNI' suffix map (e.g. example.org matches its subdomains), but the current UI only edits the default value." },
+              { k: "Skip-SNI mode", v: "When the default SNI value is -, the handshake sends no server_name — useful to bypass SNI-based probes or blocking." }
             ] },
-            { type: "p", text: "Why experimental: the Dart TLS stack uses the request host as the SNI, so 'domain fronting' (sending an SNI different from the actual host) can't take effect via the standard path. At runtime the DNS/Hosts redirection is applied for the main traffic, but the TLS SNI is still decided by HttpClient based on the request host." },
-            { type: "p", text: "When to use: rare advanced scenarios that need a custom SNI. Most users should leave it off." },
-            { type: "p", text: "When not to: if you don't understand what SNI is, don't enable it. It probably won't take effect anyway and only adds confusion." }
+            { type: "p", text: "Scope: for direct HTTPS, NexHub builds the SNI from your settings (default domain, custom string, - to skip, or domainSni suffix wildcard). This is a native Dart runtime control — the real handshake honors it." },
+            { type: "p", text: "When to use: when the target blocks or probes based on SNI, and you need to send a different SNI than the actual host, or send none at all, to connect." },
+            { type: "p", text: "When not to: when going through an external proxy (e.g. a local proxy core that supports SNI/ECH), the proxy tunnel decides SNI and this setting has no effect — leave it off." }
           ]
         },
         {
