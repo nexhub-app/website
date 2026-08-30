@@ -526,6 +526,10 @@ a { color: inherit; text-decoration: none; }
 .tag-builtin { background: color-mix(in srgb, var(--accent) 16%, transparent); color: var(--accent); }
 .tag-community { background: color-mix(in srgb, var(--muted) 16%, transparent); color: var(--muted); }
 .tag-ver { background: var(--surface-2); color: var(--muted); }
+.tag-age { font-weight: 700; }
+.tag-age-general { background: color-mix(in srgb, #2e9e5b 16%, transparent); color: #2e9e5b; }
+.tag-age-teen { background: color-mix(in srgb, #d98a00 18%, transparent); color: #b97700; }
+.tag-age-mature { background: color-mix(in srgb, #d23b3b 18%, transparent); color: #c23030; }
 .src .desc { color: var(--muted); font-size: 14px; flex: 1; }
 .src .url { font-size: 12.5px; color: var(--muted); word-break: break-all; }
 .src .btn { justify-content: center; margin-top: 4px; }

@@ -563,12 +563,19 @@
       var badge = s.builtin
         ? '<span class="tag tag-builtin">' + esc(dict["sources.builtin"]) + "</span>"
         : '<span class="tag tag-community">' + esc(dict["sources.community"]) + "</span>";
+      var ageMap = {
+        general: { zh: "全年龄", en: "General", cls: "general" },
+        teen: { zh: "青少年 16+", en: "Teen 16+", cls: "teen" },
+        mature: { zh: "成人 18+", en: "Mature 18+", cls: "mature" }
+      };
+      var ar = ageMap[s.ageRating] || ageMap.general;
+      var ageBadge = '<span class="tag tag-age tag-age-' + ar.cls + '">' + esc(ar[state.lang] || ar.zh) + "</span>";
       var action = s.builtin
         ? '<button class="btn btn-outline" type="button" data-import="' + esc(s.id) + '">' + esc(dict["sources.import"]) + "</button>"
         : '<span class="btn btn-outline disabled" style="cursor:default;text-align:center">' + esc(dict["sources.soon"]) + "</span>";
       return '<div class="card src">' +
         '<div class="src-top"><span class="src-name">' + esc(s.name) + "</span>" +
-        '<div class="src-badges"><span class="tag tag-type">' + esc(typeLabel) + "</span>" + badge +
+        '<div class="src-badges"><span class="tag tag-type">' + esc(typeLabel) + "</span>" + badge + ageBadge +
         '<span class="tag tag-ver">v' + esc(ver) + "</span></div></div>" +
         '<div class="desc">' + esc(desc) + "</div>" +
         '<div class="url">' + esc(s.baseUrl) + "</div>" + action + "</div>";
