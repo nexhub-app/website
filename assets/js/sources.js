@@ -69,6 +69,7 @@
           builtin: true, // 源库中的源均可导入
           format: s.format, // nexhub | legado（仅信息展示用）
           desc: s.desc || {},
+          ageRating: s.ageRating, // general / teen / mature — 用于年龄分级徽标
           rawUrl: base + "sources/" + s.id + ".json"
         };
       });
