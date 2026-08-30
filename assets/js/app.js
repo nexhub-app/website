@@ -459,6 +459,56 @@
     });
   }
 
+  function initDocToc() {
+    var fab = document.getElementById("tocFab");
+    var toc = document.getElementById("docToc");
+    if (!toc) return;
+
+    // 动态创建悬浮按钮与遮罩（仅在平板/手机端显示）
+    if (!fab) {
+      fab = document.createElement("button");
+      fab.id = "tocFab";
+      fab.className = "toc-fab";
+      fab.type = "button";
+      fab.setAttribute("aria-label", "本页内容");
+      var dict = I18N[state.lang] || I18N.zh;
+      fab.textContent = (dict && dict["docs.tocTitle"]) || "本页内容";
+      document.body.appendChild(fab);
+    }
+    var backdrop = document.getElementById("tocBackdrop");
+    if (!backdrop) {
+      backdrop = document.createElement("div");
+      backdrop.id = "tocBackdrop";
+      backdrop.className = "doc-toc-backdrop";
+      document.body.appendChild(backdrop);
+    }
+
+    function setToc(open) {
+      toc.classList.toggle("open", open);
+      backdrop.classList.toggle("show", open);
+      fab.setAttribute("aria-expanded", String(open));
+    }
+
+    fab.addEventListener("click", function (e) {
+      e.stopPropagation();
+      setToc(!toc.classList.contains("open"));
+    });
+    backdrop.addEventListener("click", function () { setToc(false); });
+    toc.querySelectorAll(".doc-toc-link").forEach(function (link) {
+      link.addEventListener("click", function () {
+        if (window.innerWidth <= 1100) setToc(false);
+      });
+    });
+    document.addEventListener("click", function (e) {
+      if (!toc.classList.contains("open")) return;
+      if (toc.contains(e.target) || fab.contains(e.target)) return;
+      setToc(false);
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && toc.classList.contains("open")) setToc(false);
+    });
+  }
+
   function initDocScrollSpy(sections) {
     var links = document.querySelectorAll(".doc-toc-link");
     var secEls = sections.map(function (id) { return document.getElementById(id); }).filter(Boolean);
@@ -602,6 +652,7 @@
     renderDocsFaq();
     renderTutorial();
     initDocNav();
+    initDocToc();
     renderSourceFilter();
     renderSources();
 

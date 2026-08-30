@@ -254,7 +254,7 @@ a { color: inherit; text-decoration: none; }
 /* ===== 文档布局：源编写教程（RSSHub 风格） ===== */
 .doc-layout {
   display: grid;
-  grid-template-columns: 260px minmax(0, 1fr);
+  grid-template-columns: 260px minmax(0, 1fr) 220px;
   gap: 32px;
   max-width: 1280px;
   margin: 0 auto;
@@ -375,48 +375,13 @@ a { color: inherit; text-decoration: none; }
 
 .doc-toc-title { font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 10px; }
 
-/* 本页内容（大纲）：右侧悬浮按钮，默认收起，悬停/点按展开，底色白 */
+/* 本页内容（大纲）：桌面端为右侧固定列，与左侧文档导航对应；平板/手机端改为悬浮按钮点开 */
 .doc-toc {
-  position: fixed;
-  top: 96px;
-  right: 0;
-  z-index: 40;
-  width: 250px;
-  max-height: calc(100vh - 120px);
-  background: #fff;
-  border: 1px solid var(--border);
-  border-right: none;
-  border-radius: 14px 0 0 14px;
-  box-shadow: -8px 12px 34px rgba(0,0,0,.10);
-  transform: translateX(calc(100% - 38px));
-  transition: transform .22s ease;
-  overflow: hidden;
+  position: static;
+  align-self: start;
 }
-.doc-toc:hover, .doc-toc:focus-within { transform: translateX(0); }
-.doc-toc .doc-toc-scroll { position: static; max-height: calc(100vh - 120px); }
+.doc-toc .doc-toc-scroll { max-height: calc(100vh - 104px); }
 .doc-toc .doc-toc-tree { padding-left: 2px; }
-.doc-toc-title {
-  writing-mode: vertical-rl;
-  text-orientation: mixed;
-  margin: 0 0 8px;
-  padding: 12px 8px;
-  cursor: pointer;
-  border: none;
-  background: transparent;
-  width: 100%;
-  text-align: center;
-  font-family: inherit;
-  text-transform: none;
-  letter-spacing: 0.12em;
-  color: var(--muted);
-}
-.doc-toc:hover .doc-toc-title, .doc-toc:focus-within .doc-toc-title {
-  writing-mode: horizontal-tb;
-  text-align: left;
-  padding: 0 0 10px;
-  letter-spacing: 0.08em;
-}
-[data-theme="dark"] .doc-toc { background: #161a27; }
 
 /* 功能页：双列卡片 */
 .doc-grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; margin-top: 18px; }
@@ -446,14 +411,52 @@ a { color: inherit; text-decoration: none; }
 .doc-toc-group .doc-toc-link { padding-left: 22px; font-size: 13px; }
 
 .doc-nav-toggle { display: none; }
+.toc-fab { display: none; }
+.doc-toc-backdrop { display: none; }
 
 @media (max-width: 1100px) {
   .doc-layout { grid-template-columns: 240px minmax(0, 1fr); }
+  /* 本页内容改为右侧滑入面板 */
+  .doc-toc {
+    position: fixed;
+    top: 0; right: 0; bottom: 0;
+    width: min(82vw, 300px);
+    max-height: none;
+    background: var(--surface);
+    border-left: 1px solid var(--border);
+    box-shadow: -8px 0 34px rgba(0,0,0,.16);
+    transform: translateX(100%);
+    transition: transform .25s ease;
+    z-index: 60;
+    padding: 72px 16px 24px;
+    overflow-y: auto;
+  }
+  .doc-toc.open { transform: translateX(0); }
+  .doc-toc .doc-toc-scroll { position: static; max-height: none; }
+  .doc-toc-title { writing-mode: horizontal-tb; text-align: left; margin: 0 0 12px; padding: 0; letter-spacing: 0.08em; }
+  /* 悬浮按钮：平板/手机端显示，点按展开本页内容 */
+  .toc-fab {
+    display: inline-flex;
+    position: fixed;
+    right: 16px; bottom: 20px;
+    z-index: 55;
+    align-items: center; gap: 8px;
+    padding: 12px 18px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--primary);
+    color: #fff;
+    font-weight: 800; font-size: 14px;
+    box-shadow: 0 8px 24px rgba(0,0,0,.22);
+    cursor: pointer;
+  }
+  .doc-toc-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.42); z-index: 50; }
+  .doc-toc-backdrop.show { display: block; }
 }
 
 @media (max-width: 900px) {
   .doc-layout { grid-template-columns: 1fr; padding-top: 18px; }
-  .doc-sidebar { order: -1; position: static; margin-bottom: 8px; }
+  .doc-nav { order: -1; position: static; margin-bottom: 8px; }
   .doc-nav-scroll {
     position: fixed;
     top: 64px; left: 0; bottom: 0;
@@ -485,29 +488,6 @@ a { color: inherit; text-decoration: none; }
     margin-bottom: 10px;
   }
   .doc-nav-toggle svg { stroke: currentColor; }
-  /* 手机端：本页内容改为右下角浮动卡片，默认收起，点按/悬停展开，不在正文顶部 */
-  .doc-toc {
-    display: block;
-    position: fixed;
-    top: auto;
-    bottom: 84px;
-    right: 12px;
-    width: 240px;
-    max-height: 60vh;
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    box-shadow: 0 12px 34px rgba(0,0,0,.16);
-    transform: translateY(calc(100% - 42px));
-  }
-  .doc-toc:hover, .doc-toc:focus-within { transform: translateY(0); }
-  .doc-toc .doc-toc-scroll { max-height: 60vh; }
-  .doc-toc-title {
-    writing-mode: horizontal-tb;
-    margin: 0;
-    padding: 10px 12px;
-    text-align: center;
-    letter-spacing: 0.08em;
-  }
   .doc-back { margin-bottom: 14px; }
   .doc-title { font-size: 28px; }
   .doc-h2 { font-size: 22px; scroll-margin-top: 76px; }
