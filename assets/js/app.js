@@ -35,15 +35,8 @@
     if (s === "light" || s === "dark") return s;
     return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
   }
-  function getHideAdult() {
-    // 默认隐藏成人内容；用户关闭后写入 localStorage 持久化
-    var s = localStorage.getItem("nexhub_hide_adult");
-    if (s === "0") return false;
-    if (s === "1") return true;
-    return true; // 默认自动隐藏
-  }
 
-  var state = { lang: getLang(), theme: getTheme(), filter: "all", hideAdult: getHideAdult() };
+  var state = { lang: getLang(), theme: getTheme(), filter: "all" };
   var page = (document.body && document.body.getAttribute("data-page")) || "home";
 
   /* ---------- 文案应用 ---------- */
@@ -561,19 +554,10 @@
     var dict = I18N[state.lang] || I18N.zh;
     var box = document.getElementById("sourceGrid");
     if (!box) return;
-    var filtered = SOURCES.filter(function (s) { return state.filter === "all" || s.type === state.filter; });
-    // 自动隐藏成人内容（可在页面开关切换）
-    var hiddenAdult = 0;
-    var list = filtered.filter(function (s) {
-      if (state.hideAdult && s.ageRating === "mature") { hiddenAdult++; return false; }
-      return true;
+    // 成人内容永不展示
+    var list = SOURCES.filter(function (s) {
+      return (state.filter === "all" || s.type === state.filter) && s.ageRating !== "mature";
     });
-    var note = document.getElementById("sourceNote");
-    if (note) {
-      note.textContent = (state.hideAdult && hiddenAdult > 0)
-        ? (dict["sources.adultHidden"] || "").replace("{n}", hiddenAdult)
-        : "";
-    }
     if (!list.length) { box.innerHTML = ""; return; }
     box.innerHTML = list.map(function (s) {
       var ver = (typeof s.version === "number") ? String(s.version) : s.version;
@@ -705,17 +689,6 @@
       });
       navLinks.querySelectorAll("a").forEach(function (a) {
         a.addEventListener("click", function () { navLinks.classList.remove("open"); menuBtn.setAttribute("aria-expanded", "false"); });
-      });
-    }
-
-    // 成人内容开关（默认隐藏，持久化）
-    var adTog = document.getElementById("hideAdultToggle");
-    if (adTog) {
-      adTog.checked = state.hideAdult;
-      adTog.addEventListener("change", function () {
-        state.hideAdult = adTog.checked;
-        localStorage.setItem("nexhub_hide_adult", state.hideAdult ? "1" : "0");
-        renderSources();
       });
     }
   }
