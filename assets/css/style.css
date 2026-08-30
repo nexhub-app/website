@@ -377,17 +377,19 @@ a { color: inherit; text-decoration: none; }
 
 /* 本页内容（大纲）：桌面端为右侧固定列，与左侧文档导航对应；平板/手机端改为悬浮按钮点开 */
 .doc-toc {
-  position: static;
-  align-self: start;
-}
-.doc-toc .doc-toc-scroll {
   position: sticky;
   top: 84px;
+  align-self: start;
   max-height: calc(100vh - 104px);
   overflow-y: auto;
   overflow-x: hidden;
   padding-right: 4px;
   -webkit-overflow-scrolling: touch;
+}
+.doc-toc .doc-toc-scroll {
+  position: static;
+  max-height: none;
+  overflow: visible;
 }
 .doc-toc .doc-toc-tree { padding-left: 2px; }
 
@@ -454,13 +456,12 @@ a { color: inherit; text-decoration: none; }
     bottom: auto;
     z-index: 55;
     align-items: center; gap: 8px;
-    padding: 12px 18px;
-    border-radius: 999px;
+    padding: 8px 14px;
+    border-radius: 10px;
     border: 1px solid var(--border);
-    background: var(--primary);
-    color: #fff;
-    font-weight: 800; font-size: 14px;
-    box-shadow: 0 8px 24px rgba(0,0,0,.22);
+    background: var(--surface);
+    color: var(--text);
+    font-weight: 700; font-size: 14px;
     cursor: pointer;
   }
   .doc-toc-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.42); z-index: 50; }
