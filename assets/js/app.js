@@ -9,7 +9,7 @@
 
   /* GitHub 仓库地址（源导入链接、下载、GitHub 按钮都基于它） */
   var REPO = "https://github.com/nexhub-app/nexhub";
-  var RAW_BASE = window.NEXHUB_REPO_RAW || (REPO + "/raw/main/plugins/builtin/");
+  var RAW_BASE = window.NEXHUB_REPO_RAW || "https://cdn.jsdelivr.net/gh/nexhub-app/sources@main/sources/";
 
   var I18N = window.I18N;
   var CONTENT = window.CONTENT;

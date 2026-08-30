@@ -25,9 +25,9 @@ website/                         ← 整个静态站（也是 GitHub Pages 的�
 │   ├── css/style.css       # 样式（天青色主色、明暗主题、响应式）
 │   └── js/
 │       ├── i18n.js         # 双语文案 + 功能/下载/文档/首页亮点/使用指南
-│       ├── sources.js      # 源仓库数据（增删源改这里）
+│       ├── sources.js      # 源仓库加载器（fetch nexhub-app/sources 的 index.json，含 CDN 回退）
 │       └── app.js          # 注入 header/footer、语言/主题切换、渲染、交互
-├── plugins/builtin/        # 内置源 JSON（供「导入源」直接拉取）
+├── plugins/                # 旧版内置源已迁出；现源统一由 nexhub-app/sources 仓库管理
 ├── .github/workflows/      # Deploy to GitHub Pages 工作流
 ├── LICENSE
 ├── .nojekyll
@@ -41,7 +41,7 @@ website/                         ← 整个静态站（也是 GitHub Pages 的�
 
 本仓库地址：`https://github.com/nexhub-app/website`（源导入链接与下载按钮已预设此地址，无需再改占位符）。
 
-仓库内已包含：站点文件（`index.html` 等）、`plugins/builtin/` 内置源 JSON（供「导入源」直接拉取）、`LICENSE`、`.nojekyll`、`.github/workflows/deploy.yml`（自动部署）。
+仓库内已包含：站点文件（`index.html` 等）、`LICENSE`、`.nojekyll`、`.github/workflows/deploy.yml`（自动部署）。源数据不再存于本仓库，改由 [nexhub-app/sources](https://github.com/nexhub-app/sources) 仓库的 `index.json` 动态提供。
 
 ### 方式一：GitHub Actions 自动部署（推荐）
 
@@ -70,9 +70,9 @@ python3 -m http.server 8080
 ## 日常维护
 
 - **改文案 / 加功能卡 / 加下载平台 / 加文档 / 加首页亮点**：编辑 `assets/js/i18n.js`（中英两版都改）。
-- **加 / 改源**：编辑 `assets/js/sources.js` 的 `NEXHUB_SOURCES` 数组。
-  - `builtin: true` 的源显示「导入」按钮（复制 raw 链接）；`builtin: false` 作为社区/示例源显示「敬请期待」。
-  - 小说源目前为社区示例，待真正接入 `plugins/builtin/` 后把 `builtin` 改为 `true` 即可变为内置可导入。
+- **加 / 改源**：源统一在 [nexhub-app/sources](https://github.com/nexhub-app/sources) 仓库管理。往 `sources/<分类>/` 放一个 JSON，GitHub Action 会自动重建 `index.json`，网站下次打开即出现，**无需改本仓库代码**。
+  - 网站 `assets/js/sources.js` 只负责从 `index.json` 拉取并渲染，通常不用改（仅切换数据源地址时才动）。
+  - 所有源 `builtin` 均为 `true`，网页显示「导入」按钮（复制可直接导入的链接）。
 - **换主题色**：编辑 `assets/css/style.css` 顶部 `:root` 里的 `--primary` 等变量（当前为天青色）。
 - **改品牌名 / Logo**：改各页面里的 `NexHub` 文字与 `assets/app-icon.svg`。
 - **增删页面**：新建 `xxx.html`（复制任一页面骨架，改 `<body data-page="xxx">` 与内部容器），并在 `assets/js/app.js` 的 `PAGES` 数组里加一项。
