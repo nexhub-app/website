@@ -377,10 +377,24 @@ a { color: inherit; text-decoration: none; }
 
 /* 本页内容（大纲）：桌面端为右侧固定列，与左侧文档导航对应；平板/手机端改为悬浮按钮点开 */
 .doc-toc {
-  position: static;
+  position: sticky;
+  top: 84px;
   align-self: start;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  box-shadow: 0 2px 12px rgba(0,0,0,.04);
+  overflow: hidden;
 }
-.doc-toc .doc-toc-scroll { max-height: calc(100vh - 104px); }
+.doc-toc .doc-toc-scroll {
+  position: static;
+  max-height: calc(100vh - 136px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 4px;
+  -webkit-overflow-scrolling: touch;
+}
 .doc-toc .doc-toc-tree { padding-left: 2px; }
 
 /* 功能页：双列卡片 */
@@ -430,15 +444,17 @@ a { color: inherit; text-decoration: none; }
     z-index: 60;
     padding: 72px 16px 24px;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
   .doc-toc.open { transform: translateX(0); }
-  .doc-toc .doc-toc-scroll { position: static; max-height: none; }
+  .doc-toc .doc-toc-scroll { position: static; max-height: none; overflow-y: auto; -webkit-overflow-scrolling: touch; }
   .doc-toc-title { writing-mode: horizontal-tb; text-align: left; margin: 0 0 12px; padding: 0; letter-spacing: 0.08em; }
   /* 悬浮按钮：平板/手机端显示，点按展开本页内容 */
   .toc-fab {
     display: inline-flex;
     position: fixed;
-    right: 16px; bottom: 20px;
+    right: 16px;
+    bottom: calc(20px + env(safe-area-inset-bottom, 0px));
     z-index: 55;
     align-items: center; gap: 8px;
     padding: 12px 18px;
