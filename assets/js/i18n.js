@@ -251,7 +251,7 @@ window.CONTENT = {
     channels: {
       repo: "https://github.com/nexhub-app/nexhub",
       stableTag: "latest",
-      betaTag: "v2.0.0-beta.3",
+      betaTag: "v2.0.0-beta.4",
       mirror: "https://ghfast.top/"
     }
   },
@@ -317,7 +317,11 @@ window.CONTENT = {
         "朗读通知栏控制、阅读中预下载、平滑自动翻页、书签角标自定义图",
         "在线多音色 TTS：自定义 HTTP 模板 + 角色→音色映射",
         "长正文多页并发抓取：nextContentUrl 并发保序拼接，加快大章加载",
-        "滚动模式插图样式与对齐：banner / card，可选左 / 中 / 右"
+        "滚动模式插图样式与对齐：banner / card，可选左 / 中 / 右",
+        "章节翻译断点续译：按块写入检查点，中断后从断点继续，不重翻整章",
+        "术语表注入：专有名词跨段一致，多书可共享术语表",
+        "译文可导出为可复用资产",
+        "翻译接口主备容灾 + 健康熔断：主端点失败自动切备用，偶发抖动不整段失败"
       ],
       "howto": [
         "本地阅读：在「书架 → 本地」导入 TXT / EPUB 文件或文件夹，离线也能看",
@@ -492,7 +496,8 @@ window.CONTENT = {
         "防重叠轨道算法，seek 后弹幕位置稳定",
         "视频字幕实时翻译：字幕面板开关（跨会话记忆），逐句翻译，无字幕时截帧画面 OCR 兜底",
         "译文底部覆盖层可选显示原文，按语言持久缓存",
-        "翻译异常归一处理，瞬时抖动不再丢句"
+        "翻译异常归一处理，瞬时抖动不再丢句",
+        "视频整片离线字幕翻译 + 双语导出：整片字幕离线翻完，可导出双语字幕文件"
       ],
       "howto": [
         "导入影视 / 动漫源（如 233动漫、花子动漫）",
@@ -687,7 +692,8 @@ window.CONTENT = {
         "键盘快捷键补全、鼠标滚轮速度可调、鼠标光标反馈、放大态边缘滑动切页、缩放锚点可配、图片加载失败重试",
         "漫画页翻译：翻页自动对当前页做 OCR + 翻译，译文气泡按版面叠加，按作品记忆、失败可重试",
         "翻译接口可在 AI 设置页单独配置（留空回落通用翻译），阅读设置面板开关可控",
-        "漫画翻译并发限流，快速翻页不再触发接口限流"
+        "漫画翻译并发限流，快速翻页不再触发接口限流",
+        "漫画页翻译气泡回填：译文气泡按版面回填，翻页残留更少、覆盖更准"
       ],
       "howto": [
         "本地阅读：在「书架 → 本地」导入 PDF / CBR / RAR / 7Z 等文件或文件夹，离线也能看",
@@ -867,7 +873,11 @@ window.CONTENT = {
         "TTS notification controls, pre-download while reading, smooth auto-page, custom bookmark badge icon",
         "Online multi-voice TTS: custom HTTP template plus character→voice mapping",
         "Long-chapter concurrent fetch: pages fetched in parallel and merged in order, speeding up big chapters",
-        "Scroll-mode illustration styles & alignment: banner / card, left / center / right"
+        "Scroll-mode illustration styles & alignment: banner / card, left / center / right",
+        "Resumable chapter translation: checkpointed chunks, resume from breakpoint instead of restarting",
+        "Glossary injection: consistent terms across chunks, shareable per book",
+        "Export translations as reusable assets",
+        "Primary/backup translation endpoints with health circuit breaker: failover on error, fewer whole-section failures"
       ],
       "howto": [
         "Local reading: import TXT / EPUB files or folders via Bookshelf → Local to read offline",
@@ -1042,7 +1052,8 @@ window.CONTENT = {
         "Anti-overlap track algorithm that keeps danmaku positions stable after seeking",
         "Realtime subtitle translation: a subtitle-panel toggle (remembered across sessions) translates line by line; frame OCR as a fallback when no subtitle track",
         "Translated overlay optionally shows the original text, cached per language",
-        "Normalized translation errors so brief network blips no longer drop lines"
+        "Normalized translation errors so brief network blips no longer drop lines",
+        "Whole-video offline subtitle translation + bilingual export: translate an entire video offline and export bilingual subtitles"
       ],
       "howto": [
         "Import a video/anime source (e.g. 233动漫, 花子动漫)",
@@ -1237,7 +1248,8 @@ window.CONTENT = {
         "Complete keyboard shortcuts, adjustable mouse-wheel speed, cursor feedback, edge-swipe page-turn while zoomed, configurable zoom anchor, image load retry",
         "Comic page translation: auto OCR + translate the current page on turn, translated bubbles overlaid by layout, remembered per work, retryable on failure",
         "Translation endpoint configurable in AI settings (falls back to the general one when blank), toggle in the reader settings",
-        "Concurrency-limited comic translation so fast page turns no longer hit rate limits"
+        "Concurrency-limited comic translation so fast page turns no longer hit rate limits",
+        "Comic page-translation bubble backfill: bubbles re-laid out by layout, less residue and more accurate after page turns"
       ],
       "howto": [
         "Local reading: import PDF, CBR, RAR, 7Z files or folders via Bookshelf → Local to read offline",
