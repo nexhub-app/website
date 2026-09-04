@@ -250,7 +250,7 @@ window.CONTENT = {
     ],
     channels: {
       repo: "https://github.com/nexhub-app/nexhub",
-      stableTag: "latest",
+      stableTag: "v2.0.0",
       betaTag: "v2.0.0-beta.8",
       mirror: "https://ghfast.top/"
     }
@@ -1998,6 +1998,35 @@ window.CONTENT = {
       "code": "function parseImages(raw, context){\n  var baseUrl = (context.baseUrl || '').replace(/\\/$/, '');\n  // 解密 raw 得到真实地址列表\n  var urls = decrypt(raw);\n  return urls.map(function(u){ return u.indexOf('/')===0 ? baseUrl+u : u; });\n}"
     },
     {
+      "id": "imageTransform",
+      "title": "八（续）、图片字节解密（imageTransform）",
+      "group": "advanced",
+      "body": "部分图床对**图片字节本身**加密（浏览器端由站点自带 JS 解密渲染），无论怎么配 Referer/UA，客户端拿到的图片都是密文，直接解码失败。这类源可在源顶层声明 imageTransform 段：列出需要解密的 CDN host，并声明解密算法，引擎在图片下载层统一解密（密钥/算法全部来自源 JSON，引擎不写死任何站点逻辑）。\n\n适用：覆盖社区常见的图片字节加密方式——aes-cbc / aes-ecb / rc4 / xor；IV 支持「文件头前缀字节」/「固定值」/「全零」；填充支持 pkcs7 / none；密钥与 IV 支持 utf8 / base64 / hex 编码。解密后的明文进磁盘缓存，保存/分享自动继承。\n\n注意：matchHosts 必须枚举**所有**可能下发图片的 CDN host（部分站点按镜像域名轮换图床，漏一个 host 该镜像的图就是坏图）。",
+      "fields": [
+        {
+          "k": "matchHosts",
+          "v": "需要解密的图片 CDN host 列表（精确匹配，忽略大小写）。"
+        },
+        {
+          "k": "decrypt.algo",
+          "v": "解密算法：aes-cbc / aes-ecb / rc4 / xor。"
+        },
+        {
+          "k": "decrypt.key / keyEncoding",
+          "v": "密钥字节；keyEncoding 支持 utf8（缺省）/ base64 / hex。"
+        },
+        {
+          "k": "decrypt.ivSource",
+          "v": "IV 来源：prefixBytes（密文文件前 ivLength 字节为 IV，最常见）/ fixed（用 decrypt.iv 固定值）/ none（全零 IV）。"
+        },
+        {
+          "k": "decrypt.padding",
+          "v": "填充：pkcs7（缺省）/ none（密文长度恒为 16 倍数）。"
+        }
+      ],
+      "code": "\"imageTransform\": {\n  \"matchHosts\": [\"cdn.example.com\", \"cdn-mirror.example.com\"],\n  \"decrypt\": {\n    \"algo\": \"aes-cbc\",\n    \"key\": \"16字节密钥原文\",\n    \"keyEncoding\": \"utf8\",\n    \"ivSource\": \"prefixBytes\",\n    \"ivLength\": 16,\n    \"padding\": \"pkcs7\"\n  }\n}"
+    },
+    {
       "id": "webfavorite",
       "title": "九、网络收藏（webFavorite）",
       "group": "intermediate",
@@ -2619,6 +2648,20 @@ window.CONTENT = {
         }
       ],
       "code": "function parseImages(raw, context){\n  var baseUrl = (context.baseUrl || '').replace(/\\/$/, '');\n  var urls = decrypt(raw);\n  return urls.map(function(u){ return u.indexOf('/')===0 ? baseUrl+u : u; });\n}"
+    },
+    {
+      "id": "imageTransform",
+      "title": "8 (cont.). Image byte decryption (imageTransform)",
+      "group": "advanced",
+      "body": "Some image CDNs encrypt the **image bytes themselves** (the browser decrypts them client-side via the site's own JS). No matter how you set Referer/UA, the client receives ciphertext and decoding fails. Such sources can declare an imageTransform block at the top level: list the CDN hosts that need decryption and the algorithm; the engine decrypts uniformly at the image-download layer (all keys/algorithms come from the source JSON — the engine hard-codes no site logic).\n\nCoverage: common community image-byte encryption schemes — aes-cbc / aes-ecb / rc4 / xor; IV supports prefix-bytes / fixed / all-zero; padding supports pkcs7 / none; key and IV support utf8 / base64 / hex encodings. Decrypted plaintext goes into the on-disk cache; save/share inherit it automatically.\n\nNote: matchHosts must enumerate **all** CDN hosts that may serve images (some sites rotate image hosts by mirror domain — miss one host and that mirror's images break).",
+      "fields": [
+        { "k": "matchHosts", "v": "List of image CDN hosts to decrypt (exact match, case-insensitive)." },
+        { "k": "decrypt.algo", "v": "Decryption algorithm: aes-cbc / aes-ecb / rc4 / xor." },
+        { "k": "decrypt.key / keyEncoding", "v": "Key bytes; keyEncoding supports utf8 (default) / base64 / hex." },
+        { "k": "decrypt.ivSource", "v": "IV source: prefixBytes (the first ivLength bytes of the ciphertext are the IV, most common) / fixed (use decrypt.iv) / none (all-zero IV)." },
+        { "k": "decrypt.padding", "v": "Padding: pkcs7 (default) / none (ciphertext length always a multiple of 16)." }
+      ],
+      "code": "\"imageTransform\": {\n  \"matchHosts\": [\"cdn.example.com\", \"cdn-mirror.example.com\"],\n  \"decrypt\": {\n    \"algo\": \"aes-cbc\",\n    \"key\": \"16-byte key literal\",\n    \"keyEncoding\": \"utf8\",\n    \"ivSource\": \"prefixBytes\",\n    \"ivLength\": 16,\n    \"padding\": \"pkcs7\"\n  }\n}"
     },
     {
       "id": "webfavorite",
