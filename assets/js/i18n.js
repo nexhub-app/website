@@ -2257,7 +2257,7 @@ window.CONTENT = {
       "id": "collection",
       "title": "十六、采集 API 接口说明",
       "group": "advanced",
-      "body": "「采集 API」指的是一个源对外暴露的「抓取接口集合」——也就是 routes 里定义的一个个端点（search / latest / detail / video / images …），以及每个端点用 selectors 或 overrides 声明的抽取规则。App 的引擎按这套约定逐个调用端点、把站点数据变成统一结构。\n\n端点与覆盖层：\n· 每个端点先在 routes 里定义 url（支持 {keyword}/{page}/{id}/{url}/{detailUrl} 占位符）、method、responseType、headers、params。\n· 抽取方式由 parser.overrides.<端点> 决定：builtin / xpath / jsonpath / css / script / webview / webview-html。\n· 声明式端点用 selectors.<端点> 指定选择器；脚本端点用 overrides.<端点>.script 提供函数。\n\n异步协议 __meta：当端点需要先请求另一个接口才能解析（例如视频先调 API 拿真实地址），脚本返回 { __meta:true, __fetchUrl, __processor }。引擎会先预取 __fetchUrl，再把结果交给 __processor 同步处理。这是沙箱里唯一安全的异步通道。\n\n常用端点一览：search（搜索）、latest（最新）、explore / category（发现/分类）、detail（详情+目录）、episodes（剧集列表）、video（视频地址）、chapters（漫画话列表）、images（漫画图片）、week（周更表）。具体字段名见各模块小节与「源字段完整参考」。",
+      "body": "「采集 API」指的是一个源对外暴露的「抓取接口集合」——也就是 routes 里定义的一个个端点（search / latest / detail / video / images …），以及每个端点用 selectors 或 overrides 声明的抽取规则。App 的引擎按这套约定逐个调用端点、把站点数据变成统一结构。\n\n端点与覆盖层：\n· 每个端点先在 routes 里定义 url（支持 {keyword}/{page}/{id}/{url}/{detailUrl} 占位符）、method、responseType、headers、params。\n· 占位符数值运算：数值型占位符支持 {page-1} / {page+1} / {page*30-30}（只支持 + - * / 后接非负整数，按书写顺序从左到右求值，不做优先级）；引擎统一从 1 开始计数，站点从 0 开始用 -1，JSON API 的 offset 分页用 {page*30-30} 一次算出偏移量；非数值占位符（如关键词）不处理，结果为负则夹到 0。\n· 抽取方式由 parser.overrides.<端点> 决定：builtin / xpath / jsonpath / css / script / webview / webview-html。\n· 声明式端点用 selectors.<端点> 指定选择器；脚本端点用 overrides.<端点>.script 提供函数。\n\n异步协议 __meta：当端点需要先请求另一个接口才能解析（例如视频先调 API 拿真实地址），脚本返回 { __meta:true, __fetchUrl, __processor }。引擎会先预取 __fetchUrl，再把结果交给 __processor 同步处理。这是沙箱里唯一安全的异步通道。\n\n常用端点一览：search（搜索）、latest（最新）、explore / category（发现/分类）、detail（详情+目录）、episodes（剧集列表）、video（视频地址）、chapters（漫画话列表）、images（漫画图片）、week（周更表）。具体字段名见各模块小节与「源字段完整参考」。",
       "fields": [
         {
           "k": "routes.<name>",
@@ -2667,7 +2667,7 @@ window.CONTENT = {
       "id": "webfavorite",
       "title": "9. Web favorites (webFavorite)",
       "group": "intermediate",
-      "body": "If your source site itself offers a 'my bookshelf / favorites' page, declare webFavorite so the app shows an extra 'Web Favorites' tab in browse. What users see there comes from the site account (requires login), not the app's local favorites.\n\nDeclare it by adding a webFavorite object at the source top level. enabled defaults true; title is the tab label; route / url is the 'view favorites list' route or address; addRoute / addUrl is the 'add to favorites' route or address, supporting {id} / {detailUrl} / {title} placeholders (auto-replaced with the current work's id / detail link / title); requireLogin true means login is required first.\n\nNote: webFavorite and the app's local favorites are independent — local favorites are managed by the app, web favorites go through the site API.",
+      "body": "If your source site itself offers a 'my bookshelf / favorites' page, declare webFavorite so the app shows an extra 'Web Favorites' tab in browse. What users see there comes from the site account (requires login), not the app's local favorites.\n\nDeclare it by adding a webFavorite object at the source top level. enabled defaults true; title is the tab label; route / url is the 'view favorites list' route or address — when route points to a JSON API script endpoint, the favorites list is fetched via the script resolver and automatically carries the login token (good for auth-required App API favorites). addRoute / addUrl is the 'add to favorites' route or address, supporting {id} / {detailUrl} / {title} placeholders — when addRoute points to a script endpoint, the add is handled by the source script (multi-step request + auth, e.g. fetch the work uuid first then POST), no static form needed; requireLogin true means login is required first.\n\nNote: webFavorite and the app's local favorites are independent — local favorites are managed by the app, web favorites go through the site API.",
       "fields": [
         {
           "k": "enabled",
@@ -2683,7 +2683,7 @@ window.CONTENT = {
         },
         {
           "k": "addRoute / addUrl",
-          "v": "Add-to-favorites route or address, supports {id} / {detailUrl} / {title} placeholders."
+          "v": "Add-to-favorites route or address, supports {id} / {detailUrl} / {title} placeholders. When addRoute points to a script endpoint, the add is handled by the source script (multi-step + auth), good for App API sources."
         },
         {
           "k": "requireLogin",
