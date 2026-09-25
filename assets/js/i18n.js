@@ -250,7 +250,7 @@ window.CONTENT = {
     ],
     channels: {
       repo: "https://github.com/nexhub-app/nexhub",
-      stableTag: "v2.0.2",
+      stableTag: "v2.0.3",
       betaTag: "v2.0.0-beta.8",
       mirror: "https://ghfast.top/"
     }
@@ -2142,7 +2142,7 @@ window.CONTENT = {
       "id": "script",
       "title": "十三、内嵌 JS 脚本约定",
       "group": "advanced",
-      "body": "当声明式选择器搞不定时，用 parser.overrides 写 JS。每个模块可指定 type:\"script\" 并给出 function 名与 script 源码。\n\n重要约定：\n1. 函数签名固定为 parseXxx(html, context)，html 为页面字符串，context 含 baseUrl、log 等。\n2. 必须同步返回结果（数组或对象）。\n3. 需要异步数据时，返回 {__meta:true, __fetchUrl, __processor} 协议对象，引擎会先预取该 URL，再调用 __processor 同步处理函数——这是唯一安全的异步通道。\n4. 不要写死任何站点常量到 App，全部留在源文件。",
+      "body": "当声明式选择器搞不定时，用 parser.overrides 写 JS。每个模块可指定 type:\"script\" 并给出 function 名与 script 源码。\n\n重要约定：\n1. 函数签名固定为 parseXxx(html, context)，html 为页面字符串，context 含 baseUrl、log 等。\n2. 必须同步返回结果（数组或对象）。\n3. 需要异步数据时，返回 {__meta:true, __fetchUrl, __processor} 协议对象，引擎会先预取该 URL，再调用 __processor 同步处理函数——这是唯一安全的异步通道。\n4. 不要写死任何站点常量到 App，全部留在源文件。\n5. 沙箱已预置 atob / btoa（浏览器语义 polyfill，宽松剥离非法字符与尾部 =），脚本可直接调用，无需在源里内嵌同名 polyfill；若源脚本自带同名声明则覆盖默认值。同一 JsEngine 实例内顶层变量跨 meta 多跳持续可见，多跳各跳的 __processor 不再重放整段脚本，符合「同一 JsEngine 内全局持续可见」的约定。",
       "fields": [
         {
           "k": "function",
@@ -2779,7 +2779,7 @@ window.CONTENT = {
       "id": "script",
       "title": "13. Embedded JS conventions",
       "group": "advanced",
-      "body": "When declarative selectors are not enough, use parser.overrides to write JS. Each module can set type:'script' with a function name and script source.\n\nKey rules:\n1. Signature is fixed: parseXxx(html, context); html is the page string, context has baseUrl, log, etc.\n2. Must return synchronously (array or object).\n3. For async data, return the {__meta:true, __fetchUrl, __processor} protocol object; the engine prefetches that URL, then calls __processor synchronously — the only safe async channel.\n4. Never hardcode site constants into the app; keep everything in the source file.",
+      "body": "When declarative selectors are not enough, use parser.overrides to write JS. Each module can set type:'script' with a function name and script source.\n\nKey rules:\n1. Signature is fixed: parseXxx(html, context); html is the page string, context has baseUrl, log, etc.\n2. Must return synchronously (array or object).\n3. For async data, return the {__meta:true, __fetchUrl, __processor} protocol object; the engine prefetches that URL, then calls __processor synchronously — the only safe async channel.\n4. Never hardcode site constants into the app; keep everything in the source file.\n5. The sandbox now presets atob / btoa (browser-semantics polyfill, leniently stripping invalid chars and trailing '='), so scripts can call them directly without embedding a polyfill; a source's own same-name declaration overrides the default. Within one JsEngine instance, top-level variables persist across meta multi-hop calls — each hop's __processor no longer replays the whole script — matching the 'globals stay visible within one JsEngine' convention.",
       "fields": [
         {
           "k": "function",
