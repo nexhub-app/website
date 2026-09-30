@@ -186,7 +186,7 @@
     if (!box) return;
     var dict = I18N[state.lang] || I18N.zh;
     var g = (CONTENT.guide && CONTENT.guide[state.lang]) || CONTENT.guide.zh;
-    var order = ["novel", "video", "manga"];
+    var order = ["novel", "video", "manga", "media"];
     box.innerHTML = order.map(function (k) {
       var item = g[k];
       var feats = item.features.map(function (f) { return "<li>" + esc(f) + "</li>"; }).join("");
@@ -263,7 +263,7 @@
     var dict = I18N[state.lang] || I18N.zh;
     var features = (CONTENT.features && CONTENT.features[state.lang]) || CONTENT.features.zh;
     var guide = (CONTENT.guide && CONTENT.guide[state.lang]) || CONTENT.guide.zh;
-    var order = ["novel", "video", "manga"];
+    var order = ["novel", "video", "manga", "media"];
 
     // 核心功能
     var core = '<section class="doc-section" id="features-core">' +

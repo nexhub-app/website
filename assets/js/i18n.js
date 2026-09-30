@@ -829,6 +829,26 @@ window.CONTENT = {
       ]
     }
   },
+    "media": {
+      "title": "🎬 媒体服务器",
+      "features": [
+        "连接自建媒体服务器：支持 Emby 与 Jellyfin，多服务器管理",
+        "服务器内浏览：继续观看 / 最新添加 / 媒体库海报墙分页，支持服务器内搜索",
+        "电影 / 剧集详情：季切换 + 集列表（已看角标、观看进度条、集数徽章）",
+        "直连播放原画质：不支持的编码明确提示（不黑屏不花屏）",
+        "观看进度双向同步：退出自动上报服务器，网页端 / 其他设备无缝续播",
+        "已看标记同步：播放到 90% 自动标记，与服务器网页端一致",
+        "播放器内上下集切换与自动连播，整季刷剧不退出",
+        "详情页台标 / 横幅剧照沉浸式展示；含图形字幕（PGS）的集提前提示"
+      ],
+      "howto": [
+        "设置 → 配置与网络 → 媒体服务器 → 添加服务器：输入地址（如 http://192.168.1.10:8096）自动识别类型，登录账号",
+        "影视模块「在线」列表或「源管理」中点击服务器，直接进入浏览",
+        "媒体库或搜索找到想看的条目，点海报进详情，点「播放」或集卡片观看",
+        "退出播放进度自动同步；服务器网页端 / 其他设备可从同一位置继续观看",
+        "服务器的重命名 / 删除 / 重新登录在管理页操作；登录凭证只存系统安全存储"
+      ]
+    },
   "en": {
     "novel": {
       "title": "📖 Novel Reader",
@@ -1386,6 +1406,26 @@ window.CONTENT = {
       ]
     }
   }
+    "media": {
+      "title": "🎬 Media servers",
+      "features": [
+        "Connect self-hosted media servers: Emby & Jellyfin, multi-server management",
+        "In-server browsing: continue watching / latest additions / paginated poster walls with server-side search",
+        "Movie / series detail: season switcher + episode list (watched badges, progress bars, episode badges)",
+        "Direct play at original quality; unsupported codecs get a clear notice (never a black screen)",
+        "Two-way watch progress sync: reported on exit, resume seamlessly on web or other devices",
+        "Watched-state sync: auto-marked at 90% playback, consistent with the server web app",
+        "In-player episode switching and auto-play next for full-season bingeing",
+        "Immersive detail header with clear logo / backdrop; graphical subtitles (PGS) flagged in advance"
+      ],
+      "howto": [
+        "Settings → Configuration & network → Media servers → Add server: enter the address (e.g. http://192.168.1.10:8096), the type is detected automatically, then sign in",
+        "Tap a server in the media module's Online list or Source management to browse it directly",
+        "Find something in a library or via search, open the detail page, tap Play or an episode card",
+        "Progress syncs on exit; continue on the server web app or any other device from the same spot",
+        "Rename / delete / re-login a server from the manage screen; credentials live only in the system secure storage"
+      ]
+    },
 },
   network: {
     zh: {
