@@ -827,8 +827,7 @@ window.CONTENT = {
           "desc": "缩放 / 翻页模式，自然 / 反向。"
         }
       ]
-    }
-  },
+    },
     "media": {
       "title": "🎬 媒体服务器",
       "features": [
@@ -848,7 +847,8 @@ window.CONTENT = {
         "退出播放进度自动同步；服务器网页端 / 其他设备可从同一位置继续观看",
         "服务器的重命名 / 删除 / 重新登录在管理页操作；登录凭证只存系统安全存储"
       ]
-    },
+    }
+  },
   "en": {
     "novel": {
       "title": "📖 Novel Reader",
@@ -1404,8 +1404,7 @@ window.CONTENT = {
           "desc": "Zoom / page-turn mode, natural / inverted."
         }
       ]
-    }
-  }
+    },
     "media": {
       "title": "🎬 Media servers",
       "features": [
@@ -1425,7 +1424,8 @@ window.CONTENT = {
         "Progress syncs on exit; continue on the server web app or any other device from the same spot",
         "Rename / delete / re-login a server from the manage screen; credentials live only in the system secure storage"
       ]
-    },
+    }
+  },
 },
   network: {
     zh: {

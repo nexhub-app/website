@@ -1,0 +1,12 @@
+# Trae IDE 配置目录（不入库）
+.trae/
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# 生效中的本地工具
+node_modules/
