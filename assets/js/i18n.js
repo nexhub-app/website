@@ -831,21 +831,26 @@ window.CONTENT = {
     "media": {
       "title": "🎬 媒体服务器",
       "features": [
-        "连接自建媒体服务器：支持 Emby 与 Jellyfin，多服务器管理",
-        "服务器内浏览：继续观看 / 最新添加 / 媒体库海报墙分页，支持服务器内搜索",
-        "电影 / 剧集详情：季切换 + 集列表（已看角标、观看进度条、集数徽章）",
-        "直连播放原画质：不支持的编码明确提示（不黑屏不花屏）",
-        "观看进度双向同步：退出自动上报服务器，网页端 / 其他设备无缝续播",
-        "已看标记同步：播放到 90% 自动标记，与服务器网页端一致",
-        "播放器内上下集切换与自动连播，整季刷剧不退出",
+        "连接自建媒体服务器：支持 Emby 与 Jellyfin，多服务器管理与实时在线状态点",
+        "服务器内浏览：继续观看 / 接下来观看 / 我的收藏 / 最新添加 / 媒体库海报墙，含合集浏览、流派 / 年份 / 已看筛选与排序",
+        "电影 / 剧集详情：沉浸式 backdrop 折叠头图 + 季切换 + 集列表（已看角标、观看进度条、集数徽章）",
+        "智能播放协商：直连 → 直接流 → 转码三段自动回退，不支持的编码自动转码可播并明确提示",
+        "码率档位与音轨选择：自动 / 原画 / 20M～1M / 720p 限档；多音轨切换，换档换轨均保持当前进度续播",
+        "观看进度双向同步：退出自动上报服务器，播完自动标已看，网页端 / 其他设备无缝续播",
+        "收藏 / 已看双向同步：详情页一键操作，剧集整季批量标记、长按单集切换，与服务器网页端一致",
+        "历史 / 继续观看 / 全局搜索并入：服务器条目与本地内容同一套体系，删除服务器自动清理残留",
+        "内外网多地址自动切换：当前地址断连自动切备用；后台定时探活，状态点实时变化",
+        "海报磁盘缓存 + 按屏幕密度请求分辨率：二次进入秒开，弱网省流量",
+        "播放器内上下集切换与自动连播，整季刷剧不退出；统计面板显示直连 / 转码与协商码率",
         "详情页台标 / 横幅剧照沉浸式展示；含图形字幕（PGS）的集提前提示"
       ],
       "howto": [
-        "设置 → 配置与网络 → 媒体服务器 → 添加服务器：输入地址（如 http://192.168.1.10:8096）自动识别类型，登录账号",
+        "设置 → 配置与网络 → 媒体服务器 → 添加服务器：输入地址（如 http://192.168.1.10:8096，内网外网可填多行自动探测）自动识别类型，登录账号",
         "影视模块「在线」列表或「源管理」中点击服务器，直接进入浏览",
-        "媒体库或搜索找到想看的条目，点海报进详情，点「播放」或集卡片观看",
+        "媒体库或搜索找到想看的条目（搜索词自动记入历史），点海报进详情，点「播放」或集卡片观看",
+        "播放器菜单可切换画质档位与音轨；详情页心形收藏、对勾标记已看（剧集长按单集切换、季头部整季标记）",
         "退出播放进度自动同步；服务器网页端 / 其他设备可从同一位置继续观看",
-        "服务器的重命名 / 删除 / 重新登录在管理页操作；登录凭证只存系统安全存储"
+        "服务器的地址管理 / 重命名 / 删除 / 重新登录在管理页操作；登录凭证只存系统安全存储"
       ]
     }
   },
@@ -1408,21 +1413,26 @@ window.CONTENT = {
     "media": {
       "title": "🎬 Media servers",
       "features": [
-        "Connect self-hosted media servers: Emby & Jellyfin, multi-server management",
-        "In-server browsing: continue watching / latest additions / paginated poster walls with server-side search",
-        "Movie / series detail: season switcher + episode list (watched badges, progress bars, episode badges)",
-        "Direct play at original quality; unsupported codecs get a clear notice (never a black screen)",
-        "Two-way watch progress sync: reported on exit, resume seamlessly on web or other devices",
-        "Watched-state sync: auto-marked at 90% playback, consistent with the server web app",
-        "In-player episode switching and auto-play next for full-season bingeing",
+        "Connect self-hosted media servers: Emby & Jellyfin, multi-server management with live status dots",
+        "In-server browsing: continue watching / next up / favorites / latest additions / paginated poster walls, with collections, genre / year / watched filters and sorting",
+        "Movie / series detail: immersive collapsible backdrop header + season switcher + episode list (watched badges, progress bars, episode badges)",
+        "Smart play negotiation: direct play → direct stream → transcode, three-stage automatic fallback; unsupported codecs transcode with a clear notice",
+        "Bitrate tiers & audio tracks: auto / original / 20M–1M / 720p cap; track switching always resumes from the current position",
+        "Two-way watch progress sync: reported on exit, auto-marked on completion, resume seamlessly on the web app or other devices",
+        "Favorite & watched two-way sync: one-tap on the detail page, season-wide batch marking, long-press per-episode toggle — consistent with the server web app",
+        "Integrated into history / continue watching / global search: server items share one system with local content; deleting a server cleans up its leftovers",
+        "Multi-address failover (LAN / WAN): auto-switch to a backup address when the active one drops; periodic health checks keep status dots live",
+        "Poster disk cache + density-matched resolution: instant revisits, less data on weak networks",
+        "In-player episode switching and auto-play next for full-season bingeing; the stats panel shows direct / transcode and negotiated bitrate",
         "Immersive detail header with clear logo / backdrop; graphical subtitles (PGS) flagged in advance"
       ],
       "howto": [
-        "Settings → Configuration & network → Media servers → Add server: enter the address (e.g. http://192.168.1.10:8096), the type is detected automatically, then sign in",
+        "Settings → Configuration & network → Media servers → Add server: enter the address (e.g. http://192.168.1.10:8096; multiple lines allowed for LAN / WAN, availability auto-detected), the type is detected automatically, then sign in",
         "Tap a server in the media module's Online list or Source management to browse it directly",
-        "Find something in a library or via search, open the detail page, tap Play or an episode card",
+        "Find something in a library or via search (terms are remembered), open the detail page, tap Play or an episode card",
+        "Switch quality tier and audio track from the player menu; favorite (heart) and mark watched (check) on the detail page — long-press an episode to toggle it, use the season header for season-wide marking",
         "Progress syncs on exit; continue on the server web app or any other device from the same spot",
-        "Rename / delete / re-login a server from the manage screen; credentials live only in the system secure storage"
+        "Address management / rename / delete / re-login live on the manage screen; credentials stay in the system secure storage"
       ]
     }
   },
