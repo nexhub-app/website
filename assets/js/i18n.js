@@ -253,7 +253,7 @@ window.CONTENT = {
     channels: {
       repo: "https://github.com/nexhub-app/nexhub",
       stableTag: "v2.0.3",
-      betaTag: "v3.0.0-beta.3",
+      betaTag: "v3.0.0-beta.4",
       mirror: "https://ghfast.top/"
     }
   },
@@ -1559,7 +1559,7 @@ window.CONTENT = {
           id: "net-ech",
           title: "八、ECH",
           blocks: [
-            { type: "callout", variant: "warn", text: "现已接通：ECH 由内置原生引擎（OpenSSL）驱动，对直连 HTTPS 真实生效，不再依赖外部代理；非 Android 或缺失原生库时自动降级为直连，不影响其他功能。" },
+            { type: "callout", variant: "warn", text: "现已接通：ECH 由内置原生引擎（OpenSSL）驱动，对直连 HTTPS 真实生效，不再依赖外部代理；当前随 Android（arm64-v8a / armeabi-v7a / x86_64 三架构）与 Windows 桌面端打包；macOS / Linux 暂未打包原生库，自动降级为直连，不影响其他功能。" },
             { type: "p", text: "ECH（Encrypted Client Hello，加密客户端问候）是 TLS 的一个扩展，把 SNI 加密，让旁观者连「你在访问哪个域名」都看不到。它比单纯的免 SNI 更进一步：连 SNI 内容也对网络中间人不可见。" },
             { type: "table", rows: [
               { k: "启用 ECH", v: "开关，默认关闭。" },
@@ -1635,7 +1635,7 @@ window.CONTENT = {
           title: "十二、常见疑问",
           blocks: [
             { type: "p", text: "问：我改了代理，为什么内置浏览器 / 网页视图还是不走代理？\n答：网页视图走原生栈，不受全局 HttpClient 覆盖影响。代理只对封面、下载、同步、源抓取等 Dart 侧 HTTP 流量生效。" },
-            { type: "p", text: "问：ECH 现在生效吗？\n答：生效。ECH 由内置原生引擎驱动，对直连 HTTPS 真实生效，作用域分应用级 / 源级 / Bangumi 专用；非 Android 或缺失原生库时自动降级为直连，正常站点不受影响。" },
+            { type: "p", text: "问：ECH 现在生效吗？\n答：生效。ECH 由内置原生引擎驱动，对直连 HTTPS 真实生效，作用域分应用级 / 源级 / Bangumi 专用；当前随 Android（arm64-v8a / armeabi-v7a / x86_64 三架构）与 Windows 桌面端打包；macOS / Linux 暂未打包原生库，自动降级为直连，正常站点不受影响。" },
             { type: "p", text: "问：代理密码存哪了？安全吗？\n答：存在系统安全存储（flutter_secure_storage），不写入网络配置 JSON，不会随源文件或备份明文外泄。" },
             { type: "p", text: "问：源站用自签证书打不开怎么办？\n答：NexHub 对自签证书已经默认容忍（badCertificateCallback 总是放行），无需手动处理。若仍打不开，多半是网络/DNS/代理问题，而非证书。" },
             { type: "p", text: "问：「恢复默认网络设置」会不会丢我的源和收藏？\n答：不会。它只重置网络配置、清空 DNS 缓存与源级覆盖，源、收藏、历史、下载都不受影响。" },
@@ -1763,7 +1763,7 @@ window.CONTENT = {
           id: "net-ech",
           title: "8. ECH",
           blocks: [
-            { type: "callout", variant: "warn", text: "Now wired: ECH is driven by a built-in native engine (OpenSSL) and takes effect for direct HTTPS — no external proxy needed. Off Android or when the native lib is absent, it auto-degrades to direct, without affecting other features." },
+            { type: "callout", variant: "warn", text: "Now wired: ECH is driven by a built-in native engine (OpenSSL) and takes effect for direct HTTPS — no external proxy needed. Now shipped with Android (three ABIs: arm64-v8a / armeabi-v7a / x86_64) and the Windows desktop build; macOS / Linux fall back to direct for now, without affecting other features." },
             { type: "p", text: "ECH (Encrypted Client Hello) is a TLS extension that encrypts the SNI, so observers can't even see 'which domain you're visiting'. It goes further than skip-SNI alone: even the SNI content is hidden from network intermediaries." },
             { type: "table", rows: [
               { k: "Enable ECH", v: "Switch, off by default." },
@@ -1839,7 +1839,7 @@ window.CONTENT = {
           title: "12. FAQ",
           blocks: [
             { type: "p", text: "Q: I changed the proxy — why does the in-app browser / web view still not use it?\nA: The web view uses the native stack and is not affected by the global HttpClient override. The proxy only applies to Dart-side HTTP traffic like covers, downloads, sync and source scraping." },
-            { type: "p", text: "Q: Does ECH work now?\nA: Yes. ECH is driven by a built-in native engine and takes effect for direct HTTPS, with app-level / per-source / Bangumi scopes; off Android or without the native lib it auto-degrades to direct, leaving normal sites unaffected." },
+            { type: "p", text: "Q: Does ECH work now?\nA: Yes. ECH is driven by a built-in native engine and takes effect for direct HTTPS, with app-level / per-source / Bangumi scopes; now shipped with Android (three ABIs: arm64-v8a / armeabi-v7a / x86_64) and the Windows desktop build; macOS / Linux fall back to direct for now, leaving normal sites unaffected." },
             { type: "p", text: "Q: Where is the proxy password stored? Is it safe?\nA: In the system secure storage (flutter_secure_storage), not in the network config JSON, so it won't leak in plain text via source files or backups." },
             { type: "p", text: "Q: A source uses a self-signed certificate and won't open — what do I do?\nA: NexHub already tolerates self-signed certs by default (badCertificateCallback always allows). If it still won't open, it's almost certainly a network/DNS/proxy issue, not a certificate one." },
             { type: "p", text: "Q: Does 'Reset to defaults' delete my sources and favorites?\nA: No. It only resets the network config, clears the DNS cache and per-source overrides. Sources, favorites, history and downloads are untouched." },
@@ -2233,7 +2233,7 @@ window.CONTENT = {
         },
         {
           "k": "network.ech",
-          "v": "ECH 覆盖（如 { \"enabled\": true, \"configs\": [...] }）。由内置原生引擎驱动，对直连 HTTPS 真实生效；作用域分应用级 / 源级 / Bangumi 专用，非 Android 自动降级。"
+          "v": "ECH 覆盖（如 { \"enabled\": true, \"configs\": [...] }）。由内置原生引擎驱动，对直连 HTTPS 真实生效；作用域分应用级 / 源级 / Bangumi 专用；当前随 Android（三架构）与 Windows 桌面端打包，macOS / Linux 暂未打包原生库自动降级。"
         },
         {
           "k": "comments.provider / routes / selectors",
@@ -2870,7 +2870,7 @@ window.CONTENT = {
         },
         {
           "k": "network.ech",
-          "v": "ECH override (e.g. { \"enabled\": true, \"configs\": [...] }). Driven by a built-in native engine; takes effect for direct HTTPS. Scopes: app-level / per-source / Bangumi; auto-degrades off Android."
+          "v": "ECH override (e.g. { \"enabled\": true, \"configs\": [...] }). Driven by a built-in native engine; takes effect for direct HTTPS. Scopes: app-level / per-source / Bangumi; now shipped with Android (three ABIs) and the Windows desktop build; macOS / Linux fall back to direct for now."
         },
         {
           "k": "comments.provider / routes / selectors",
