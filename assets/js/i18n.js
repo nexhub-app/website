@@ -211,7 +211,8 @@ window.CONTENT = {
       { icon: "🔞", title: "年龄分级体系", desc: "源可声明年龄分级；18+ 源默认隐藏，可在设置中手动开启，保护未成年人。" },
       { icon: "🧭", title: "新手引导", desc: "首次启动 6 步引导：添加源、关联 Bangumi、隐私与合规、主题与语言、授予权限。" },
       { icon: "💻", title: "跨平台", desc: "同一套 Flutter 代码覆盖 Android / iOS / Windows / macOS / Linux。" },
-      { icon: "🌟", title: "开源免费", desc: "代码公开、无广告、无内购，隐私友好。" }
+      { icon: "🌟", title: "开源免费", desc: "代码公开、无广告、无内购，隐私友好。" },
+      { icon: "🎨", title: "界面个性化", desc: "全局字体设置（跟随系统 / 三款内置字体 / 自定义导入）与详情页外观自定义（封面强调色 + 模糊背景），应用观感由你定。" }
     ],
     en: [
       { icon: "🧩", title: "All-in-One", desc: "Anime / manga / novel / video in a single app, with unified search, favorites and history." },
@@ -230,7 +231,8 @@ window.CONTENT = {
       { icon: "🔞", title: "Age Rating System", desc: "Sources can declare an age rating; 18+ sources are hidden by default and can be enabled in Settings — protecting minors." },
       { icon: "🧭", title: "Onboarding", desc: "A 6-step first-run guide: add sources, link Bangumi, privacy & compliance, theme & language, grant permissions." },
       { icon: "💻", title: "Cross-Platform", desc: "One Flutter codebase across Android / iOS / Windows / macOS / Linux." },
-      { icon: "🌟", title: "Open & Free", desc: "Public code, no ads, no in-app purchases, privacy friendly." }
+      { icon: "🌟", title: "Open & Free", desc: "Public code, no ads, no in-app purchases, privacy friendly." },
+      { icon: "🎨", title: "UI Personalization", desc: "Global font setting (system / three built-in fonts / custom import) and detail-page appearance (cover accent color + blurred backdrop) — make the app look yours." }
     ]
   },
   downloads: {
@@ -251,7 +253,7 @@ window.CONTENT = {
     channels: {
       repo: "https://github.com/nexhub-app/nexhub",
       stableTag: "v2.0.3",
-      betaTag: "v3.0.0-beta.2",
+      betaTag: "v3.0.0-beta.3",
       mirror: "https://ghfast.top/"
     }
   },
@@ -1555,16 +1557,16 @@ window.CONTENT = {
         },
         {
           id: "net-ech",
-          title: "八、ECH（实验性）",
+          title: "八、ECH",
           blocks: [
-            { type: "callout", variant: "warn", text: "实验性 · 诚实的限制：受 Dart TLS 栈（BoringSSL 封装）限制，ECH 在运行时暂未接通，当前版本实际不生效。" },
+            { type: "callout", variant: "warn", text: "现已接通：ECH 由内置原生引擎（OpenSSL）驱动，对直连 HTTPS 真实生效，不再依赖外部代理；非 Android 或缺失原生库时自动降级为直连，不影响其他功能。" },
             { type: "p", text: "ECH（Encrypted Client Hello，加密客户端问候）是 TLS 的一个扩展，把 SNI 加密，让旁观者连「你在访问哪个域名」都看不到。它比单纯的免 SNI 更进一步：连 SNI 内容也对网络中间人不可见。" },
             { type: "table", rows: [
               { k: "启用 ECH", v: "开关，默认关闭。" },
               { k: "ECH 配置列表", v: "Base64 编码的 ECH 配置字符串。" }
             ] },
-            { type: "p", text: "为什么是实验性：Dart 的 TLS 栈没有暴露 ECH 的 API，社区也没有可用插件。所以这一块的 UI 和持久化是完整的（你能填、能存），但运行时实际不生效——开与不开对当前版本没有区别。" },
-            { type: "p", text: "当前建议：受限站点请优先使用 SNI（免 SNI / 自定义值）+ Hosts 组合，或经支持 ECH 的本地代理内核（手动代理）。ECH 开关是为将来 Dart/Flutter 支持时预留的，届时无需改配置即可生效。" }
+            { type: "p", text: "作用域分三档：应用级（接管任意 https 域，不支持 ECH 的站点由原生侧逐域自适应回落，不会搞断正常站点）、源级（只接管该源 site.baseUrl 的 host，可在源 JSON network.ech 或 UI 覆盖单独开关）、Bangumi 专用。" },
+            { type: "p", text: "当前建议：受限站点仍可用 SNI（免 SNI / 自定义值）+ Hosts 组合作为兜底；ECH 已实装，无需再借助外部代理内核。" }
           ]
         },
         {
@@ -1633,7 +1635,7 @@ window.CONTENT = {
           title: "十二、常见疑问",
           blocks: [
             { type: "p", text: "问：我改了代理，为什么内置浏览器 / 网页视图还是不走代理？\n答：网页视图走原生栈，不受全局 HttpClient 覆盖影响。代理只对封面、下载、同步、源抓取等 Dart 侧 HTTP 流量生效。" },
-            { type: "p", text: "问：ECH 我开了为什么不生效？\n答：ECH 是实验性功能。Dart 的 TLS 栈没暴露 ECH API，运行时实际不生效。UI 和存储是预留的，等底层支持后才会真正起作用。" },
+            { type: "p", text: "问：ECH 现在生效吗？\n答：生效。ECH 由内置原生引擎驱动，对直连 HTTPS 真实生效，作用域分应用级 / 源级 / Bangumi 专用；非 Android 或缺失原生库时自动降级为直连，正常站点不受影响。" },
             { type: "p", text: "问：代理密码存哪了？安全吗？\n答：存在系统安全存储（flutter_secure_storage），不写入网络配置 JSON，不会随源文件或备份明文外泄。" },
             { type: "p", text: "问：源站用自签证书打不开怎么办？\n答：NexHub 对自签证书已经默认容忍（badCertificateCallback 总是放行），无需手动处理。若仍打不开，多半是网络/DNS/代理问题，而非证书。" },
             { type: "p", text: "问：「恢复默认网络设置」会不会丢我的源和收藏？\n答：不会。它只重置网络配置、清空 DNS 缓存与源级覆盖，源、收藏、历史、下载都不受影响。" },
@@ -1759,16 +1761,16 @@ window.CONTENT = {
         },
         {
           id: "net-ech",
-          title: "8. ECH (Experimental)",
+          title: "8. ECH",
           blocks: [
-            { type: "callout", variant: "warn", text: "Experimental — honest limitation: limited by the Dart TLS stack (BoringSSL wrapper), ECH does NOT take effect at runtime in the current version." },
+            { type: "callout", variant: "warn", text: "Now wired: ECH is driven by a built-in native engine (OpenSSL) and takes effect for direct HTTPS — no external proxy needed. Off Android or when the native lib is absent, it auto-degrades to direct, without affecting other features." },
             { type: "p", text: "ECH (Encrypted Client Hello) is a TLS extension that encrypts the SNI, so observers can't even see 'which domain you're visiting'. It goes further than skip-SNI alone: even the SNI content is hidden from network intermediaries." },
             { type: "table", rows: [
               { k: "Enable ECH", v: "Switch, off by default." },
               { k: "ECH config list", v: "A base64-encoded ECH config string." }
             ] },
-            { type: "p", text: "Why experimental: the Dart TLS stack doesn't expose an ECH API, and there's no community plugin. So the UI and persistence are complete (you can fill it in and save), but at runtime it does NOT take effect — on or off makes no difference in the current version." },
-            { type: "p", text: "Current recommendation: for restricted sites, prefer SNI (skip-SNI / custom value) + Hosts, or go through a local proxy core that supports ECH (manual proxy). The ECH switch is reserved for when Dart/Flutter adds support — it will then work without changing your config." }
+            { type: "p", text: "Three scopes: app-level (covers any https domain; sites without ECH support fall back per-domain by the native side, so normal sites aren't broken), per-source (only the source's site.baseUrl host; toggle via source JSON network.ech or the UI override), and Bangumi-specific." },
+            { type: "p", text: "Current recommendation: SNI (skip-SNI / custom value) + Hosts still works as a fallback for restricted sites; ECH is now wired and no longer needs an external proxy core." }
           ]
         },
         {
@@ -1837,7 +1839,7 @@ window.CONTENT = {
           title: "12. FAQ",
           blocks: [
             { type: "p", text: "Q: I changed the proxy — why does the in-app browser / web view still not use it?\nA: The web view uses the native stack and is not affected by the global HttpClient override. The proxy only applies to Dart-side HTTP traffic like covers, downloads, sync and source scraping." },
-            { type: "p", text: "Q: I enabled ECH — why doesn't it work?\nA: ECH is experimental. The Dart TLS stack doesn't expose an ECH API, so it doesn't take effect at runtime. The UI and storage are reserved for when the underlying support lands." },
+            { type: "p", text: "Q: Does ECH work now?\nA: Yes. ECH is driven by a built-in native engine and takes effect for direct HTTPS, with app-level / per-source / Bangumi scopes; off Android or without the native lib it auto-degrades to direct, leaving normal sites unaffected." },
             { type: "p", text: "Q: Where is the proxy password stored? Is it safe?\nA: In the system secure storage (flutter_secure_storage), not in the network config JSON, so it won't leak in plain text via source files or backups." },
             { type: "p", text: "Q: A source uses a self-signed certificate and won't open — what do I do?\nA: NexHub already tolerates self-signed certs by default (badCertificateCallback always allows). If it still won't open, it's almost certainly a network/DNS/proxy issue, not a certificate one." },
             { type: "p", text: "Q: Does 'Reset to defaults' delete my sources and favorites?\nA: No. It only resets the network config, clears the DNS cache and per-source overrides. Sources, favorites, history and downloads are untouched." },
@@ -2219,7 +2221,7 @@ window.CONTENT = {
       "id": "advanced",
       "title": "十四、进阶：源级网络 / 评论 / 登录（v0.4.0）",
       "group": "advanced",
-      "body": "v0.4.0 起，源还能声明一些「站点级」能力，让 App 在不改引擎的前提下适配更复杂的站点：\n· network（可选）：源级网络覆盖。子键 proxy / dns / hosts / sni / ech，逐项选「继承全局」或「单独覆盖」。缺省即继承全局设置，非法值只告警、不会让源无法启用。其中 sni 对直连 HTTPS 真实生效（defaultSni 填 - 即免 SNI，配合 hosts 钉 IP 可绕过按 SNI 的封锁）；ech 受 Dart TLS 栈限制运行时暂未接通，仅作预留。\n· comments（可选）：声明该源的评论能力。provider 默认 source（评论来自源站）；routes 声明 list / replies / post / reply / like / report 等路由（未声明的按钮不渲染）；selectors 用同一套 JSONPath/CSS/XPath 引擎抽取内容。\n· 登录（可选，声明在 comments.login 段）：三种方式，可组合——\n  1) WebView 登录：login.url 填登录页地址，App 用 WebView 打开让用户登录，成功后捕获会话 Cookie 存本地。\n  2) Cookie 登录：login.checkCookie 填「代表已登录的 Cookie 键名」，App 据此快速判定；也可在 site.cookies 直接粘贴整段会话 Cookie，全源请求自动携带。\n  3) API Key 登录：login.sendTokenAs 设为 \"key\"，用户在「源详情 → 登录」面板粘贴密钥，App 存本地密钥库，并在受保护请求上追加 Authorization: <authScheme> <密钥>（默认前缀 Key）。适合「登录给的是 access_token，但收藏 / 个人页却要单独 API Key」的站点（部分站点的新版 API 明确要求 Key <api_key>，而非 Bearer）。\n· 令牌携带方式 login.sendTokenAs：null（只靠 Cookie）/ \"bearer\"（Authorization: Bearer <checkCookie 对应 Cookie 值>）/ \"key\"（Authorization: <authScheme> <手动密钥>，即 API Key 登录）。\n· 登录态二次确认：login.checkUrl + login.loggedInSelector（GET checkUrl，选择器命中非空即视为登录有效）。\n凭据只存本地，不会上传；未声明登录时，该源按「只读 / 免登录」处理。",
+      "body": "v0.4.0 起，源还能声明一些「站点级」能力，让 App 在不改引擎的前提下适配更复杂的站点：\n· network（可选）：源级网络覆盖。子键 proxy / dns / hosts / sni / ech，逐项选「继承全局」或「单独覆盖」。缺省即继承全局设置，非法值只告警、不会让源无法启用。其中 sni 对直连 HTTPS 真实生效（defaultSni 填 - 即免 SNI，配合 hosts 钉 IP 可绕过按 SNI 的封锁）；ech 由内置原生引擎驱动，作用域分应用级 / 源级 / Bangumi 专用（对直连 HTTPS 真实生效）。\n· comments（可选）：声明该源的评论能力。provider 默认 source（评论来自源站）；routes 声明 list / replies / post / reply / like / report 等路由（未声明的按钮不渲染）；selectors 用同一套 JSONPath/CSS/XPath 引擎抽取内容。\n· 登录（可选，声明在 comments.login 段）：三种方式，可组合——\n  1) WebView 登录：login.url 填登录页地址，App 用 WebView 打开让用户登录，成功后捕获会话 Cookie 存本地。\n  2) Cookie 登录：login.checkCookie 填「代表已登录的 Cookie 键名」，App 据此快速判定；也可在 site.cookies 直接粘贴整段会话 Cookie，全源请求自动携带。\n  3) API Key 登录：login.sendTokenAs 设为 \"key\"，用户在「源详情 → 登录」面板粘贴密钥，App 存本地密钥库，并在受保护请求上追加 Authorization: <authScheme> <密钥>（默认前缀 Key）。适合「登录给的是 access_token，但收藏 / 个人页却要单独 API Key」的站点（部分站点的新版 API 明确要求 Key <api_key>，而非 Bearer）。\n· 令牌携带方式 login.sendTokenAs：null（只靠 Cookie）/ \"bearer\"（Authorization: Bearer <checkCookie 对应 Cookie 值>）/ \"key\"（Authorization: <authScheme> <手动密钥>，即 API Key 登录）。\n· 登录态二次确认：login.checkUrl + login.loggedInSelector（GET checkUrl，选择器命中非空即视为登录有效）。\n凭据只存本地，不会上传；未声明登录时，该源按「只读 / 免登录」处理。",
       "fields": [
         {
           "k": "network",
@@ -2231,7 +2233,7 @@ window.CONTENT = {
         },
         {
           "k": "network.ech",
-          "v": "ECH 覆盖（如 { \"enabled\": true, \"configs\": [...] }）。受 Dart TLS 栈限制运行时暂未接通，UI/存储预留，等底层支持后生效。"
+          "v": "ECH 覆盖（如 { \"enabled\": true, \"configs\": [...] }）。由内置原生引擎驱动，对直连 HTTPS 真实生效；作用域分应用级 / 源级 / Bangumi 专用，非 Android 自动降级。"
         },
         {
           "k": "comments.provider / routes / selectors",
@@ -2475,7 +2477,7 @@ window.CONTENT = {
         },
         {
           "k": "network",
-          "v": "可选。源级网络覆盖：proxy / dns / hosts / sni / ech；缺省继承全局，非法值只告警不阻断启用。（其中 sni 对直连 HTTPS 真实生效，ech 运行时暂未接通）"
+          "v": "可选。源级网络覆盖：proxy / dns / hosts / sni / ech；缺省继承全局，非法值只告警不阻断启用。（sni 与 ech 均对直连 HTTPS 真实生效）"
         },
         {
           "k": "announcement",
@@ -2856,7 +2858,7 @@ window.CONTENT = {
       "id": "advanced",
       "title": "14. Advanced: source-level network / comments / login (v0.4.0)",
       "group": "advanced",
-      "body": "Since v0.4.0 a source can also declare 'site-level' capabilities so the app adapts to harder sites without engine changes:\n· network (optional): source-level network override. Sub-keys proxy / dns / hosts / sni / ech, each 'inherit global' or a specific override. Defaults to global; invalid values only warn and never disable the source. Of these, sni is runtime-effective for direct HTTPS (defaultSni "-" = skip SNI; combined with hosts pinning an IP it bypasses SNI-based blocking); ech is reserved — limited by the Dart TLS stack, not yet wired at runtime.\n· comments (optional): declares the source's comment capability. provider defaults to source; routes declares list / replies / post / reply / like / report (undeclared buttons are not rendered); selectors reuse the same JSONPath/CSS/XPath engine.\n· login (optional, declared in comments.login): three ways, combinable —\n  1) WebView login: set login.url to the login page; the app opens it in a WebView and captures the session cookie locally after login.\n  2) Cookie login: set login.checkCookie to the cookie key that means 'logged in' for a fast check; you can also paste a whole session cookie into site.cookies and every source request carries it.\n  3) API key login: set login.sendTokenAs to \"key\"; the user pastes the key in Source details → Login, the app stores it in the local key store and appends Authorization: <authScheme> <key> to protected requests (prefix defaults to Key). For sites where login yields an access_token but favorites/profile need a separate API key (some sites' newer APIs explicitly require Key <api_key>, not Bearer).\n· Token carrier login.sendTokenAs: null (cookie only) / \"bearer\" (Authorization: Bearer <cookie value of checkCookie>) / \"key\" (Authorization: <authScheme> <manual key>, i.e. API key login).\n· Secondary session check: login.checkUrl + login.loggedInSelector (GET checkUrl; a non-empty selector match means the session is valid).\nCredentials stay local only; without a login declaration the source is treated as read-only / no-login.",
+      "body": "Since v0.4.0 a source can also declare 'site-level' capabilities so the app adapts to harder sites without engine changes:\n· network (optional): source-level network override. Sub-keys proxy / dns / hosts / sni / ech, each 'inherit global' or a specific override. Defaults to global; invalid values only warn and never disable the source. Of these, sni is runtime-effective for direct HTTPS (defaultSni "-" = skip SNI; combined with hosts pinning an IP it bypasses SNI-based blocking); ech is driven by a built-in native engine with app-level / per-source / Bangumi scopes.\n· comments (optional): declares the source's comment capability. provider defaults to source; routes declares list / replies / post / reply / like / report (undeclared buttons are not rendered); selectors reuse the same JSONPath/CSS/XPath engine.\n· login (optional, declared in comments.login): three ways, combinable —\n  1) WebView login: set login.url to the login page; the app opens it in a WebView and captures the session cookie locally after login.\n  2) Cookie login: set login.checkCookie to the cookie key that means 'logged in' for a fast check; you can also paste a whole session cookie into site.cookies and every source request carries it.\n  3) API key login: set login.sendTokenAs to \"key\"; the user pastes the key in Source details → Login, the app stores it in the local key store and appends Authorization: <authScheme> <key> to protected requests (prefix defaults to Key). For sites where login yields an access_token but favorites/profile need a separate API key (some sites' newer APIs explicitly require Key <api_key>, not Bearer).\n· Token carrier login.sendTokenAs: null (cookie only) / \"bearer\" (Authorization: Bearer <cookie value of checkCookie>) / \"key\" (Authorization: <authScheme> <manual key>, i.e. API key login).\n· Secondary session check: login.checkUrl + login.loggedInSelector (GET checkUrl; a non-empty selector match means the session is valid).\nCredentials stay local only; without a login declaration the source is treated as read-only / no-login.",
       "fields": [
         {
           "k": "network",
@@ -2868,7 +2870,7 @@ window.CONTENT = {
         },
         {
           "k": "network.ech",
-          "v": "ECH override (e.g. { \"enabled\": true, \"configs\": [...] }). Reserved — limited by the Dart TLS stack, not yet wired at runtime; takes effect once the stack supports it."
+          "v": "ECH override (e.g. { \"enabled\": true, \"configs\": [...] }). Driven by a built-in native engine; takes effect for direct HTTPS. Scopes: app-level / per-source / Bangumi; auto-degrades off Android."
         },
         {
           "k": "comments.provider / routes / selectors",
@@ -3112,7 +3114,7 @@ window.CONTENT = {
         },
         {
           "k": "network",
-          "v": "Optional. Source-level network override: proxy / dns / hosts / sni / ech; inherits global by default, invalid values only warn. (sni is runtime-effective for direct HTTPS; ech is not yet wired at runtime)"
+          "v": "Optional. Source-level network override: proxy / dns / hosts / sni / ech; inherits global by default, invalid values only warn. (sni and ech are both runtime-effective for direct HTTPS)"
         },
         {
           "k": "announcement",
