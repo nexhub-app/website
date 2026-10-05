@@ -63,7 +63,7 @@
         return {
           id: s.id,
           name: s.name,
-          type: s.type || s.category, // manga / anime / novel（网页筛选标签）
+          type: s.type || s.category, // manga / media / novel（网页筛选标签）
           version: s.version,
           baseUrl: s.baseUrl,
           builtin: true, // 源库中的源均可导入
