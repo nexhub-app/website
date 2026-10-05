@@ -252,7 +252,7 @@ window.CONTENT = {
     ],
     channels: {
       repo: "https://github.com/nexhub-app/nexhub",
-      stableTag: "v2.0.3",
+      stableTag: "v3.0.0",
       betaTag: "v3.0.0-beta.4",
       mirror: "https://ghfast.top/"
     }
@@ -2311,7 +2311,7 @@ window.CONTENT = {
       "id": "collection",
       "title": "十六、采集 API 接口说明",
       "group": "advanced",
-      "body": "「采集 API」指的是一个源对外暴露的「抓取接口集合」——也就是 routes 里定义的一个个端点（search / latest / detail / video / images …），以及每个端点用 selectors 或 overrides 声明的抽取规则。App 的引擎按这套约定逐个调用端点、把站点数据变成统一结构。\n\n端点与覆盖层：\n· 每个端点先在 routes 里定义 url（支持 {keyword}/{page}/{id}/{url}/{detailUrl} 占位符）、method、responseType、headers、params。\n· 占位符数值运算：数值型占位符支持 {page-1} / {page+1} / {page*30-30}（只支持 + - * / 后接非负整数，按书写顺序从左到右求值，不做优先级）；引擎统一从 1 开始计数，站点从 0 开始用 -1，JSON API 的 offset 分页用 {page*30-30} 一次算出偏移量；非数值占位符（如关键词）不处理，结果为负则夹到 0。\n· 抽取方式由 parser.overrides.<端点> 决定：builtin / xpath / jsonpath / css / script / webview / webview-html。\n· 声明式端点用 selectors.<端点> 指定选择器；脚本端点用 overrides.<端点>.script 提供函数。\n\n异步协议 __meta：当端点需要先请求另一个接口才能解析（例如视频先调 API 拿真实地址），脚本返回 { __meta:true, __fetchUrl, __processor }。引擎会先预取 __fetchUrl，再把结果交给 __processor 同步处理。这是沙箱里唯一安全的异步通道。\n\n常用端点一览：search（搜索）、latest（最新）、explore / category（发现/分类）、detail（详情+目录）、episodes（剧集列表）、video（视频地址）、chapters（漫画话列表）、images（漫画图片）、week（周更表）。具体字段名见各模块小节与「源字段完整参考」。",
+      "body": "「采集 API」指的是一个源对外暴露的「抓取接口集合」——也就是 routes 里定义的一个个端点（search / latest / detail / video / images …），以及每个端点用 selectors 或 overrides 声明的抽取规则。App 的引擎按这套约定逐个调用端点、把站点数据变成统一结构。\n\n端点与覆盖层：\n· 每个端点先在 routes 里定义 url（支持 {keyword}/{page}/{id}/{url}/{detailUrl} 占位符）、method、responseType、headers、params。\n· 占位符数值运算：数值型占位符支持 {page-1} / {page+1} / {page*30-30}（只支持 + - * / 后接非负整数，按书写顺序从左到右求值，不做优先级）；引擎统一从 1 开始计数，站点从 0 开始用 -1，JSON API 的 offset 分页用 {page*30-30} 一次算出偏移量；非数值占位符（如关键词）不处理，结果为负则夹到 0。\n· 抽取方式由 parser.overrides.<端点> 决定：builtin / xpath / jsonpath / css / script / webview / webview-html。\n· 声明式端点用 selectors.<端点> 指定选择器；脚本端点用 overrides.<端点>.script 提供函数。\n\n异步协议 __meta：当端点需要先请求另一个接口才能解析（例如视频先调 API 拿真实地址），脚本返回 { __meta:true, __fetchUrl, __processor }。引擎会先预取 __fetchUrl，再把结果交给 __processor 同步处理。这是沙箱里唯一安全的异步通道。\n\n常用端点一览：search（搜索）、latest（最新）、explore / category（发现/分类）、detail（详情+目录）、episodes（剧集列表）、video（视频地址）、chapters（漫画话列表）、images（漫画图片）、week（周更表）。具体字段名见各模块小节与「源字段完整参考」。\n\n路由 body 与可选参数：端点可在 routes 里声明 body（POST/PUT 的请求体）与 headers；路径占位符支持可选写法 {k?}（命中时取该段、未命中则整段省去），便于适配「有时带分类、有时不带」的站点路由。",
       "fields": [
         {
           "k": "routes.<name>",
