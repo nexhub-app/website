@@ -252,7 +252,7 @@ window.CONTENT = {
     ],
     channels: {
       repo: "https://github.com/nexhub-app/nexhub",
-      stableTag: "v3.0.0",
+      stableTag: "v3.1.0",
       betaTag: "v3.0.0-beta.4",
       mirror: "https://ghfast.top/"
     }
@@ -327,7 +327,7 @@ window.CONTENT = {
       ],
       "howto": [
         "本地阅读：在「书架 → 本地」导入 TXT / EPUB 文件或文件夹，离线也能看",
-        "在「源仓库」导入小说源（如笔趣阁、八一中文）",
+        "在「源仓库」导入小说源（源库订阅挑选或导入源 JSON）",
         "进入「小说」分类，搜索或浏览书名",
         "点开书籍 → 自动拉取目录",
         "选择章节开始阅读：单击按热区翻页，左侧 1/3 上下滑动调亮度",
@@ -499,10 +499,14 @@ window.CONTENT = {
         "视频字幕实时翻译：字幕面板开关（跨会话记忆），逐句翻译，无字幕时截帧画面 OCR 兜底",
         "译文底部覆盖层可选显示原文，按语言持久缓存",
         "翻译异常归一处理，瞬时抖动不再丢句",
-        "视频整片离线字幕翻译 + 双语导出：整片字幕离线翻完，可导出双语字幕文件"
+        "视频整片离线字幕翻译 + 双语导出：整片字幕离线翻完，可导出双语字幕文件",
+        "逐帧步进：暂停时上一帧 / 下一帧按容器真实帧率精确走帧，桌面逗号 / 句号快捷键",
+        "起播自动全屏：起播即沉浸横屏，切集 / 连播每集重新全屏（画中画与断流自愈不误触发）",
+        "播放失败页返回栏：解析失败 / 重连耗尽可退出，不再卡在错误页",
+        "嗅探候选排序选优：真直链优先、广告占位不再冒充正片；无头嗅探接入网络层被动捕获，首嗅探放宽至 15s"
       ],
       "howto": [
-        "导入影视 / 动漫源（如 233动漫、花子动漫）",
+        "导入影视 / 动漫源（源库订阅挑选或导入源 JSON）",
         "进入「影视 / 动漫」分类浏览或搜索",
         "点开番剧 → 选集",
         "播放页：单击显隐控制栏；双击中间播放 / 暂停、双击左右快退 / 快进；长按临时加速；左半屏竖滑亮度、右半屏竖滑音量；横滑定位",
@@ -520,6 +524,10 @@ window.CONTENT = {
         {
           "key": "⏪ ⏩ 快退 / 快进",
           "desc": "双击画面左半屏快退 10 秒、右半屏快进 10 秒。"
+        },
+        {
+          "key": "🎞 逐帧步进",
+          "desc": "暂停时中央播放键两侧「上一帧 / 下一帧」精确走帧；桌面键盘逗号 = 上一帧、句号 = 下一帧（播放中按下先暂停再走帧）。"
         },
         {
           "key": "⚡ 长按加速",
@@ -909,7 +917,7 @@ window.CONTENT = {
       ],
       "howto": [
         "Local reading: import TXT / EPUB files or folders via Bookshelf → Local to read offline",
-        "Import a novel source in Source Repository (e.g. 笔趣阁, 八一中文)",
+        "Import a novel source in Source Repository (subscribe from the source list or import a source JSON)",
         "Open the Novel category, search or browse titles",
         "Open a book → table of contents is fetched",
         "Pick a chapter: tap tap-zones to turn pages; swipe up/down on the left 1/3 to adjust brightness",
@@ -1081,10 +1089,14 @@ window.CONTENT = {
         "Realtime subtitle translation: a subtitle-panel toggle (remembered across sessions) translates line by line; frame OCR as a fallback when no subtitle track",
         "Translated overlay optionally shows the original text, cached per language",
         "Normalized translation errors so brief network blips no longer drop lines",
-        "Whole-video offline subtitle translation + bilingual export: translate an entire video offline and export bilingual subtitles"
+        "Whole-video offline subtitle translation + bilingual export: translate an entire video offline and export bilingual subtitles",
+        "Frame stepping: previous / next frame with container-accurate rate while paused; comma / period shortcuts on desktop",
+        "Auto-fullscreen on playback start: immersive landscape on play, re-applied per episode on switch / auto-next (PiP and reconnect self-heal exempt)",
+        "Back bar on playback error pages: exit after a parse failure or exhausted retries instead of being stuck",
+        "Sniffing candidate ranking: real links win over ad placeholders; headless sniffing adds passive network-layer capture and the first-sniff budget is relaxed to 15 s"
       ],
       "howto": [
-        "Import a video/anime source (e.g. 233动漫, 花子动漫)",
+        "Import a video/anime source (subscribe from the source list or import a source JSON)",
         "Open the Video/Anime category to browse or search",
         "Open a show → pick an episode",
         "In player: tap to toggle UI; double-tap center play/pause, left/right rewind/forward; long-press to boost; left-half swipe brightness, right-half volume; swipe to seek",
@@ -1102,6 +1114,10 @@ window.CONTENT = {
         {
           "key": "⏪ ⏩ Rewind / Forward",
           "desc": "Double-tap the left half to rewind 10 s, the right half to forward 10 s."
+        },
+        {
+          "key": "🎞 Frame stepping",
+          "desc": "While paused, use Previous / Next frame buttons beside the center play button for frame-accurate stepping; comma = previous frame, period = next frame on desktop (pauses first if playing)."
         },
         {
           "key": "⚡ Long-press boost",
@@ -2311,7 +2327,7 @@ window.CONTENT = {
       "id": "collection",
       "title": "十六、采集 API 接口说明",
       "group": "advanced",
-      "body": "「采集 API」指的是一个源对外暴露的「抓取接口集合」——也就是 routes 里定义的一个个端点（search / latest / detail / video / images …），以及每个端点用 selectors 或 overrides 声明的抽取规则。App 的引擎按这套约定逐个调用端点、把站点数据变成统一结构。\n\n端点与覆盖层：\n· 每个端点先在 routes 里定义 url（支持 {keyword}/{page}/{id}/{url}/{detailUrl} 占位符）、method、responseType、headers、params。\n· 占位符数值运算：数值型占位符支持 {page-1} / {page+1} / {page*30-30}（只支持 + - * / 后接非负整数，按书写顺序从左到右求值，不做优先级）；引擎统一从 1 开始计数，站点从 0 开始用 -1，JSON API 的 offset 分页用 {page*30-30} 一次算出偏移量；非数值占位符（如关键词）不处理，结果为负则夹到 0。\n· 抽取方式由 parser.overrides.<端点> 决定：builtin / xpath / jsonpath / css / script / webview / webview-html。\n· 声明式端点用 selectors.<端点> 指定选择器；脚本端点用 overrides.<端点>.script 提供函数。\n\n异步协议 __meta：当端点需要先请求另一个接口才能解析（例如视频先调 API 拿真实地址），脚本返回 { __meta:true, __fetchUrl, __processor }。引擎会先预取 __fetchUrl，再把结果交给 __processor 同步处理。这是沙箱里唯一安全的异步通道。\n\n常用端点一览：search（搜索）、latest（最新）、explore / category（发现/分类）、detail（详情+目录）、episodes（剧集列表）、video（视频地址）、chapters（漫画话列表）、images（漫画图片）、week（周更表）。具体字段名见各模块小节与「源字段完整参考」。\n\n路由 body 与可选参数：端点可在 routes 里声明 body（POST/PUT 的请求体）与 headers；路径占位符支持可选写法 {k?}（命中时取该段、未命中则整段省去），便于适配「有时带分类、有时不带」的站点路由。",
+      "body": "「采集 API」指的是一个源对外暴露的「抓取接口集合」——也就是 routes 里定义的一个个端点（search / latest / detail / video / images …），以及每个端点用 selectors 或 overrides 声明的抽取规则。App 的引擎按这套约定逐个调用端点、把站点数据变成统一结构。\n\n端点与覆盖层：\n· 每个端点先在 routes 里定义 url（支持 {keyword}/{page}/{id}/{url}/{detailUrl} 占位符）、method、responseType、headers、params。\n· 占位符数值运算：数值型占位符支持 {page-1} / {page+1} / {page*30-30}（只支持 + - * / 后接非负整数，按书写顺序从左到右求值，不做优先级）；引擎统一从 1 开始计数，站点从 0 开始用 -1，JSON API 的 offset 分页用 {page*30-30} 一次算出偏移量；非数值占位符（如关键词）不处理，结果为负则夹到 0。\n· 抽取方式由 parser.overrides.<端点> 决定：builtin / xpath / jsonpath / css / script / webview / webview-html。\n· 声明式端点用 selectors.<端点> 指定选择器；脚本端点用 overrides.<端点>.script 提供函数。\n\n异步协议 __meta：当端点需要先请求另一个接口才能解析（例如视频先调 API 拿真实地址），脚本返回 { __meta:true, __fetchUrl, __processor }。引擎会先预取 __fetchUrl，再把结果交给 __processor 同步处理。这是沙箱里唯一安全的异步通道。\n\n常用端点一览：search（搜索）、latest（最新）、explore / category（发现/分类）、detail（详情+目录）、episodes（剧集列表）、video（视频地址）、chapters（漫画话列表）、images（漫画图片）、week（周更表）。具体字段名见各模块小节与「源字段速查」。\n\n路由 body 与可选参数：端点可在 routes 里声明 body（POST/PUT 的请求体）与 headers；路径占位符支持可选写法 {k?}（命中时取该段、未命中则整段省去），便于适配「有时带分类、有时不带」的站点路由。",
       "fields": [
         {
           "k": "routes.<name>",
@@ -2379,7 +2395,7 @@ window.CONTENT = {
     },
     {
       "id": "fields",
-      "title": "二十一、源字段完整参考",
+      "title": "二十一、源字段速查",
       "group": "advanced",
       "body": "下面按「顶层字段 / site / parser / routes / 选择器 / 高级块」给出一份较完整的字段速查。除 id、name、type、site、parser 外，其余字段均可选；源模型会忽略未知键（如 author / lang / builtin），请勿把它们当功能字段使用。\n\n完整约束以仓库源码 lib/core/models/plugin_config.dart 为准，本表覆盖日常编写最常用的字段。",
       "fields": [
