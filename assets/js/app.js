@@ -149,21 +149,23 @@
     box.innerHTML = arr.map(function (d) {
       var btns = "";
       if (d.asset) {
-        var stable = releaseUrl(stableTag, d.asset);
+        // 卡片级 tag：平台包不在 stableTag 时（如鸿蒙预览版）单独指定
+        var cardTag = d.tag || stableTag;
+        var stable = releaseUrl(cardTag, d.asset);
         btns += '<a class="btn btn-primary" href="' + stable + '" target="_blank" rel="noopener">' +
           esc(dict["download.stable"]) + "</a>";
-        if (betaTag) {
+        if (betaTag && !d.tag) {
           btns += '<a class="btn btn-outline" href="' + releaseUrl(betaTag, d.asset) +
             '" target="_blank" rel="noopener">' + esc(dict["download.beta"]) + "</a>";
         }
-        if (mirror) {
+        if (mirror && !d.tag) {
           btns += '<a class="btn btn-outline" href="' + mirror + stable +
             '" target="_blank" rel="noopener">' + esc(dict["download.mirror"]) + "</a>";
         }
         if (d.alts && d.alts.length) {
           btns += '<div class="dl-alts">' + esc(dict["download.alts"]) + " " +
             d.alts.map(function (a) {
-              return '<a href="' + releaseUrl(stableTag, a) + '" target="_blank" rel="noopener">' + esc(a) + "</a>";
+              return '<a href="' + releaseUrl(cardTag, a) + '" target="_blank" rel="noopener">' + esc(a) + "</a>";
             }).join(" · ") + "</div>";
         }
       } else {
