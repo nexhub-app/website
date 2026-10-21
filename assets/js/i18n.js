@@ -196,13 +196,14 @@ window.CONTENT = {
   features: {
     zh: [
       { icon: "🧩", title: "四合一聚合", desc: "动漫 / 漫画 / 小说 / 影视 四种媒体集中在同一应用，统一搜索、收藏与历史。" },
-      { icon: "🔷", title: "鸿蒙版（预览）", desc: "HarmonyOS / OpenHarmony arm64 适配版：四合一聚合与源即插件架构完整移植，libmpv 播放、弹幕、画中画、Bangumi 同步与本地持久化全线可用；安装包为未签名 HAP，自行签名即可侧载。" },
+      { icon: "🔷", title: "鸿蒙版（正式支持）", desc: "HarmonyOS / OpenHarmony arm64 适配版：四合一聚合与源即插件架构完整移植，libmpv 播放、弹幕、画中画、离线朗读、投屏、音量键翻页与本地持久化全线可用；安装包为未签名 HAP，自行签名即可侧载。" },
       { icon: "🔌", title: "源即插件（共创式）", desc: "解析逻辑全部写在可导入的源文件里。社区自由编写、分享，应用只提供引擎。" },
       { icon: "📥", title: "一键导入源", desc: "在 App 内粘贴或导入源文件即可使用，无需更新应用；同名源按版本号自动升级。" },
       { icon: "🗂️", title: "本地内容导入", desc: "小说支持 TXT / EPUB，漫画支持 PDF / CBR / RAR / 7Z 等归档与整文件夹导入（Android 支持 SAF 文件夹），离线也能看。" },
       { icon: "📚", title: "漫画阅读器", desc: "五种阅读模式、缩放与滤镜、方向与点击区自定义，回上一话精确续读。" },
       { icon: "▶️", title: "视频播放 + 弹幕", desc: "基于 media_kit 的播放器，支持弹幕、多线路切换与画中画，追番更带感。" },
       { icon: "📖", title: "小说阅读器", desc: "字体、行距、主题、翻页等样式自由组合，支持 TTS 朗读与简繁转换，设置即时生效并持久保存。" },
+      { icon: "🆓", title: "内置免费翻译", desc: "无需配置 AI 也能翻译详情文本、小说与字幕：免费通道优先、失败自动回退 AI，并带熔断与本地缓存。" },
       { icon: "📊", title: "Bangumi 同步", desc: "一键将看番进度、收藏与评分同步到 Bangumi（bgm.tv），多端共享你的动画清单。" },
       { icon: "🌐", title: "网络配置", desc: "自定义代理、镜像站与请求头，应对部分站点被阻断或限流的情况。" },
       { icon: "💬", title: "收藏分组与评论", desc: "本地收藏支持分组、评分与备注评论，跨媒体统一管理你的追更清单。" },
@@ -217,13 +218,14 @@ window.CONTENT = {
     ],
     en: [
       { icon: "🧩", title: "All-in-One", desc: "Anime / manga / novel / video in a single app, with unified search, favorites and history." },
-      { icon: "🔷", title: "HarmonyOS (preview)", desc: "HarmonyOS / OpenHarmony arm64 port: the full all-in-one aggregation and source-as-plugin architecture, with libmpv playback, danmaku, PiP, Bangumi sync and local persistence. Ships as an unsigned HAP — sign it yourself and sideload." },
+      { icon: "🔷", title: "HarmonyOS (supported)", desc: "HarmonyOS / OpenHarmony arm64 port: the full all-in-one aggregation and source-as-plugin architecture, with libmpv playback, danmaku, PiP, offline TTS, casting, volume-key page turning and local persistence. Ships as an unsigned HAP — sign it yourself and sideload." },
       { icon: "🔌", title: "Source = Plugin", desc: "All parsing logic lives in importable source files. The community writes and shares them; the app only ships the engine." },
       { icon: "📥", title: "One-tap Import", desc: "Paste or import a source file in the app — no app update needed. Same-id sources auto-upgrade by version." },
       { icon: "🗂️", title: "Local Content Import", desc: "Novels in TXT / EPUB; manga from PDF, CBR, RAR, 7Z archives or whole folders (Android SAF supported). Read offline." },
       { icon: "📚", title: "Manga Reader", desc: "Five reading modes, zoom & filters, custom orientation and tap zones, precise resume at the last page." },
       { icon: "▶️", title: "Video + Danmaku", desc: "A media_kit based player with danmaku (bullet comments), multi-source switching and picture-in-picture." },
       { icon: "📖", title: "Novel Reader", desc: "Freely combine fonts, spacing, themes and page-turn styles; TTS read-aloud and simplified/traditional conversion. Settings apply instantly and persist." },
+      { icon: "🆓", title: "Built-in Free Translation", desc: "Translate detail text, novels and subtitles without any AI setup: free channel first with automatic AI fallback, plus circuit breaker and local caching." },
       { icon: "📊", title: "Bangumi Sync", desc: "One-tap sync your watch progress, collections and ratings to Bangumi (bgm.tv) — share your anime list across devices." },
       { icon: "🌐", title: "Network Config", desc: "Set custom proxies, mirrors and request headers to handle blocked or rate-limited sites." },
       { icon: "💬", title: "Favorites & Comments", desc: "Group, rate and annotate your local favorites; manage your tracking list across all media types." },
@@ -240,23 +242,23 @@ window.CONTENT = {
   downloads: {
     zh: [
       { id: "android", icon: "🤖", name: "Android", desc: "适用于手机与平板（Android 5.0+）。推荐 arm64-v8a 架构（绝大多数现代设备）；另提供 armeabi-v7a、x86_64 及通用 APK 备选。", btn: "下载 APK", asset: "app-arm64-v8a-release.apk", alts: ["app-armeabi-v7a-release.apk", "app-x86_64-release.apk", "app-release.apk"], note: "安装时需在系统设置中允许「未知来源」。" },
-      { id: "ios", icon: "🍎", name: "iOS", desc: "适用于 iPhone / iPad。", btn: "获取（TestFlight）", note: "通过 TestFlight 或自签安装；企业证书版请留意有效期。" },
+      { id: "ios", icon: "🍎", name: "iOS", desc: "适用于 iPhone / iPad（未签名 IPA）。", btn: "下载 IPA（未签名）", asset: "NexHub-ios.ipa", note: "未签名安装包：请用 AltStore / Sideloadly 等工具自签后侧载安装。" },
       { id: "windows", icon: "🪟", name: "Windows", desc: "Windows 10 / 11 桌面客户端。", btn: "下载 EXE / ZIP", asset: "NexHub-windows-x64.zip", note: "若被 SmartScreen 拦截，选择「仍要运行」。" },
       { id: "macos", icon: "🍏", name: "macOS", desc: "支持 Intel 与 Apple 芯片。", btn: "下载 DMG", asset: "NexHub-macos.dmg", alts: ["NexHub-macos.zip"], note: "首次打开需在「系统设置 - 隐私与安全性」中允许。" },
       { id: "linux", icon: "🐧", name: "Linux", desc: "提供 AppImage / deb 等格式。", btn: "下载", asset: "NexHub-linux-x64.AppImage", alts: ["NexHub-linux-x64.deb", "NexHub-linux-x64.tar.gz"], note: "请根据发行版选择对应包。" },
-      { id: "harmonyos", icon: "🔷", name: "HarmonyOS / OpenHarmony", desc: "适用于鸿蒙 arm64 真机（首个预览版）。四合一聚合与源即插件架构完整移植，播放、弹幕、画中画与同步全线可用。", btn: "下载 HAP（未签名）", asset: "NexHub-ohos-arm64-unsigned.hap", tag: "v3.1.1-ohos-beta.1", note: "安装包统一不带签名：请用端侧签名工具自行签名后安装（或 DevEco Studio / hdc）；模拟器暂不支持视频播放。" }
+      { id: "harmonyos", icon: "🔷", name: "HarmonyOS / OpenHarmony", desc: "适用于鸿蒙 arm64 真机（正式支持）。四合一聚合与源即插件架构完整移植，播放、弹幕、画中画、朗读、投屏与同步全线可用。", btn: "下载 HAP（未签名）", asset: "NexHub-ohos-arm64-unsigned.hap", tag: "v3.2.0", note: "安装包统一不带签名：请用端侧签名工具自行签名后安装（或 DevEco Studio / hdc）；模拟器暂不支持视频播放。" }
     ],
     en: [
       { id: "android", icon: "🤖", name: "Android", desc: "For phones & tablets (Android 5.0+). arm64-v8a is recommended (most modern devices); armeabi-v7a, x86_64 and a universal APK are also provided as fallbacks.", btn: "Download APK", asset: "app-arm64-v8a-release.apk", alts: ["app-armeabi-v7a-release.apk", "app-x86_64-release.apk", "app-release.apk"], note: "Allow 'Install unknown apps' in system settings." },
-      { id: "ios", icon: "🍎", name: "iOS", desc: "For iPhone / iPad.", btn: "Get (TestFlight)", note: "Via TestFlight or sideload; watch enterprise cert expiry." },
+      { id: "ios", icon: "🍎", name: "iOS", desc: "For iPhone / iPad (unsigned IPA).", btn: "Download IPA (unsigned)", asset: "NexHub-ios.ipa", note: "Unsigned package: self-sign with AltStore / Sideloadly and sideload." },
       { id: "windows", icon: "🪟", name: "Windows", desc: "Desktop client for Windows 10 / 11.", btn: "Download EXE / ZIP", asset: "NexHub-windows-x64.zip", note: "If SmartScreen blocks it, choose 'Run anyway'." },
       { id: "macos", icon: "🍏", name: "macOS", desc: "Intel & Apple Silicon supported.", btn: "Download DMG", asset: "NexHub-macos.dmg", alts: ["NexHub-macos.zip"], note: "On first open, allow it in System Settings → Privacy & Security." },
       { id: "linux", icon: "🐧", name: "Linux", desc: "AppImage / deb and more.", btn: "Download", asset: "NexHub-linux-x64.AppImage", alts: ["NexHub-linux-x64.deb", "NexHub-linux-x64.tar.gz"], note: "Pick the package for your distro." },
-      { id: "harmonyos", icon: "🔷", name: "HarmonyOS / OpenHarmony", desc: "For HarmonyOS arm64 devices (first preview). Full all-in-one aggregation and the source-as-plugin architecture, with playback, danmaku, PiP and sync.", btn: "Download HAP (unsigned)", asset: "NexHub-ohos-arm64-unsigned.hap", tag: "v3.1.1-ohos-beta.1", note: "Release packages are consistently unsigned: sign the HAP yourself with an on-device signing tool (or DevEco Studio / hdc) before installing; video playback is unsupported on emulators." }
+      { id: "harmonyos", icon: "🔷", name: "HarmonyOS / OpenHarmony", desc: "For HarmonyOS arm64 devices (fully supported). Full all-in-one aggregation and the source-as-plugin architecture, with playback, danmaku, PiP, TTS, casting and sync.", btn: "Download HAP (unsigned)", asset: "NexHub-ohos-arm64-unsigned.hap", tag: "v3.2.0", note: "Release packages are consistently unsigned: sign the HAP yourself with an on-device signing tool (or DevEco Studio / hdc) before installing; video playback is unsupported on emulators." }
     ],
     channels: {
       repo: "https://github.com/nexhub-app/nexhub",
-      stableTag: "v3.1.0",
+      stableTag: "v3.2.0",
       betaTag: "v3.0.0-beta.4",
       mirror: "https://ghfast.top/"
     }
@@ -268,7 +270,7 @@ window.CONTENT = {
       { q: "自己写源（共创式架构）", a: "源是一个 JSON 文件，可包含声明式选择器（xpath / css / jsonpath）或内嵌 JS 解析脚本。应用通过 JS 沙箱执行脚本，不把任何站点写死在代码里——这正是「源即插件」的含义。往下滚动可查看完整《源编写教程》。" },
       { q: "数据安全与隐私", a: "NexHub 不收集个人信息，不托管任何媒体内容；所有请求直连第三方源站。请遵守所在地法律法规使用。" },
       { q: "NexHub 现在稳定了吗，可以升级吗？", a: "NexHub 的基础功能已经完成——四合一聚合、源即插件、Bangumi 同步、网络配置、收藏分组评论、阅读统计、调试崩溃日志等核心能力均已就绪。从 v1.0.0 起可作为稳定版长期使用、放心升级；v1.1.0 起提供完整的本地内容导入体系（EPUB / PDF / 多格式归档 / 文件夹），v1.2.0 重点打磨了本地下载 / 导入的稳定性与三大阅读器体验，并加入「运行日志」便于反馈排障。数据格式向后兼容：旧数据与源 JSON 无需重新导入，沿用同一签名密钥可直接覆盖安装。遇到问题可在 GitHub 反馈。" },
-      { q: "鸿蒙（HarmonyOS）版怎么安装？", a: "在下载页选择 HarmonyOS 获取未签名 HAP。发布物统一不带签名：用端侧签名工具对 HAP 自行签名后安装，或通过 DevEco Studio / hdc 安装。鸿蒙版与 Android 功能对齐（源解析、libmpv 播放、弹幕、画中画、Bangumi 同步、本地持久化）；目录选择类功能（本地文件夹导入、自定义下载 / 截图目录）暂以应用内目录替代，离线朗读 / 投屏 / 音量键翻页暂不可用，模拟器暂不支持视频播放。" }
+      { q: "鸿蒙（HarmonyOS）版怎么安装？", a: "在下载页选择 HarmonyOS 获取未签名 HAP。发布物统一不带签名：用端侧签名工具对 HAP 自行签名后安装，或通过 DevEco Studio / hdc 安装。鸿蒙版与 Android 功能对齐（源解析、libmpv 播放、弹幕、画中画、Bangumi 同步、本地持久化）；离线朗读、投屏、音量键翻页、莫奈取色与 ECH 加速均已支持；目录选择类功能（本地文件夹导入、自定义下载 / 截图目录）暂以应用内目录替代，模拟器暂不支持视频播放。" }
     ],
     en: [
       { q: "Getting Started", a: "Install and open the app — built-in sources ship with it. For more content, import community sources from the Source Repository and browse them in the matching category." },
@@ -276,7 +278,7 @@ window.CONTENT = {
       { q: "Write your own source", a: "A source is a JSON file with declarative selectors (xpath / css / jsonpath) or embedded JS. The app runs it in a JS sandbox and hardcodes no site — that is exactly what 'source = plugin' means. Scroll down for the full Source Authoring Tutorial." },
       { q: "Data & privacy", a: "NexHub collects no personal data and hosts no content; all requests go directly to third-party sources. Please use it in compliance with local laws." },
       { q: "Is NexHub stable now — can I upgrade?", a: "NexHub's core features are complete: all-in-one aggregation, source = plugin, Bangumi sync, network config, favorites & comments, reading stats and debug/crash logs are all in place. From v1.0.0 it is a stable release you can rely on long-term; v1.1.0 provides a full local content import pipeline (EPUB / PDF / multi-format archives / folders), and v1.2.0 focuses on local download / import stability and the three readers, with a Run Log for easier bug reports. Data stays backward-compatible: your data and source JSON need no re-import, and the same signing key means just overwrite-install. Report issues on GitHub." },
-      { q: "How do I install the HarmonyOS build?", a: "Pick HarmonyOS on the download page to get the unsigned HAP. Release packages are consistently unsigned: sign the HAP yourself with an on-device signing tool, or install via DevEco Studio / hdc. The HarmonyOS build matches Android feature-wise (source parsing, libmpv playback, danmaku, PiP, Bangumi sync, local persistence). Directory-picking features (local folder import, custom download / screenshot directories) fall back to in-app locations for now; offline TTS, screen casting and volume-key page turning are unavailable; video playback is unsupported on emulators." }
+      { q: "How do I install the HarmonyOS build?", a: "Pick HarmonyOS on the download page to get the unsigned HAP. Release packages are consistently unsigned: sign the HAP yourself with an on-device signing tool, or install via DevEco Studio / hdc. The HarmonyOS build matches Android feature-wise (source parsing, libmpv playback, danmaku, PiP, Bangumi sync, local persistence). Offline TTS, screen casting, volume-key page turning, Material You colors and ECH acceleration are all supported; directory-picking features (local folder import, custom download / screenshot directories) fall back to in-app locations for now; video playback is unsupported on emulators." }
     ]
   },
   guide: {
