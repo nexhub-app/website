@@ -246,7 +246,7 @@ window.CONTENT = {
       { id: "windows", icon: "🪟", name: "Windows", desc: "Windows 10 / 11 桌面客户端。", btn: "下载 EXE / ZIP", asset: "NexHub-windows-x64.zip", note: "若被 SmartScreen 拦截，选择「仍要运行」。" },
       { id: "macos", icon: "🍏", name: "macOS", desc: "支持 Intel 与 Apple 芯片。", btn: "下载 DMG", asset: "NexHub-macos.dmg", alts: ["NexHub-macos.zip"], note: "首次打开需在「系统设置 - 隐私与安全性」中允许。" },
       { id: "linux", icon: "🐧", name: "Linux", desc: "提供 AppImage / deb 等格式。", btn: "下载", asset: "NexHub-linux-x64.AppImage", alts: ["NexHub-linux-x64.deb", "NexHub-linux-x64.tar.gz"], note: "请根据发行版选择对应包。" },
-      { id: "harmonyos", icon: "🔷", name: "HarmonyOS / OpenHarmony", desc: "适用于鸿蒙 arm64 真机（正式支持）。四合一聚合与源即插件架构完整移植，播放、弹幕、画中画、朗读、投屏与同步全线可用。", btn: "下载 HAP（未签名）", asset: "NexHub-ohos-arm64-unsigned.hap", tag: "v3.2.0", note: "安装包统一不带签名：请用端侧签名工具自行签名后安装（或 DevEco Studio / hdc）；模拟器暂不支持视频播放。" }
+      { id: "harmonyos", icon: "🔷", name: "HarmonyOS / OpenHarmony", desc: "适用于鸿蒙 arm64 真机（正式支持）。四合一聚合与源即插件架构完整移植，播放、弹幕、画中画、朗读、投屏与同步全线可用。", btn: "下载 HAP（未签名）", asset: "NexHub-ohos-arm64-unsigned.hap", tag: "v3.3.0", note: "安装包统一不带签名：请用端侧签名工具自行签名后安装（或 DevEco Studio / hdc）；模拟器暂不支持视频播放。" }
     ],
     en: [
       { id: "android", icon: "🤖", name: "Android", desc: "For phones & tablets (Android 5.0+). arm64-v8a is recommended (most modern devices); armeabi-v7a, x86_64 and a universal APK are also provided as fallbacks.", btn: "Download APK", asset: "app-arm64-v8a-release.apk", alts: ["app-armeabi-v7a-release.apk", "app-x86_64-release.apk", "app-release.apk"], note: "Allow 'Install unknown apps' in system settings." },
@@ -258,7 +258,7 @@ window.CONTENT = {
     ],
     channels: {
       repo: "https://github.com/nexhub-app/nexhub",
-      stableTag: "v3.2.0",
+      stableTag: "v3.3.0",
       betaTag: "v3.0.0-beta.4",
       mirror: "https://ghfast.top/"
     }
@@ -331,7 +331,13 @@ window.CONTENT = {
         "章节翻译断点续译：按块写入检查点，中断后从断点继续，不重翻整章",
         "术语表注入：专有名词跨段一致，多书可共享术语表",
         "译文可导出为可复用资产",
-        "翻译接口主备容灾 + 健康熔断：主端点失败自动切备用，偶发抖动不整段失败"
+        "翻译接口主备容灾 + 健康熔断：主端点失败自动切备用，偶发抖动不整段失败",
+        "上下文增强与术语闭环：注入前文译文 / 批边界提示，自动提取术语并裁决冲突，同译合并别名",
+        "译文缓存指纹与过期提示：原文 / 术语 / 风格变更后可感知并可一键重译",
+        "精译模式（三稿并发合成）与 AI 审校（影子修订，采纳才写回）",
+        "多角色朗读：角色卡 + AI 分镜归因 + HTTP 并发合成按序播放 + 跨章连播 + 系统 TTS 分声",
+        "选区工具条：划词翻译 / 问 AI（携带章节上下文）；笔记与标记 Markdown 导出",
+        "划线笔记 WebDAV 云同步（逐书文件、集合并集合并）；阅读时长 7 / 30 天趋势图"
       ],
       "howto": [
         "本地阅读：在「书架 → 本地」导入 TXT / EPUB 文件或文件夹，离线也能看",
@@ -921,7 +927,13 @@ window.CONTENT = {
         "Resumable chapter translation: checkpointed chunks, resume from breakpoint instead of restarting",
         "Glossary injection: consistent terms across chunks, shareable per book",
         "Export translations as reusable assets",
-        "Primary/backup translation endpoints with health circuit breaker: failover on error, fewer whole-section failures"
+        "Primary/backup translation endpoints with health circuit breaker: failover on error, fewer whole-section failures",
+        "Context enhancement and a terminology loop: inject earlier translations and batch-boundary hints, auto-extract terms, adjudicate conflicts and merge aliases",
+        "Translation cache fingerprints with expiry prompts: changes to source text, terms or style are detected and can be re-translated in one tap",
+        "Refined mode (three drafts merged) and AI review (shadow revisions applied only when you accept them)",
+        "Multi-character TTS: character cards + AI speaker attribution + concurrent HTTP synthesis played in order + cross-chapter auto-next + split voices in system TTS",
+        "Selection toolbar: translate selection / ask AI with chapter context; export notes and highlights as Markdown",
+        "Highlight notes synced over WebDAV (per-book files, set-union merge); 7 / 30-day reading-time trend chart"
       ],
       "howto": [
         "Local reading: import TXT / EPUB files or folders via Bookshelf → Local to read offline",
