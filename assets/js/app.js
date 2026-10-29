@@ -102,6 +102,7 @@
       '<div class="container footer-inner">' +
         '<div class="footer-brand"><img src="./assets/app-icon.svg" alt="" width="26" height="26" /><span>NexHub</span></div>' +
         '<p class="disclaimer" data-i18n="footer.disclaimer">' + esc(dict["footer.disclaimer"]) + "</p>" +
+        '<p class="footer-qq"><a href="https://qm.qq.com/" target="_blank" rel="noopener">QQ 交流群：1132306726</a></p>' +
         '<p class="copyright" id="footerCopyright"></p>' +
       "</div>";
   }
