@@ -28,10 +28,12 @@
   --shadow: 0 1px 2px rgba(9, 30, 38, 0.05), 0 6px 20px rgba(9, 30, 38, 0.06);
   --shadow-hover: 0 2px 6px rgba(9, 30, 38, 0.07), 0 14px 34px rgba(9, 30, 38, 0.10);
 
-  /* MD3 shape：卡片 16 / 小件 12 / 大件 28 / 胶囊 999 */
-  --radius: 16px;
-  --radius-sm: 12px;
-  --radius-lg: 28px;
+  /* M3E shape：更大圆角 + 弹性缓动 */
+  --radius: 20px;
+  --radius-sm: 14px;
+  --radius-lg: 32px;
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-emph: cubic-bezier(0.2, 0, 0, 1);
   --maxw: 1120px;
   --grad: linear-gradient(135deg, var(--primary), var(--primary-2));
   --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
@@ -673,3 +675,43 @@ a { color: inherit; text-decoration: none; }
 .doc-nav-link:hover,
 .doc-toc-link:hover { background: var(--primary-container); color: var(--on-primary-container); }
 .chip:hover { background: var(--primary-container); }
+
+/* ===== M3E（Material 3 Expressive）表达性收口 =====
+ * 更大圆角、非对称「饼干」形状、弹性动效、更大字号层级、tonal 色块。
+ * 与 Claude 的克制并存：色仍只落在关键处，弹性但不喧闹。 */
+.hero-title { font-size: clamp(34px, 6vw, 62px); line-height: 1.06; }
+.section-head h2 { font-size: clamp(30px, 4.4vw, 44px); }
+.doc-title { font-size: clamp(30px, 4.4vw, 40px); }
+
+/* 弹性卡片：悬停带回弹的轻微放大上浮 */
+.card {
+  border-radius: 24px;
+  transition: transform .32s var(--ease-spring, cubic-bezier(.34,1.56,.64,1)),
+              box-shadow .32s ease, border-color .32s ease;
+}
+.card:hover { transform: translateY(-6px) scale(1.012); }
+
+/* 弹性按钮：按下回缩 */
+.btn {
+  transition: transform .26s var(--ease-spring, cubic-bezier(.34,1.56,.64,1)),
+              box-shadow .26s ease, background .2s ease;
+}
+.btn:active { transform: scale(.96); }
+.icon-btn:active { transform: scale(.94); }
+
+/* M3E 非对称「饼干」圆角 + 轻微浮动 */
+.hero-logo { border-radius: 30px 30px 30px 10px; }
+@keyframes heroFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+.hero-logo { animation: heroFloat 6s var(--ease-emph, ease-in-out) infinite; }
+
+/* tonal 色块：徽章改用 primary-container 填充 */
+.badge { background: var(--primary-container); border-color: transparent; color: var(--on-primary-container); }
+
+/* 表达性区间背景：柔和渐变替代纯色 */
+.section-soft { background: linear-gradient(180deg, var(--bg-soft), var(--bg)); }
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-logo { animation: none; }
+  .card:hover { transform: none; }
+  .btn:active, .icon-btn:active { transform: none; }
+}
