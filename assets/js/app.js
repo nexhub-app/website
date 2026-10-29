@@ -139,6 +139,16 @@
   }
 
   /* ---------- 渲染：下载 ---------- */
+  // 平台图标：内联 SVG（24×24 线性风格，颜色继承 currentColor），按平台 id 对应
+  var PLATFORM_ICONS = {
+    android: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 17.8V13.8a7.5 7.5 0 0 1 15 0v4Z"/><path d="M6.7 8.5 5.1 6.9"/><path d="M17.3 8.5 18.9 6.9"/><circle cx="9.3" cy="12.4" r="1" fill="currentColor" stroke="none"/><circle cx="14.7" cy="12.4" r="1" fill="currentColor" stroke="none"/></svg>',
+    ios: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6.5" y="2.5" width="11" height="19" rx="3"/><path d="M10.5 5.2h3"/><circle cx="12" cy="18.2" r=".9" fill="currentColor" stroke="none"/></svg>',
+    windows: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><rect x="3.2" y="3.2" width="7.6" height="7.6" rx="1"/><rect x="13.2" y="3.2" width="7.6" height="7.6" rx="1"/><rect x="3.2" y="13.2" width="7.6" height="7.6" rx="1"/><rect x="13.2" y="13.2" width="7.6" height="7.6" rx="1"/></svg>',
+    macos: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="10.5" rx="2"/><path d="M2.2 18.5h19.6"/><path d="M12 15.5v3"/></svg>',
+    linux: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.2c-2.2 0-3.8 1.7-3.8 3.9 0 1.2.3 1.9.3 3 0 1.5-1.5 2.5-1.5 4.4 0 2 2.1 3.7 5 3.7s5-1.7 5-3.7c0-1.9-1.5-2.9-1.5-4.4 0-1.1.3-1.8.3-3 0-2.2-1.6-3.9-3.8-3.9Z"/><circle cx="10.6" cy="7.2" r=".8" fill="currentColor" stroke="none"/><circle cx="13.4" cy="7.2" r=".8" fill="currentColor" stroke="none"/><path d="M10.7 9.1h2.6l-1.3 1.4-1.3-1.4Z" fill="currentColor" stroke="none"/></svg>',
+    harmonyos: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.8 19.4 7v10L12 21.2 4.6 17V7L12 2.8Z"/><circle cx="12" cy="12" r="3.1"/></svg>'
+  };
+
   function renderDownloads() {
     var box = document.getElementById("downloadGrid");
     if (!box) return;
@@ -187,7 +197,7 @@
       btns += '<a class="btn btn-outline" href="' + repo + '/releases" target="_blank" rel="noopener">' +
         esc(dict["download.allReleases"]) + "</a>";
       return '<div class="card dl">' +
-        '<div class="dl-head"><span class="icon">' + d.icon + '</span><span class="name">' + esc(d.name) + "</span></div>" +
+        '<div class="dl-head"><span class="icon">' + (PLATFORM_ICONS[d.id] || esc(d.icon)) + '</span><span class="name">' + esc(d.name) + "</span></div>" +
         '<div class="desc">' + esc(d.desc) + "</div>" +
         '<div class="dl-btns">' + btns + "</div>" +
         '<div class="note">' + esc(d.note) + "</div></div>";

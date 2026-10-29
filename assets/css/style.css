@@ -215,7 +215,8 @@ a { color: inherit; text-decoration: none; }
 /* ===== Download cards ===== */
 .dl { display: flex; flex-direction: column; gap: 12px; }
 .dl-head { display: flex; align-items: center; gap: 12px; }
-.dl-head .icon { font-size: 30px; }
+.dl-head .icon { display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px; font-size: 30px; color: var(--primary); }
+.dl-head .icon svg { width: 30px; height: 30px; display: block; }
 .dl-head .name { font-size: 18px; font-weight: 800; }
 .dl .desc { color: var(--muted); font-size: 14px; flex: 1; }
 .dl .note { font-size: 12.5px; color: var(--muted); background: var(--surface-2); border-radius: 8px; padding: 7px 10px; }
