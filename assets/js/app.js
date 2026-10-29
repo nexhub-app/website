@@ -30,13 +30,24 @@
     var nav = (navigator.language || "zh").toLowerCase();
     return nav.indexOf("zh") === 0 ? "zh" : "en";
   }
-  function getTheme() {
+  function getThemePref() {
     var s = localStorage.getItem("nexhub_theme");
-    if (s === "light" || s === "dark") return s;
-    return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    if (s === "light" || s === "dark" || s === "auto") return s;
+    return "auto";
+  }
+  function prefersDark() {
+    return !!(window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches);
+  }
+  function resolveTheme(pref) {
+    if (pref === "light" || pref === "dark") return pref;
+    return prefersDark() ? "dark" : "light";
+  }
+  function themeIcon(pref) {
+    return pref === "light" ? "☀️" : (pref === "dark" ? "🌙" : "🌗");
   }
 
-  var state = { lang: getLang(), theme: getTheme(), filter: "all" };
+  var state = { lang: getLang(), themePref: getThemePref(), theme: "light", filter: "all" };
+  state.theme = resolveTheme(state.themePref);
   var page = (document.body && document.body.getAttribute("data-page")) || "home";
 
   /* ---------- 文案应用 ---------- */
@@ -55,8 +66,8 @@
 
     var tBtn = document.getElementById("themeToggle");
     if (tBtn) {
-      tBtn.querySelector(".theme-icon").textContent = state.theme === "dark" ? "☀️" : "🌙";
-      tBtn.title = state.theme === "dark" ? dict["theme.toLight"] : dict["theme.toDark"];
+      tBtn.querySelector(".theme-icon").textContent = themeIcon(state.themePref);
+      tBtn.title = dict["theme." + state.themePref] || dict["theme.auto"];
     }
 
     ["githubLink", "heroGithub"].forEach(function (id) {
@@ -102,7 +113,7 @@
       '<div class="container footer-inner">' +
         '<div class="footer-brand"><img src="./assets/app-icon.svg" alt="" width="26" height="26" /><span>NexHub</span></div>' +
         '<p class="disclaimer" data-i18n="footer.disclaimer">' + esc(dict["footer.disclaimer"]) + "</p>" +
-        '<p class="footer-qq"><a href="https://qm.qq.com/" target="_blank" rel="noopener">QQ 交流群：1132306726</a></p>' +
+        '<p class="footer-qq"><a href="https://qm.qq.com/q/KQ9T6Zh7EG" target="_blank" rel="noopener">QQ 开发交流群：1132306726</a></p>' +
         '<p class="copyright" id="footerCopyright"></p>' +
       "</div>";
   }
@@ -637,14 +648,16 @@
       });
     }
   }
-  function setTheme(theme) {
-    state.theme = theme;
-    localStorage.setItem("nexhub_theme", theme);
-    document.documentElement.setAttribute("data-theme", theme);
+  function setTheme(pref) {
+    state.themePref = pref;
+    state.theme = resolveTheme(pref);
+    localStorage.setItem("nexhub_theme", pref);
+    document.documentElement.setAttribute("data-theme", state.theme);
     var tBtn = document.getElementById("themeToggle");
     if (tBtn) {
-      tBtn.querySelector(".theme-icon").textContent = theme === "dark" ? "☀️" : "🌙";
-      tBtn.title = theme === "dark" ? I18N[state.lang]["theme.toLight"] : I18N[state.lang]["theme.toDark"];
+      var d = I18N[state.lang] || I18N.zh;
+      tBtn.querySelector(".theme-icon").textContent = themeIcon(pref);
+      tBtn.title = d["theme." + pref] || d["theme.auto"];
     }
   }
 
@@ -681,7 +694,22 @@
     if (langBtn) langBtn.addEventListener("click", function () { setLang(state.lang === "zh" ? "en" : "zh"); });
 
     var themeBtn = document.getElementById("themeToggle");
-    if (themeBtn) themeBtn.addEventListener("click", function () { setTheme(state.theme === "dark" ? "light" : "dark"); });
+    if (themeBtn) themeBtn.addEventListener("click", function () {
+      var order = ["auto", "light", "dark"];
+      setTheme(order[(order.indexOf(state.themePref) + 1) % order.length]);
+    });
+
+    // 跟随系统：偏好为 auto 时随系统深浅色实时切换
+    if (window.matchMedia) {
+      var mq = window.matchMedia("(prefers-color-scheme: dark)");
+      var onScheme = function () {
+        if (state.themePref !== "auto") return;
+        state.theme = resolveTheme("auto");
+        document.documentElement.setAttribute("data-theme", state.theme);
+      };
+      if (mq.addEventListener) mq.addEventListener("change", onScheme);
+      else if (mq.addListener) mq.addListener(onScheme);
+    }
 
     var menuBtn = document.getElementById("menuToggle");
     var navLinks = document.getElementById("navLinks");

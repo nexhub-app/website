@@ -90,6 +90,9 @@ window.I18N = {
     "footer.rights": "保留所有权利。",
     "theme.toLight": "切换到浅色",
     "theme.toDark": "切换到深色",
+    "theme.auto": "跟随系统",
+    "theme.light": "日间模式",
+    "theme.dark": "夜间模式",
     "copied": "已复制导入链接"
   },
   en: {
@@ -174,6 +177,9 @@ window.I18N = {
     "footer.rights": "All rights reserved.",
     "theme.toLight": "Switch to light",
     "theme.toDark": "Switch to dark",
+    "theme.auto": "Follow system",
+    "theme.light": "Light",
+    "theme.dark": "Dark",
     "copied": "Import link copied"
   }
 };
