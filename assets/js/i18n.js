@@ -215,6 +215,7 @@ window.CONTENT = {
       { icon: "💬", title: "收藏分组与评论", desc: "本地收藏支持分组、评分与备注评论，跨媒体统一管理你的追更清单。" },
       { icon: "🔑", title: "源登录鉴权", desc: "源可声明登录需求，保存 Cookie / 登录态后访问需登录的站点，凭据仅存本地。" },
       { icon: "📈", title: "阅读统计", desc: "自动记录阅读时长，按作品与日期汇总，并用热力图日历呈现你的阅读密度。" },
+      { icon: "🖼️", title: "桌面卡片（小组件）", desc: "继续观看 / 追更 / 下载 / 统计 / 热力图等 8 类桌面卡片，显示真实话集进度与当月打卡，配色随主题、深浅色跟随系统，点一下直达详情或统计页；背景、模糊与条数可在设置里调。" },
       { icon: "🐞", title: "调试与崩溃日志", desc: "内置崩溃日志页，集中展示异常堆栈，一键复制精准上报。" },
       { icon: "🔞", title: "年龄分级体系", desc: "源可声明年龄分级；18+ 源默认隐藏，可在设置中手动开启，保护未成年人。" },
       { icon: "🧭", title: "新手引导", desc: "首次启动 6 步引导：添加源、关联 Bangumi、隐私与合规、主题与语言、授予权限。" },
@@ -237,6 +238,7 @@ window.CONTENT = {
       { icon: "💬", title: "Favorites & Comments", desc: "Group, rate and annotate your local favorites; manage your tracking list across all media types." },
       { icon: "🔑", title: "Source Auth", desc: "Sources can require login; save cookies / session to access member-only sites — credentials stay local only." },
       { icon: "📈", title: "Reading Stats", desc: "Automatically tracks reading time, summarized by title and date, with a heatmap calendar of your reading density." },
+      { icon: "🖼️", title: "Home Widgets", desc: "8 kinds of home-screen widgets — Continue Watching, Updates, Downloads, Stats, Heatmap and more — showing real episode/chapter progress and this month's check-ins. Colors follow your theme and system light/dark; one tap opens the detail or stats page. Background, blur and item count are adjustable." },
       { icon: "🐞", title: "Debug & Crash Logs", desc: "A built-in crash-log screen gathers runtime exception stacks so you can copy precise logs when reporting issues." },
       { icon: "🔞", title: "Age Rating System", desc: "Sources can declare an age rating; 18+ sources are hidden by default and can be enabled in Settings — protecting minors." },
       { icon: "🧭", title: "Onboarding", desc: "A 6-step first-run guide: add sources, link Bangumi, privacy & compliance, theme & language, grant permissions." },
@@ -252,7 +254,7 @@ window.CONTENT = {
       { id: "windows", icon: "🪟", name: "Windows", desc: "Windows 10 / 11 桌面客户端。", btn: "下载 EXE / ZIP", asset: "NexHub-windows-x64.zip", note: "若被 SmartScreen 拦截，选择「仍要运行」。" },
       { id: "macos", icon: "🍏", name: "macOS", desc: "支持 Intel 与 Apple 芯片。", btn: "下载 DMG", asset: "NexHub-macos.dmg", alts: ["NexHub-macos.zip"], note: "首次打开需在「系统设置 - 隐私与安全性」中允许。" },
       { id: "linux", icon: "🐧", name: "Linux", desc: "提供 AppImage / deb 等格式。", btn: "下载", asset: "NexHub-linux-x64.AppImage", alts: ["NexHub-linux-x64.deb", "NexHub-linux-x64.tar.gz"], note: "请根据发行版选择对应包。" },
-      { id: "harmonyos", icon: "🔷", name: "HarmonyOS / OpenHarmony", desc: "适用于鸿蒙 arm64 真机（正式支持）。四合一聚合与源即插件架构完整移植，播放、弹幕、画中画、朗读、投屏与同步全线可用。", btn: "下载 HAP（未签名）", asset: "NexHub-ohos-arm64-unsigned.hap", tag: "v3.3.0", note: "安装包统一不带签名：请用端侧签名工具自行签名后安装（或 DevEco Studio / hdc）；模拟器暂不支持视频播放。" }
+      { id: "harmonyos", icon: "🔷", name: "HarmonyOS / OpenHarmony", desc: "适用于鸿蒙 arm64 真机（正式支持）。四合一聚合与源即插件架构完整移植，播放、弹幕、画中画、朗读、投屏与同步全线可用。", btn: "下载 HAP（未签名）", asset: "NexHub-ohos-arm64-unsigned.hap", tag: "v3.4.0", note: "安装包统一不带签名：请用端侧签名工具自行签名后安装（或 DevEco Studio / hdc）；模拟器暂不支持视频播放。" }
     ],
     en: [
       { id: "android", icon: "🤖", name: "Android", desc: "For phones & tablets (Android 5.0+). arm64-v8a is recommended (most modern devices); armeabi-v7a, x86_64 and a universal APK are also provided as fallbacks.", btn: "Download APK", asset: "app-arm64-v8a-release.apk", alts: ["app-armeabi-v7a-release.apk", "app-x86_64-release.apk", "app-release.apk"], note: "Allow 'Install unknown apps' in system settings." },
@@ -260,11 +262,11 @@ window.CONTENT = {
       { id: "windows", icon: "🪟", name: "Windows", desc: "Desktop client for Windows 10 / 11.", btn: "Download EXE / ZIP", asset: "NexHub-windows-x64.zip", note: "If SmartScreen blocks it, choose 'Run anyway'." },
       { id: "macos", icon: "🍏", name: "macOS", desc: "Intel & Apple Silicon supported.", btn: "Download DMG", asset: "NexHub-macos.dmg", alts: ["NexHub-macos.zip"], note: "On first open, allow it in System Settings → Privacy & Security." },
       { id: "linux", icon: "🐧", name: "Linux", desc: "AppImage / deb and more.", btn: "Download", asset: "NexHub-linux-x64.AppImage", alts: ["NexHub-linux-x64.deb", "NexHub-linux-x64.tar.gz"], note: "Pick the package for your distro." },
-      { id: "harmonyos", icon: "🔷", name: "HarmonyOS / OpenHarmony", desc: "For HarmonyOS arm64 devices (fully supported). Full all-in-one aggregation and the source-as-plugin architecture, with playback, danmaku, PiP, TTS, casting and sync.", btn: "Download HAP (unsigned)", asset: "NexHub-ohos-arm64-unsigned.hap", tag: "v3.2.0", note: "Release packages are consistently unsigned: sign the HAP yourself with an on-device signing tool (or DevEco Studio / hdc) before installing; video playback is unsupported on emulators." }
+      { id: "harmonyos", icon: "🔷", name: "HarmonyOS / OpenHarmony", desc: "For HarmonyOS arm64 devices (fully supported). Full all-in-one aggregation and the source-as-plugin architecture, with playback, danmaku, PiP, TTS, casting and sync.", btn: "Download HAP (unsigned)", asset: "NexHub-ohos-arm64-unsigned.hap", tag: "v3.4.0", note: "Release packages are consistently unsigned: sign the HAP yourself with an on-device signing tool (or DevEco Studio / hdc) before installing; video playback is unsupported on emulators." }
     ],
     channels: {
       repo: "https://github.com/nexhub-app/nexhub",
-      stableTag: "v3.3.0",
+      stableTag: "v3.4.0",
       betaTag: "v3.0.0-beta.4",
       mirror: "https://ghfast.top/"
     }
