@@ -240,6 +240,7 @@
       { id: "intro", href: "docs.html", titleKey: "docs.centerTitle" },
       { id: "features", href: "docs-features.html", titleKey: "features.title" },
       { id: "network", href: "docs-network.html", titleKey: "network.title" },
+      { id: "ohos", href: "docs-ohos.html", titleKey: "docs.ohosTitle" },
       { id: "faq", href: "docs-faq.html", titleKey: "docs.faqTitle" },
       { id: "tutorial", href: "docs-tutorial.html", titleKey: "docs.tutorialTitle" }
     ];
@@ -268,6 +269,7 @@
       '<div class="grid doc-cards">' +
         '<a class="card doc-card" href="docs-features.html"><div class="f-icon">✨</div><h3>' + esc(dict["docs.cardFeaturesTitle"]) + '</h3><p>' + esc(dict["docs.cardFeaturesDesc"]) + '</p><span class="card-link" aria-hidden="true">→</span></a>' +
         '<a class="card doc-card" href="docs-network.html"><div class="f-icon">🌐</div><h3>' + esc(dict["docs.cardNetworkTitle"]) + '</h3><p>' + esc(dict["docs.cardNetworkDesc"]) + '</p><span class="card-link" aria-hidden="true">→</span></a>' +
+        '<a class="card doc-card" href="docs-ohos.html"><div class="f-icon">🔷</div><h3>' + esc(dict["docs.cardOhosTitle"]) + '</h3><p>' + esc(dict["docs.cardOhosDesc"]) + '</p><span class="card-link" aria-hidden="true">→</span></a>' +
         '<a class="card doc-card" href="docs-faq.html"><div class="f-icon">❓</div><h3>' + esc(dict["docs.cardFaqTitle"]) + '</h3><p>' + esc(dict["docs.cardFaqDesc"]) + '</p><span class="card-link" aria-hidden="true">→</span></a>' +
         '<a class="card doc-card" href="docs-tutorial.html"><div class="f-icon">📝</div><h3>' + esc(dict["docs.cardTutTitle"]) + '</h3><p>' + esc(dict["docs.cardTutDesc"]) + '</p><span class="card-link" aria-hidden="true">→</span></a>' +
       '</div></section>';
@@ -394,6 +396,30 @@
     }).join("");
 
     initDocScrollSpy(arr.map(function (_, i) { return "faq-" + i; }));
+  }
+
+  /* ---------- 渲染：鸿蒙安装文档页 ---------- */
+  function renderDocsOhos() {
+    var body = document.getElementById("ohosBody");
+    var toc = document.getElementById("ohosToc");
+    if (!body || !toc) return;
+    var arr = (CONTENT.ohos && CONTENT.ohos[state.lang]) || CONTENT.ohos.zh;
+
+    body.innerHTML = arr.map(function (d, i) {
+      // a 可以是单段字符串，也可以是段落数组（安装步骤需要多段）
+      var paras = Array.isArray(d.a) ? d.a : [d.a];
+      return '<section class="doc-section" id="ohos-' + i + '">' +
+        '<h2 class="doc-h2">' + esc(d.q) + '<a class="doc-anchor" href="#ohos-' + i + '" aria-hidden="true">#</a></h2>' +
+        '<div class="doc-section-body">' +
+        paras.map(function (p) { return '<p>' + esc(p) + '</p>'; }).join("") +
+        '</div></section>';
+    }).join("");
+
+    toc.innerHTML = arr.map(function (d, i) {
+      return '<a class="doc-toc-link" href="#ohos-' + i + '">' + esc(d.q) + '</a>';
+    }).join("");
+
+    initDocScrollSpy(arr.map(function (_, i) { return "ohos-" + i; }));
   }
 
   /* ---------- 渲染：源编写教程（右侧章节） ---------- */
@@ -648,7 +674,7 @@
     localStorage.setItem("nexhub_lang", lang);
     applyI18n();
     renderHome(); renderFeatures(); renderDownloads(); renderGuide();
-    renderDocsNav(); renderDocsIntro(); renderDocsFeatures(); renderDocsNetwork(); renderDocsFaq(); renderTutorial();
+    renderDocsNav(); renderDocsIntro(); renderDocsFeatures(); renderDocsNetwork(); renderDocsOhos(); renderDocsFaq(); renderTutorial();
     renderSourceFilter(); renderSources();
     if (window.NEXHUB_SOURCES_PROMISE) {
       window.NEXHUB_SOURCES_PROMISE.then(function () {
@@ -685,6 +711,7 @@
     renderDocsIntro();
     renderDocsFeatures();
     renderDocsNetwork();
+    renderDocsOhos();
     renderDocsFaq();
     renderTutorial();
     initDocNav();

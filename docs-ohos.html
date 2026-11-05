@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" data-i18n="docs.ohosSubtitle" content="NexHub 鸿蒙安装：为什么要自签、三条安装路径、更新与调试证书到期处理。" />
+  <title data-i18n="pageTitle.docs">文档 · NexHub</title>
+  <link rel="icon" href="./assets/app-icon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="./assets/css/style.css" />
+<script>document.documentElement.setAttribute('data-theme',(function(){try{var s=localStorage.getItem('nexhub_theme');if(s==='light'||s==='dark')return s;return (window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light'}catch(e){return'light'}})());</script>
+</head>
+<body data-page="docs">
+  <header class="site-header" id="siteHeader"></header>
+
+  <main class="doc-layout">
+    <aside class="doc-sidebar doc-nav" id="docNav" aria-label="文档导航">
+      <button class="doc-nav-toggle" id="docNavToggle" aria-expanded="false" aria-controls="docNavTree">
+        <span data-i18n="docs.tocToggle">目录</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+      <div class="doc-nav-scroll" id="docNavScroll">
+        <a class="doc-back" href="docs.html" data-i18n="docs.backToDocs">← 返回文档中心</a>
+        <nav class="doc-nav-tree" id="docNavTree"></nav>
+      </div>
+    </aside>
+
+    <article class="doc-main" id="docMain">
+      <nav class="doc-breadcrumb" aria-label="breadcrumb">
+        <a href="index.html">NexHub</a>
+        <span class="doc-bc-sep">/</span>
+        <a href="docs.html" data-i18n="docs.centerTitle">文档中心</a>
+        <span class="doc-bc-sep">/</span>
+        <span data-i18n="docs.ohosTitle">鸿蒙安装</span>
+      </nav>
+      <header class="doc-header">
+        <h1 class="doc-title" data-i18n="docs.ohosTitle">鸿蒙安装</h1>
+        <p class="doc-lead" data-i18n="docs.ohosSubtitle">鸿蒙不允许安装未签名应用：这里讲清为什么要自签、三种装法、更新与证书到期怎么处理。</p>
+      </header>
+      <div class="doc-content" id="ohosBody"></div>
+    </article>
+
+    <aside class="doc-sidebar doc-toc" id="docToc" aria-label="页面大纲">
+      <div class="doc-toc-scroll" id="docTocScroll">
+        <button class="doc-toc-title" type="button" data-i18n="docs.tocTitle">本页内容</button>
+        <nav class="doc-toc-tree" id="ohosToc"></nav>
+      </div>
+    </aside>
+  </main>
+
+  <footer class="site-footer" id="siteFooter"></footer>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="./assets/js/i18n.js"></script>
+  <script src="./assets/js/sources.js"></script>
+  <script src="./assets/js/app.js"></script>
+</body>
+</html>

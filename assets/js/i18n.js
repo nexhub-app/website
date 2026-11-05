@@ -62,6 +62,10 @@ window.I18N = {
     "docs.cardFeaturesDesc": "四合一聚合、源即插件、跨平台阅读器与使用指南。",
     "docs.cardNetworkTitle": "网络设置",
     "docs.cardNetworkDesc": "代理、DNS、DoH/DoT、自定义 Hosts、SNI、ECH 与源级覆盖的详解，面向新手。",
+    "docs.ohosTitle": "鸿蒙安装",
+    "docs.ohosSubtitle": "鸿蒙不允许安装未签名应用：这里讲清为什么要自签、三种装法、更新与证书到期怎么处理。",
+    "docs.cardOhosTitle": "鸿蒙安装",
+    "docs.cardOhosDesc": "为什么鸿蒙要自己签名、三条安装路径、更新与调试证书到期处理。",
     "network.title": "网络设置",
     "network.subtitle": "把每一个开关讲明白：代理、DNS、DoH/DoT、自定义 Hosts、SNI、ECH，以及全局与源级两层生效模型。",
     "network.metaDesc": "NexHub 网络设置详解：代理、DNS、DoH/DoT、自定义 Hosts、SNI、ECH 与源级覆盖，面向新手的使用指南。",
@@ -149,6 +153,10 @@ window.I18N = {
     "docs.cardFeaturesDesc": "All-in-one aggregation, source = plugin, cross-platform readers and usage guides.",
     "docs.cardNetworkTitle": "Network Settings",
     "docs.cardNetworkDesc": "Proxy, DNS, DoH/DoT, custom Hosts, SNI, ECH and per-source overrides — explained for beginners.",
+    "docs.ohosTitle": "HarmonyOS Install",
+    "docs.ohosSubtitle": "HarmonyOS refuses unsigned apps. Why self-signing is needed, three ways to install, updates, and what to do when the certificate expires.",
+    "docs.cardOhosTitle": "HarmonyOS Install",
+    "docs.cardOhosDesc": "Why self-signing is required, three install paths, updates and certificate expiry.",
     "network.title": "Network Settings",
     "network.subtitle": "Every switch explained: proxy, DNS, DoH/DoT, custom Hosts, SNI, ECH, plus the global vs per-source model.",
     "network.metaDesc": "NexHub network settings explained: proxy, DNS, DoH/DoT, custom Hosts, SNI, ECH and per-source overrides — a beginner-friendly guide.",
@@ -254,7 +262,7 @@ window.CONTENT = {
       { id: "windows", icon: "🪟", name: "Windows", desc: "Windows 10 / 11 桌面客户端。", btn: "下载 EXE / ZIP", asset: "NexHub-windows-x64.zip", note: "若被 SmartScreen 拦截，选择「仍要运行」。" },
       { id: "macos", icon: "🍏", name: "macOS", desc: "支持 Intel 与 Apple 芯片。", btn: "下载 DMG", asset: "NexHub-macos.dmg", alts: ["NexHub-macos.zip"], note: "首次打开需在「系统设置 - 隐私与安全性」中允许。" },
       { id: "linux", icon: "🐧", name: "Linux", desc: "提供 AppImage / deb 等格式。", btn: "下载", asset: "NexHub-linux-x64.AppImage", alts: ["NexHub-linux-x64.deb", "NexHub-linux-x64.tar.gz"], note: "请根据发行版选择对应包。" },
-      { id: "harmonyos", icon: "🔷", name: "HarmonyOS / OpenHarmony", desc: "适用于鸿蒙 arm64 真机（正式支持）。四合一聚合与源即插件架构完整移植，播放、弹幕、画中画、朗读、投屏与同步全线可用。", btn: "下载 HAP（未签名）", asset: "NexHub-ohos-arm64-unsigned.hap", tag: "v3.4.0", note: "未签名包：推荐先装「轻启·安装器」，在其内安装与更新；或用小白调试助手 / HoKit 签名后安装（DevEco Studio / hdc 亦可）。模拟器暂不支持视频播放。" }
+      { id: "harmonyos", icon: "🔷", name: "HarmonyOS / OpenHarmony", desc: "适用于鸿蒙 arm64 真机（正式支持）。四合一聚合与源即插件架构完整移植，播放、弹幕、画中画、朗读、投屏与同步全线可用。", btn: "下载 HAP（未签名）", asset: "NexHub-ohos-arm64-unsigned.hap", tag: "v3.4.0", note: "未签名包：推荐先装「轻启·安装器」，在其内安装与更新；或用小白调试助手 / HoKit 签名后安装（DevEco Studio / hdc 亦可）。详见文档「鸿蒙安装」。模拟器暂不支持视频播放。" }
     ],
     en: [
       { id: "android", icon: "🤖", name: "Android", desc: "For phones & tablets (Android 5.0+). arm64-v8a is recommended (most modern devices); armeabi-v7a, x86_64 and a universal APK are also provided as fallbacks.", btn: "Download APK", asset: "app-arm64-v8a-release.apk", alts: ["app-armeabi-v7a-release.apk", "app-x86_64-release.apk", "app-release.apk"], note: "Allow 'Install unknown apps' in system settings." },
@@ -262,7 +270,7 @@ window.CONTENT = {
       { id: "windows", icon: "🪟", name: "Windows", desc: "Desktop client for Windows 10 / 11.", btn: "Download EXE / ZIP", asset: "NexHub-windows-x64.zip", note: "If SmartScreen blocks it, choose 'Run anyway'." },
       { id: "macos", icon: "🍏", name: "macOS", desc: "Intel & Apple Silicon supported.", btn: "Download DMG", asset: "NexHub-macos.dmg", alts: ["NexHub-macos.zip"], note: "On first open, allow it in System Settings → Privacy & Security." },
       { id: "linux", icon: "🐧", name: "Linux", desc: "AppImage / deb and more.", btn: "Download", asset: "NexHub-linux-x64.AppImage", alts: ["NexHub-linux-x64.deb", "NexHub-linux-x64.tar.gz"], note: "Pick the package for your distro." },
-      { id: "harmonyos", icon: "🔷", name: "HarmonyOS / OpenHarmony", desc: "For HarmonyOS arm64 devices (fully supported). Full all-in-one aggregation and the source-as-plugin architecture, with playback, danmaku, PiP, TTS, casting and sync.", btn: "Download HAP (unsigned)", asset: "NexHub-ohos-arm64-unsigned.hap", tag: "v3.4.0", note: "Unsigned package: install the QSStore installer for in-device install and update, or sign it with Auto-Installer / HoKit (DevEco Studio / hdc also works). Video playback is unsupported on emulators." }
+      { id: "harmonyos", icon: "🔷", name: "HarmonyOS / OpenHarmony", desc: "For HarmonyOS arm64 devices (fully supported). Full all-in-one aggregation and the source-as-plugin architecture, with playback, danmaku, PiP, TTS, casting and sync.", btn: "Download HAP (unsigned)", asset: "NexHub-ohos-arm64-unsigned.hap", tag: "v3.4.0", note: "Unsigned package: install the QSStore installer for in-device install and update, or sign it with Auto-Installer / HoKit (DevEco Studio / hdc also works). See “HarmonyOS Install” in Docs. Video playback is unsupported on emulators." }
     ],
     channels: {
       repo: "https://github.com/nexhub-app/nexhub",
@@ -287,6 +295,66 @@ window.CONTENT = {
       { q: "Data & privacy", a: "NexHub collects no personal data and hosts no content; all requests go directly to third-party sources. Please use it in compliance with local laws." },
       { q: "Is NexHub stable now — can I upgrade?", a: "NexHub's core features are complete: all-in-one aggregation, source = plugin, Bangumi sync, network config, favorites & comments, reading stats and debug/crash logs are all in place. From v1.0.0 it is a stable release you can rely on long-term; v1.1.0 provides a full local content import pipeline (EPUB / PDF / multi-format archives / folders), and v1.2.0 focuses on local download / import stability and the three readers, with a Run Log for easier bug reports. Data stays backward-compatible: your data and source JSON need no re-import, and the same signing key means just overwrite-install. Report issues on GitHub." },
       { q: "How do I install the HarmonyOS build?", a: "HarmonyOS refuses unsigned apps, and the official artifact is an unsigned HAP, so you sign it once on your own device. Recommended: use Auto-Installer or HoKit to sign and install the QSStore installer app on your phone (one time only), then search NexHub inside it; both installing and updating happen on the phone. Alternative: sign the NexHub HAP directly with those tools and sideload it, then re-download and overwrite-install for updates (data is kept). Signing needs a Huawei developer account (free, real-name verification required); re-sign after the profile expires or if you switch accounts. Full steps: github.com/nexhub-app/NexHub/blob/main/docs/OHOS_INSTALL_GUIDE.md. The HarmonyOS build matches Android feature-wise (source parsing, libmpv playback, danmaku, PiP, Bangumi sync, local persistence). Offline TTS, screen casting, volume-key page turning, Material You colors and ECH acceleration are all supported; directory-picking features (local folder import, custom download / screenshot directories) fall back to in-app locations for now; video playback is unsupported on emulators." }
+    ]
+  },
+  ohos: {
+    zh: [
+      { q: "为什么鸿蒙要自己签名？", a: [
+        "鸿蒙只允许安装带签名的应用。NexHub 的发布物统一不带签名，签名要在你自己的设备上完成——用你自己的华为账号生成证书，系统才认。",
+        "所以需要准备一个华为开发者账号（免费注册，需要实名认证）。这不是应用额外加的门槛，而是鸿蒙系统的规则。",
+        "设备要求：只提供 arm64 版本，系统版本过低会装不上或装完打不开；官方支持鸿蒙手机与鸿蒙电脑（2in1）。"
+      ] },
+      { q: "方式一：装「轻启·安装器」，以后在手机上更新（推荐）", a: [
+        "① 电脑下载两样东西：轻启·安装器的未签名 HAP（在其 GitHub Release 页），以及签名工具小白调试助手或 HoKit。",
+        "② 手机打开开发者模式：设置 → 设备型号（部分机型为「关于本机」）→ 连续点击「软件版本」7 次 → 确认并重启 → 设置 → 系统 → 开发者选项 → 打开「USB 调试」。",
+        "③ 数据线连接电脑（必须是能传数据的线），手机上弹窗点「允许」；在工具里选中安装器的 HAP，按提示登录华为账号完成签名并安装。",
+        "④ 手机打开安装器，登录华为开发者账号并授权；搜索 NexHub 安装。以后有新版本，在安装器里点更新即可，不用再连电脑。"
+      ] },
+      { q: "方式二：只用电脑装 NexHub，不装安装器", a: [
+        "① 按上面的方法打开开发者模式与 USB 调试；② 在 Release 页下载 NexHub-ohos-arm64-unsigned.hap；③ 用小白调试助手或 HoKit 选中该文件，登录华为账号完成签名并安装。",
+        "更新时重复一遍即可：下载新 HAP 覆盖安装，数据保留。装了 DevEco Studio 的话，也可以用它自带的自动签名配合 hdc 命令安装。"
+      ] },
+      { q: "方式三：无线安装（没有数据线）", a: [
+        "手机与电脑连同一个 WiFi；手机在「开发者选项」里打开「无线调试」，记下显示的 IP 与端口；在签名工具里选择无线连接、填入该地址，首次连接时在手机上点「允许」即可。"
+      ] },
+      { q: "更新、卸载与数据", a: [
+        "覆盖安装（无论走安装器还是手动装）都会保留插件、书架、收藏与播放记录；只有「卸载」才会清空数据，卸载前可先在应用内做一次备份。",
+        "调试证书会到期（实名账号通常一年，未实名约两周）。到期后应用可能被拦截、提示「应用已过期」，需要在安装器里续期重签，或重新签装一次。",
+        "如果手机里已装的那份是用另一张证书签的（换过华为账号、或旧证书被废除），覆盖安装会失败，只能卸载后重装。"
+      ] },
+      { q: "完整步骤与排错", a: [
+        "含逐步说明、常见问题（找不到设备、签名不一致、提示降级、装完打不开）与安全提醒的完整版见仓库文档：github.com/nexhub-app/NexHub/blob/main/docs/OHOS_INSTALL_GUIDE.md",
+        "请只从官方 Release 页下载安装包；第三方网盘或群文件里的「魔改版」可能已被替换内容。"
+      ] }
+    ],
+    en: [
+      { q: "Why does HarmonyOS require me to sign the app myself?", a: [
+        "HarmonyOS only installs signed apps. NexHub ships every artifact unsigned, so signing happens on your own device, with a certificate generated from your own Huawei account.",
+        "That means you need a Huawei developer account (free to register, real-name verification required). This is a HarmonyOS rule, not an extra requirement from the app.",
+        "Device notes: arm64 only; an older system may refuse the package or fail to launch it. HarmonyOS phones and HarmonyOS PCs (2in1) are supported."
+      ] },
+      { q: "Option 1: install the QSStore installer, then update on the phone (recommended)", a: [
+        "① On a computer, download two things: the installer's unsigned HAP (from its GitHub releases page) and a signing tool — Auto-Installer or HoKit.",
+        "② Enable developer mode on the phone: Settings → About device → tap “Software version” seven times → confirm and reboot → Settings → System → Developer options → turn on USB debugging.",
+        "③ Connect the phone to the computer with a data cable (charging-only cables won't work), tap Allow on the phone, select the installer HAP in the tool and follow its Huawei-account sign-in to sign and install.",
+        "④ Open the installer on the phone, sign in with your Huawei developer account, then search NexHub and install. Future updates happen inside the installer — no computer needed."
+      ] },
+      { q: "Option 2: install NexHub from a computer only", a: [
+        "① Enable developer mode and USB debugging as above; ② download NexHub-ohos-arm64-unsigned.hap from the releases page; ③ select it in Auto-Installer or HoKit, sign in with your Huawei account, sign and install.",
+        "To update, just repeat the steps: download the new HAP and overwrite-install — your data is kept. With DevEco Studio you can also use its automatic signing plus the hdc command."
+      ] },
+      { q: "Option 3: wireless install (no cable)", a: [
+        "Put the phone and computer on the same Wi-Fi; on the phone open Developer options → Wireless debugging and note the IP and port shown; choose wireless connection in the signing tool, enter that address, and tap Allow on the phone for the first connection."
+      ] },
+      { q: "Updates, uninstalling and your data", a: [
+        "Overwrite-installing (either path) keeps your sources, library, favorites and playback history. Only uninstalling clears data, so export a backup first if you need one.",
+        "Debug certificates expire (about one year for verified accounts, roughly two weeks without real-name verification). After expiry the app may be blocked with an “app expired” prompt — renew the signature in the installer, or sign and install again.",
+        "If the copy already on the phone was signed with a different certificate (you switched Huawei accounts, or the old certificate was revoked), overwrite-install will fail — uninstall first, then install."
+      ] },
+      { q: "Full steps and troubleshooting", a: [
+        "The complete version — step-by-step details, troubleshooting (device not found, signature mismatch, downgrade prompt, crash on launch) and security notes — lives in the repo: github.com/nexhub-app/NexHub/blob/main/docs/OHOS_INSTALL_GUIDE.md",
+        "Always download from the official releases page; repacks from third-party drives or chat groups may have been altered."
+      ] }
     ]
   },
   guide: {
