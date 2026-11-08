@@ -2326,7 +2326,7 @@ window.CONTENT = {
       "id": "script",
       "title": "十三、内嵌 JS 脚本约定",
       "group": "advanced",
-      "body": "当声明式选择器搞不定时，用 parser.overrides 写 JS。每个模块可指定 type:\"script\" 并给出 function 名与 script 源码。\n\n重要约定：\n1. 函数签名固定为 parseXxx(html, context)，html 为页面字符串，context 含 baseUrl、log 等。\n2. 优先同步返回结果（数组或对象）；也支持 async 函数返回 Promise，引擎会等待其 resolve（默认 15 秒超时），单次调用内的简单 await 可直接用。\n3. 需要异步数据时，返回 {__meta:true, __fetchUrl, __processor} 协议对象，引擎会先预取该 URL，再调用 __processor——跨接口取数走这条通道。单条预取时处理器按 __processor(body, headers) 收到两个独立参数（响应头在第二个），旧数组形态用 Array.isArray 归一即可。\n4. 不要写死任何站点常量到 App，全部留在源文件。\n5. 沙箱已预置 atob / btoa（浏览器语义 polyfill，宽松剥离非法字符与尾部 =），脚本可直接调用，无需在源里内嵌同名 polyfill；若源脚本自带同名声明则覆盖默认值。同一 JsEngine 实例内顶层变量跨 meta 多跳持续可见，多跳各跳的 __processor 不再重放整段脚本，符合「同一 JsEngine 内全局持续可见」的约定。",
+      "body": "当声明式选择器搞不定时，用 parser.overrides 写 JS。每个模块可指定 type:\"script\" 并给出 function 名与 script 源码。\n\n重要约定：\n1. 函数签名固定为 parseXxx(html, context)，html 为页面字符串，context 含 baseUrl、log 等。\n2. 优先同步返回结果（数组或对象）；也支持 async 函数返回 Promise，引擎会等待其 resolve（默认 15 秒超时），单次调用内的简单 await 可直接用。\n3. 需要异步数据时，返回 {__meta:true, __fetchUrl, __processor} 协议对象，引擎会先预取该 URL，再调用 __processor——跨接口取数走这条通道。单条预取时处理器按 __processor(body, headers) 收到两个独立参数（响应头在第二个），旧数组形态用 Array.isArray 归一即可。\n4. 不要写死任何站点常量到 App，全部留在源文件。\n5. 沙箱已预置 atob / btoa（浏览器语义 polyfill，宽松剥离非法字符与尾部 =），脚本可直接调用，无需在源里内嵌同名 polyfill；若源脚本自带同名声明则覆盖默认值。同一 JsEngine 实例内顶层变量跨 meta 多跳持续可见，多跳各跳的 __processor 不再重放整段脚本，符合「同一 JsEngine 内全局持续可见」的约定。\n\n批量预取：需要「逐个跟进 N 个页面」时改用 __fetchUrls 通道（见下表），处理器一次拿到按输入顺序排列的响应体数组。",
       "fields": [
         {
           "k": "function",
@@ -2343,6 +2343,14 @@ window.CONTENT = {
         {
           "k": "__meta 协议",
           "v": "异步预取：返回该对象，引擎取数后回调 __processor。"
+        },
+        {
+          "k": "__fetchUrls 批量预取",
+          "v": "逐个跟进 N 个页面：返回 {__meta:true, __fetchUrls:[…], __fetchResponseType, __fetchConcurrency, __processor}，引擎并发抓取（默认 6、上限 16）后把响应按输入顺序一次交给处理器，失败项为 null；批量通道只给响应体，需要响应头改用单条 __fetchUrl。"
+        },
+        {
+          "k": "__fetchHeaders / __fetchMethod / __fetchBody",
+          "v": "批量预取的附加请求头 / 方法（默认 get，可 post）/ POST 请求体。"
         }
       ],
       "code": "\"parser\": {\n  \"type\": \"hybrid\",\n  \"overrides\": {\n    \"search\": {\n      \"type\": \"script\",\n      \"function\": \"parseList\",\n      \"script\": \"function parseList(html, context){ /* 解析并返回数组 */ return []; }\"\n    }\n  }\n}"
@@ -2351,7 +2359,7 @@ window.CONTENT = {
       "id": "advanced",
       "title": "十四、进阶：源级网络 / 评论 / 登录（v0.4.0）",
       "group": "advanced",
-      "body": "v0.4.0 起，源还能声明一些「站点级」能力，让 App 在不改引擎的前提下适配更复杂的站点：\n· network（可选）：源级网络覆盖。子键 proxy / dns / hosts / sni / ech，逐项选「继承全局」或「单独覆盖」。缺省即继承全局设置，非法值只告警、不会让源无法启用。其中 sni 对直连 HTTPS 真实生效（defaultSni 填 - 即免 SNI，配合 hosts 钉 IP 可绕过按 SNI 的封锁）；ech 由内置原生引擎驱动，作用域分应用级 / 源级 / Bangumi 专用（对直连 HTTPS 真实生效）。\n· comments（可选）：声明该源的评论能力。provider 默认 source（评论来自源站）；routes 声明 list / replies / post / reply / like / report 等路由（未声明的按钮不渲染）；selectors 用同一套 JSONPath/CSS/XPath 引擎抽取内容。\n· 登录（可选，声明在 comments.login 段）：三种方式，可组合——\n  1) WebView 登录：login.url 填登录页地址，App 用 WebView 打开让用户登录，成功后捕获会话 Cookie 存本地。\n  2) Cookie 登录：login.checkCookie 填「代表已登录的 Cookie 键名」，App 据此快速判定；也可在 site.cookies 直接粘贴整段会话 Cookie，全源请求自动携带。\n  3) API Key 登录：login.sendTokenAs 设为 \"key\"，用户在「源详情 → 登录」面板粘贴密钥，App 存本地密钥库，并在受保护请求上追加 Authorization: <authScheme> <密钥>（默认前缀 Key）。适合「登录给的是 access_token，但收藏 / 个人页却要单独 API Key」的站点（部分站点的新版 API 明确要求 Key <api_key>，而非 Bearer）。\n· 令牌携带方式 login.sendTokenAs：null（只靠 Cookie）/ \"bearer\"（Authorization: Bearer <checkCookie 对应 Cookie 值>）/ \"key\"（Authorization: <authScheme> <手动密钥>，即 API Key 登录）。\n· 登录态二次确认：login.checkUrl + login.loggedInSelector（GET checkUrl，选择器命中非空即视为登录有效）。\n凭据只存本地，不会上传；未声明登录时，该源按「只读 / 免登录」处理。",
+      "body": "v0.4.0 起，源还能声明一些「站点级」能力，让 App 在不改引擎的前提下适配更复杂的站点：\n· network（可选）：源级网络覆盖。子键 proxy / dns / hosts / sni / ech，逐项选「继承全局」或「单独覆盖」。缺省即继承全局设置，非法值只告警、不会让源无法启用。其中 sni 对直连 HTTPS 真实生效（defaultSni 填 - 即免 SNI，配合 hosts 钉 IP 可绕过按 SNI 的封锁）；ech 由内置原生引擎驱动，作用域分应用级 / 源级 / Bangumi 专用（对直连 HTTPS 真实生效）。\n· comments（可选）：声明该源的评论能力。provider 默认 source（评论来自源站）；routes 声明 list / replies / post / reply / like / report 等路由（未声明的按钮不渲染）；selectors 用同一套 JSONPath/CSS/XPath 引擎抽取内容。\n· 登录（可选，声明在 comments.login 段）：三种方式，可组合——\n  1) WebView 登录：login.url 填登录页地址，App 用 WebView 打开让用户登录，成功后捕获会话 Cookie 存本地。\n  2) Cookie 登录：login.checkCookie 填「代表已登录的 Cookie 键名」，App 据此快速判定；也可在 site.cookies 直接粘贴整段会话 Cookie，全源请求自动携带。\n  3) API Key 登录：login.sendTokenAs 设为 \"key\"，用户在「源详情 → 登录」面板粘贴密钥，App 存本地密钥库，并在受保护请求上追加 Authorization: <authScheme> <密钥>（默认前缀 Key）。适合「登录给的是 access_token，但收藏 / 个人页却要单独 API Key」的站点（部分站点的新版 API 明确要求 Key <api_key>，而非 Bearer）。\n· 令牌携带方式 login.sendTokenAs：null（只靠 Cookie）/ \"bearer\"（Authorization: Bearer <checkCookie 对应 Cookie 值>）/ \"key\"（Authorization: <authScheme> <手动密钥>，即 API Key 登录）。\n· 登录态二次确认：login.checkUrl + login.loggedInSelector（GET checkUrl，选择器命中非空即视为登录有效）。\n凭据只存本地，不会上传；未声明登录时，该源按「只读 / 免登录」处理。\nCookie 合并规则：路由 headers / 脚本 __fetchHeaders 里显式写的 Cookie 与会话 jar 按名合并，同名以显式值为准——「页面内联 JS 写 Cookie 后二跳带令牌」的源可用。",
       "fields": [
         {
           "k": "network",
@@ -2599,7 +2607,7 @@ window.CONTENT = {
         },
         {
           "k": "mediaHostRewrite",
-          "v": "可选。媒体域名改写映射 {原host: 目标host}（精确匹配、大小写不敏感）：封面等媒体 URL 换域后再加载，适用于主 CDN 拒连、需切备用 CDN 的场景。"
+          "v": "可选。媒体域名改写映射 {原host: 目标host}（精确匹配、大小写不敏感）：封面等媒体 URL 换域后再加载，适用于主 CDN 拒连、需切备用 CDN 的场景。改写后的目标域纳入源级 ECH 接管范围，图片与页面共用同一条加密通道。"
         },
         {
           "k": "webviewConfig.adblock / timeoutSeconds",
@@ -2975,7 +2983,7 @@ window.CONTENT = {
       "id": "script",
       "title": "13. Embedded JS conventions",
       "group": "advanced",
-      "body": "When declarative selectors are not enough, use parser.overrides to write JS. Each module can set type:'script' with a function name and script source.\n\nKey rules:\n1. Signature is fixed: parseXxx(html, context); html is the page string, context has baseUrl, log, etc.\n2. Returning synchronously (array or object) is preferred; an async function returning a Promise also works — the engine awaits it (15s timeout), fine for simple awaits inside one call.\n3. For async data, return the {__meta:true, __fetchUrl, __processor} protocol object; the engine prefetches that URL and then calls __processor — use this for cross-endpoint fetching. For a single prefetch the processor receives __processor(body, headers) as two arguments (headers second); normalize the old array form with Array.isArray.\n4. Never hardcode site constants into the app; keep everything in the source file.\n5. The sandbox now presets atob / btoa (browser-semantics polyfill, leniently stripping invalid chars and trailing '='), so scripts can call them directly without embedding a polyfill; a source's own same-name declaration overrides the default. Within one JsEngine instance, top-level variables persist across meta multi-hop calls — each hop's __processor no longer replays the whole script — matching the 'globals stay visible within one JsEngine' convention.",
+      "body": "When declarative selectors are not enough, use parser.overrides to write JS. Each module can set type:'script' with a function name and script source.\n\nKey rules:\n1. Signature is fixed: parseXxx(html, context); html is the page string, context has baseUrl, log, etc.\n2. Returning synchronously (array or object) is preferred; an async function returning a Promise also works — the engine awaits it (15s timeout), fine for simple awaits inside one call.\n3. For async data, return the {__meta:true, __fetchUrl, __processor} protocol object; the engine prefetches that URL and then calls __processor — use this for cross-endpoint fetching. For a single prefetch the processor receives __processor(body, headers) as two arguments (headers second); normalize the old array form with Array.isArray.\n4. Never hardcode site constants into the app; keep everything in the source file.\n5. The sandbox now presets atob / btoa (browser-semantics polyfill, leniently stripping invalid chars and trailing '='), so scripts can call them directly without embedding a polyfill; a source's own same-name declaration overrides the default. Within one JsEngine instance, top-level variables persist across meta multi-hop calls — each hop's __processor no longer replays the whole script — matching the 'globals stay visible within one JsEngine' convention.\n\nBatch prefetch: when you must follow N pages one by one, switch to the __fetchUrls channel (see the table below); the processor receives the response bodies in input order in one call.",
       "fields": [
         {
           "k": "function",
@@ -2992,6 +3000,14 @@ window.CONTENT = {
         {
           "k": "__meta protocol",
           "v": "Async prefetch: return this object, engine calls __processor after fetch."
+        },
+        {
+          "k": "__fetchUrls batch prefetch",
+          "v": "Follow N pages: return {__meta:true, __fetchUrls:[…], __fetchResponseType, __fetchConcurrency, __processor}; the engine fetches concurrently (6 default, 16 max) and hands the responses to the processor in input order, failed items null. The batch channel returns bodies only — use a single __fetchUrl when you need headers."
+        },
+        {
+          "k": "__fetchHeaders / __fetchMethod / __fetchBody",
+          "v": "Extra headers / method (get default, post allowed) / POST body for the batch prefetch."
         }
       ],
       "code": "\"parser\": {\n  \"type\": \"hybrid\",\n  \"overrides\": {\n    \"search\": {\n      \"type\": \"script\",\n      \"function\": \"parseList\",\n      \"script\": \"function parseList(html, context){ /* parse & return array */ return []; }\"\n    }\n  }\n}"
@@ -3000,7 +3016,7 @@ window.CONTENT = {
       "id": "advanced",
       "title": "14. Advanced: source-level network / comments / login (v0.4.0)",
       "group": "advanced",
-      "body": "Since v0.4.0 a source can also declare 'site-level' capabilities so the app adapts to harder sites without engine changes:\n· network (optional): source-level network override. Sub-keys proxy / dns / hosts / sni / ech, each 'inherit global' or a specific override. Defaults to global; invalid values only warn and never disable the source. Of these, sni is runtime-effective for direct HTTPS (defaultSni "-" = skip SNI; combined with hosts pinning an IP it bypasses SNI-based blocking); ech is driven by a built-in native engine with app-level / per-source / Bangumi scopes.\n· comments (optional): declares the source's comment capability. provider defaults to source; routes declares list / replies / post / reply / like / report (undeclared buttons are not rendered); selectors reuse the same JSONPath/CSS/XPath engine.\n· login (optional, declared in comments.login): three ways, combinable —\n  1) WebView login: set login.url to the login page; the app opens it in a WebView and captures the session cookie locally after login.\n  2) Cookie login: set login.checkCookie to the cookie key that means 'logged in' for a fast check; you can also paste a whole session cookie into site.cookies and every source request carries it.\n  3) API key login: set login.sendTokenAs to \"key\"; the user pastes the key in Source details → Login, the app stores it in the local key store and appends Authorization: <authScheme> <key> to protected requests (prefix defaults to Key). For sites where login yields an access_token but favorites/profile need a separate API key (some sites' newer APIs explicitly require Key <api_key>, not Bearer).\n· Token carrier login.sendTokenAs: null (cookie only) / \"bearer\" (Authorization: Bearer <cookie value of checkCookie>) / \"key\" (Authorization: <authScheme> <manual key>, i.e. API key login).\n· Secondary session check: login.checkUrl + login.loggedInSelector (GET checkUrl; a non-empty selector match means the session is valid).\nCredentials stay local only; without a login declaration the source is treated as read-only / no-login.",
+      "body": "Since v0.4.0 a source can also declare 'site-level' capabilities so the app adapts to harder sites without engine changes:\n· network (optional): source-level network override. Sub-keys proxy / dns / hosts / sni / ech, each 'inherit global' or a specific override. Defaults to global; invalid values only warn and never disable the source. Of these, sni is runtime-effective for direct HTTPS (defaultSni "-" = skip SNI; combined with hosts pinning an IP it bypasses SNI-based blocking); ech is driven by a built-in native engine with app-level / per-source / Bangumi scopes.\n· comments (optional): declares the source's comment capability. provider defaults to source; routes declares list / replies / post / reply / like / report (undeclared buttons are not rendered); selectors reuse the same JSONPath/CSS/XPath engine.\n· login (optional, declared in comments.login): three ways, combinable —\n  1) WebView login: set login.url to the login page; the app opens it in a WebView and captures the session cookie locally after login.\n  2) Cookie login: set login.checkCookie to the cookie key that means 'logged in' for a fast check; you can also paste a whole session cookie into site.cookies and every source request carries it.\n  3) API key login: set login.sendTokenAs to \"key\"; the user pastes the key in Source details → Login, the app stores it in the local key store and appends Authorization: <authScheme> <key> to protected requests (prefix defaults to Key). For sites where login yields an access_token but favorites/profile need a separate API key (some sites' newer APIs explicitly require Key <api_key>, not Bearer).\n· Token carrier login.sendTokenAs: null (cookie only) / \"bearer\" (Authorization: Bearer <cookie value of checkCookie>) / \"key\" (Authorization: <authScheme> <manual key>, i.e. API key login).\n· Secondary session check: login.checkUrl + login.loggedInSelector (GET checkUrl; a non-empty selector match means the session is valid).\nCredentials stay local only; without a login declaration the source is treated as read-only / no-login.\nCookie merge rule: cookies declared explicitly in route headers / __fetchHeaders merge by name with the session jar — the explicit value wins for the same name, handy for sources where inline page JS writes a cookie and the second hop must carry the token.",
       "fields": [
         {
           "k": "network",
@@ -3248,7 +3264,7 @@ window.CONTENT = {
         },
         {
           "k": "mediaHostRewrite",
-          "v": "Optional. Media host rewrite map {originalHost: targetHost} (exact match, case-insensitive): cover and media URLs are rewritten before loading — useful when the primary CDN refuses direct access and a backup CDN must be used."
+          "v": "Optional. Media host rewrite map {originalHost: targetHost} (exact match, case-insensitive): cover and media URLs are rewritten before loading — useful when the primary CDN refuses direct access and a backup CDN must be used. Rewritten targets join the per-source ECH takeover scope, so images and pages share one encrypted channel."
         },
         {
           "k": "webviewConfig.adblock / timeoutSeconds",
