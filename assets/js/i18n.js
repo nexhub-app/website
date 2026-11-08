@@ -1677,14 +1677,16 @@ window.CONTENT = {
           id: "net-ech",
           title: "八、ECH",
           blocks: [
-            { type: "callout", variant: "warn", text: "现已接通：ECH 由内置原生引擎（OpenSSL）驱动，对直连 HTTPS 真实生效，不再依赖外部代理；当前随 Android（arm64-v8a / armeabi-v7a / x86_64 三架构）与 Windows 桌面端打包；macOS / Linux 暂未打包原生库，自动降级为直连，不影响其他功能。" },
+            { type: "callout", variant: "warn", text: "现已接通：ECH 由内置原生引擎（OpenSSL）驱动，对直连 HTTPS 真实生效，不再依赖外部代理；当前随 Android（arm64-v8a / armeabi-v7a / x86_64 三架构）、Windows 桌面端与鸿蒙 HAP（arm64-v8a）打包；macOS / Linux 暂未打包原生库，自动降级为直连，不影响其他功能。" },
             { type: "p", text: "ECH（Encrypted Client Hello，加密客户端问候）是 TLS 的一个扩展，把 SNI 加密，让旁观者连「你在访问哪个域名」都看不到。它比单纯的免 SNI 更进一步：连 SNI 内容也对网络中间人不可见。" },
             { type: "table", rows: [
               { k: "启用 ECH", v: "开关，默认关闭。" },
               { k: "ECH 配置列表", v: "Base64 编码的 ECH 配置字符串。" }
             ] },
             { type: "p", text: "作用域分三档：应用级（接管任意 https 域，不支持 ECH 的站点由原生侧逐域自适应回落，不会搞断正常站点）、源级（只接管该源 site.baseUrl 的 host，可在源 JSON network.ech 或 UI 覆盖单独开关）、Bangumi 专用。" },
-            { type: "p", text: "当前建议：受限站点仍可用 SNI（免 SNI / 自定义值）+ Hosts 组合作为兜底；ECH 已实装，无需再借助外部代理内核。" }
+            { type: "p", text: "当前建议：受限站点仍可用 SNI（免 SNI / 自定义值）+ Hosts 组合作为兜底；ECH 已实装，无需再借助外部代理内核。" },
+            { type: "p", text: "引擎在你背后做的事：①加密 DNS 引导失败时自动改用内置加密 DNS 解析目标域；②边缘拒绝旧配置时按下发的 retry 配置重连，并按域名记住可用配置，后续一次握手直达；③直连时对解析出的多个 IP 逐个超时尝试，单个坏 IP 不会拖死整批请求（并发 64）；④声明 ALPN 并规范请求头大小写与 Host 位置，减少被 CDN 指纹误判。" },
+            { type: "p", text: "限制：能否成功取决于目标边缘是否支持 ECH / 是否下发 retry 配置；边缘不支持时自动回落到直连，此时连通性取决于你的网络环境。" }
           ]
         },
         {
@@ -1881,14 +1883,16 @@ window.CONTENT = {
           id: "net-ech",
           title: "8. ECH",
           blocks: [
-            { type: "callout", variant: "warn", text: "Now wired: ECH is driven by a built-in native engine (OpenSSL) and takes effect for direct HTTPS — no external proxy needed. Now shipped with Android (three ABIs: arm64-v8a / armeabi-v7a / x86_64) and the Windows desktop build; macOS / Linux fall back to direct for now, without affecting other features." },
+            { type: "callout", variant: "warn", text: "Now wired: ECH is driven by a built-in native engine (OpenSSL) and takes effect for direct HTTPS — no external proxy needed. Now shipped with Android (three ABIs: arm64-v8a / armeabi-v7a / x86_64), the Windows desktop build and the HarmonyOS HAP (arm64-v8a); macOS / Linux fall back to direct for now, without affecting other features." },
             { type: "p", text: "ECH (Encrypted Client Hello) is a TLS extension that encrypts the SNI, so observers can't even see 'which domain you're visiting'. It goes further than skip-SNI alone: even the SNI content is hidden from network intermediaries." },
             { type: "table", rows: [
               { k: "Enable ECH", v: "Switch, off by default." },
               { k: "ECH config list", v: "A base64-encoded ECH config string." }
             ] },
             { type: "p", text: "Three scopes: app-level (covers any https domain; sites without ECH support fall back per-domain by the native side, so normal sites aren't broken), per-source (only the source's site.baseUrl host; toggle via source JSON network.ech or the UI override), and Bangumi-specific." },
-            { type: "p", text: "Current recommendation: SNI (skip-SNI / custom value) + Hosts still works as a fallback for restricted sites; ECH is now wired and no longer needs an external proxy core." }
+            { type: "p", text: "Current recommendation: SNI (skip-SNI / custom value) + Hosts still works as a fallback for restricted sites; ECH is now wired and no longer needs an external proxy core." },
+            { type: "p", text: "What the engine does behind the scenes: (1) if the encrypted-DNS bootstrap fails it falls back to a built-in encrypted DNS to resolve the target; (2) when the edge rejects an outdated config it reconnects with the server-provided retry config and caches the working config per host, so later connections need one handshake; (3) for direct connections it tries the resolved IPs one by one with a timeout, so a single dead IP cannot stall the batch (concurrency 64); (4) it declares ALPN and normalizes header case and Host position to avoid CDN fingerprint false positives." },
+            { type: "p", text: "Limits: success depends on whether the target edge supports ECH and returns a retry config; when it doesn't, the engine falls back to direct and reachability depends on your network." }
           ]
         },
         {
@@ -2090,6 +2094,10 @@ window.CONTENT = {
         {
           "k": "selectors.episodes",
           "v": "范式A：章节链接选择器，如 ul li a。"
+        },
+        {
+          "k": "detail 返回键 episodeCount",
+          "v": "可选。作品总集 / 总话数；脚本源在返回对象里填它，详情页据此显示集数，缺省不显示。"
         },
         {
           "k": "ruleBookInfo.tocUrl",
@@ -2318,7 +2326,7 @@ window.CONTENT = {
       "id": "script",
       "title": "十三、内嵌 JS 脚本约定",
       "group": "advanced",
-      "body": "当声明式选择器搞不定时，用 parser.overrides 写 JS。每个模块可指定 type:\"script\" 并给出 function 名与 script 源码。\n\n重要约定：\n1. 函数签名固定为 parseXxx(html, context)，html 为页面字符串，context 含 baseUrl、log 等。\n2. 必须同步返回结果（数组或对象）。\n3. 需要异步数据时，返回 {__meta:true, __fetchUrl, __processor} 协议对象，引擎会先预取该 URL，再调用 __processor 同步处理函数——这是唯一安全的异步通道。\n4. 不要写死任何站点常量到 App，全部留在源文件。\n5. 沙箱已预置 atob / btoa（浏览器语义 polyfill，宽松剥离非法字符与尾部 =），脚本可直接调用，无需在源里内嵌同名 polyfill；若源脚本自带同名声明则覆盖默认值。同一 JsEngine 实例内顶层变量跨 meta 多跳持续可见，多跳各跳的 __processor 不再重放整段脚本，符合「同一 JsEngine 内全局持续可见」的约定。",
+      "body": "当声明式选择器搞不定时，用 parser.overrides 写 JS。每个模块可指定 type:\"script\" 并给出 function 名与 script 源码。\n\n重要约定：\n1. 函数签名固定为 parseXxx(html, context)，html 为页面字符串，context 含 baseUrl、log 等。\n2. 优先同步返回结果（数组或对象）；也支持 async 函数返回 Promise，引擎会等待其 resolve（默认 15 秒超时），单次调用内的简单 await 可直接用。\n3. 需要异步数据时，返回 {__meta:true, __fetchUrl, __processor} 协议对象，引擎会先预取该 URL，再调用 __processor——跨接口取数走这条通道。单条预取时处理器按 __processor(body, headers) 收到两个独立参数（响应头在第二个），旧数组形态用 Array.isArray 归一即可。\n4. 不要写死任何站点常量到 App，全部留在源文件。\n5. 沙箱已预置 atob / btoa（浏览器语义 polyfill，宽松剥离非法字符与尾部 =），脚本可直接调用，无需在源里内嵌同名 polyfill；若源脚本自带同名声明则覆盖默认值。同一 JsEngine 实例内顶层变量跨 meta 多跳持续可见，多跳各跳的 __processor 不再重放整段脚本，符合「同一 JsEngine 内全局持续可见」的约定。",
       "fields": [
         {
           "k": "function",
@@ -2752,6 +2760,10 @@ window.CONTENT = {
           "v": "Paradigm A: chapter link selector, e.g. ul li a."
         },
         {
+          "k": "detail key episodeCount",
+          "v": "Optional. Total episode / chapter count; script sources fill it in the returned object so the detail page can show the count — hidden when absent."
+        },
+        {
           "k": "ruleBookInfo.tocUrl",
           "v": "Paradigm B: link into the contents page; empty means detail page itself is the TOC."
         },
@@ -2963,7 +2975,7 @@ window.CONTENT = {
       "id": "script",
       "title": "13. Embedded JS conventions",
       "group": "advanced",
-      "body": "When declarative selectors are not enough, use parser.overrides to write JS. Each module can set type:'script' with a function name and script source.\n\nKey rules:\n1. Signature is fixed: parseXxx(html, context); html is the page string, context has baseUrl, log, etc.\n2. Must return synchronously (array or object).\n3. For async data, return the {__meta:true, __fetchUrl, __processor} protocol object; the engine prefetches that URL, then calls __processor synchronously — the only safe async channel.\n4. Never hardcode site constants into the app; keep everything in the source file.\n5. The sandbox now presets atob / btoa (browser-semantics polyfill, leniently stripping invalid chars and trailing '='), so scripts can call them directly without embedding a polyfill; a source's own same-name declaration overrides the default. Within one JsEngine instance, top-level variables persist across meta multi-hop calls — each hop's __processor no longer replays the whole script — matching the 'globals stay visible within one JsEngine' convention.",
+      "body": "When declarative selectors are not enough, use parser.overrides to write JS. Each module can set type:'script' with a function name and script source.\n\nKey rules:\n1. Signature is fixed: parseXxx(html, context); html is the page string, context has baseUrl, log, etc.\n2. Returning synchronously (array or object) is preferred; an async function returning a Promise also works — the engine awaits it (15s timeout), fine for simple awaits inside one call.\n3. For async data, return the {__meta:true, __fetchUrl, __processor} protocol object; the engine prefetches that URL and then calls __processor — use this for cross-endpoint fetching. For a single prefetch the processor receives __processor(body, headers) as two arguments (headers second); normalize the old array form with Array.isArray.\n4. Never hardcode site constants into the app; keep everything in the source file.\n5. The sandbox now presets atob / btoa (browser-semantics polyfill, leniently stripping invalid chars and trailing '='), so scripts can call them directly without embedding a polyfill; a source's own same-name declaration overrides the default. Within one JsEngine instance, top-level variables persist across meta multi-hop calls — each hop's __processor no longer replays the whole script — matching the 'globals stay visible within one JsEngine' convention.",
       "fields": [
         {
           "k": "function",
