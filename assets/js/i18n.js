@@ -224,6 +224,7 @@ window.CONTENT = {
       { icon: "🔑", title: "源登录鉴权", desc: "源可声明登录需求，保存 Cookie / 登录态后访问需登录的站点，凭据仅存本地。" },
       { icon: "📈", title: "阅读统计", desc: "自动记录阅读时长，按作品与日期汇总，并用热力图日历呈现你的阅读密度。" },
       { icon: "🖼️", title: "桌面卡片（小组件）", desc: "继续观看 / 追更 / 下载 / 统计 / 热力图等 8 类桌面卡片，显示真实话集进度与当月打卡，配色随主题、深浅色跟随系统，点一下直达详情或统计页；背景、模糊与条数可在设置里调。" },
+      { icon: "🖥️", title: "宽屏双栏", desc: "宽窗口下列表与详情同屏：宽度可拖拽、可在设置里关掉，搜索与在线列表页同样适用；鸿蒙平板原生全屏，漫画支持宽屏自动双页。" },
       { icon: "🐞", title: "调试与崩溃日志", desc: "内置崩溃日志页，集中展示异常堆栈，一键复制精准上报。" },
       { icon: "🔞", title: "年龄分级体系", desc: "源可声明年龄分级；18+ 源默认隐藏，可在设置中手动开启，保护未成年人。" },
       { icon: "🧭", title: "新手引导", desc: "首次启动 6 步引导：添加源、关联 Bangumi、隐私与合规、主题与语言、授予权限。" },
@@ -247,6 +248,7 @@ window.CONTENT = {
       { icon: "🔑", title: "Source Auth", desc: "Sources can require login; save cookies / session to access member-only sites — credentials stay local only." },
       { icon: "📈", title: "Reading Stats", desc: "Automatically tracks reading time, summarized by title and date, with a heatmap calendar of your reading density." },
       { icon: "🖼️", title: "Home Widgets", desc: "8 kinds of home-screen widgets — Continue Watching, Updates, Downloads, Stats, Heatmap and more — showing real episode/chapter progress and this month's check-ins. Colors follow your theme and system light/dark; one tap opens the detail or stats page. Background, blur and item count are adjustable." },
+      { icon: "🖥️", title: "Wide-Screen Split View", desc: "On wide windows the list and the detail share one screen: drag the divider to resize, turn it off in Settings, and it works on search and online-list pages too. HarmonyOS tablets run full screen, and the manga reader can auto-spread pages." },
       { icon: "🐞", title: "Debug & Crash Logs", desc: "A built-in crash-log screen gathers runtime exception stacks so you can copy precise logs when reporting issues." },
       { icon: "🔞", title: "Age Rating System", desc: "Sources can declare an age rating; 18+ sources are hidden by default and can be enabled in Settings — protecting minors." },
       { icon: "🧭", title: "Onboarding", desc: "A 6-step first-run guide: add sources, link Bangumi, privacy & compliance, theme & language, grant permissions." },
@@ -262,7 +264,7 @@ window.CONTENT = {
       { id: "windows", icon: "🪟", name: "Windows", desc: "Windows 10 / 11 桌面客户端。", btn: "下载 EXE / ZIP", asset: "NexHub-windows-x64.zip", note: "若被 SmartScreen 拦截，选择「仍要运行」。" },
       { id: "macos", icon: "🍏", name: "macOS", desc: "支持 Intel 与 Apple 芯片。", btn: "下载 DMG", asset: "NexHub-macos.dmg", alts: ["NexHub-macos.zip"], note: "首次打开需在「系统设置 - 隐私与安全性」中允许。" },
       { id: "linux", icon: "🐧", name: "Linux", desc: "提供 AppImage / deb 等格式。", btn: "下载", asset: "NexHub-linux-x64.AppImage", alts: ["NexHub-linux-x64.deb", "NexHub-linux-x64.tar.gz"], note: "请根据发行版选择对应包。" },
-      { id: "harmonyos", icon: "🔷", name: "HarmonyOS / OpenHarmony", desc: "适用于鸿蒙 arm64 真机（正式支持）。四合一聚合与源即插件架构完整移植，播放、弹幕、画中画、朗读、投屏与同步全线可用。", btn: "下载 HAP（未签名）", asset: "NexHub-ohos-arm64-unsigned.hap", tag: "v3.4.0", note: "未签名包：推荐先装「轻启·安装器」，在其内安装与更新；或用小白调试助手 / HoKit 签名后安装（DevEco Studio / hdc 亦可）。详见文档「鸿蒙安装」。模拟器暂不支持视频播放。" }
+      { id: "harmonyos", icon: "🔷", name: "HarmonyOS / OpenHarmony", desc: "适用于鸿蒙 arm64 真机（正式支持）。四合一聚合与源即插件架构完整移植，播放、弹幕、画中画、朗读、投屏与同步全线可用。", btn: "下载 HAP（未签名）", asset: "NexHub-ohos-arm64-unsigned.hap", tag: "v3.5.0", note: "未签名包：推荐先装「轻启·安装器」，在其内安装与更新；或用小白调试助手 / HoKit 签名后安装（DevEco Studio / hdc 亦可）。详见文档「鸿蒙安装」。模拟器暂不支持视频播放。" }
     ],
     en: [
       { id: "android", icon: "🤖", name: "Android", desc: "For phones & tablets (Android 5.0+). arm64-v8a is recommended (most modern devices); armeabi-v7a, x86_64 and a universal APK are also provided as fallbacks.", btn: "Download APK", asset: "app-arm64-v8a-release.apk", alts: ["app-armeabi-v7a-release.apk", "app-x86_64-release.apk", "app-release.apk"], note: "Allow 'Install unknown apps' in system settings." },
@@ -270,11 +272,11 @@ window.CONTENT = {
       { id: "windows", icon: "🪟", name: "Windows", desc: "Desktop client for Windows 10 / 11.", btn: "Download EXE / ZIP", asset: "NexHub-windows-x64.zip", note: "If SmartScreen blocks it, choose 'Run anyway'." },
       { id: "macos", icon: "🍏", name: "macOS", desc: "Intel & Apple Silicon supported.", btn: "Download DMG", asset: "NexHub-macos.dmg", alts: ["NexHub-macos.zip"], note: "On first open, allow it in System Settings → Privacy & Security." },
       { id: "linux", icon: "🐧", name: "Linux", desc: "AppImage / deb and more.", btn: "Download", asset: "NexHub-linux-x64.AppImage", alts: ["NexHub-linux-x64.deb", "NexHub-linux-x64.tar.gz"], note: "Pick the package for your distro." },
-      { id: "harmonyos", icon: "🔷", name: "HarmonyOS / OpenHarmony", desc: "For HarmonyOS arm64 devices (fully supported). Full all-in-one aggregation and the source-as-plugin architecture, with playback, danmaku, PiP, TTS, casting and sync.", btn: "Download HAP (unsigned)", asset: "NexHub-ohos-arm64-unsigned.hap", tag: "v3.4.0", note: "Unsigned package: install the QSStore installer for in-device install and update, or sign it with Auto-Installer / HoKit (DevEco Studio / hdc also works). See “HarmonyOS Install” in Docs. Video playback is unsupported on emulators." }
+      { id: "harmonyos", icon: "🔷", name: "HarmonyOS / OpenHarmony", desc: "For HarmonyOS arm64 devices (fully supported). Full all-in-one aggregation and the source-as-plugin architecture, with playback, danmaku, PiP, TTS, casting and sync.", btn: "Download HAP (unsigned)", asset: "NexHub-ohos-arm64-unsigned.hap", tag: "v3.5.0", note: "Unsigned package: install the QSStore installer for in-device install and update, or sign it with Auto-Installer / HoKit (DevEco Studio / hdc also works). See “HarmonyOS Install” in Docs. Video playback is unsupported on emulators." }
     ],
     channels: {
       repo: "https://github.com/nexhub-app/nexhub",
-      stableTag: "v3.4.0",
+      stableTag: "v3.5.0",
       betaTag: "v3.0.0-beta.4",
       mirror: "https://ghfast.top/"
     }
@@ -363,6 +365,7 @@ window.CONTENT = {
       "title": "📖 小说阅读器",
       "features": [
         "字号 / 行距 / 段距 / 边距自由调节，实时预览",
+        "正文净化：随包 12 条内置规则，全局一套生效，可按全部 / 仅本书 / 仅本源限定，旧书籍级规则自动迁移",
         "11 套背景预设（黑 / 深灰 / 白 / 护眼绿 / 羊皮纸 / 暖黄…）+ 自定义背景与正文色",
         "6 种翻页动画：无动画 / 滑动 / 滚动 / 淡入 / 覆盖 / 仿真卷页",
         "自定义字体：系统 / serif / 等宽，支持导入本地 .ttf / .otf",
@@ -767,6 +770,7 @@ window.CONTENT = {
       "title": "📚 漫画阅读器",
       "features": [
         "5 种阅读模式：单页 LTR / 单页 RTL / 单页竖向 / 条漫 / 条漫（带间距）",
+        "宽屏自动双页：横屏且屏幕够宽时自动跨页（可关，竖排 / 长条不参与）",
         "双击锚点缩放（2× / 3×）、双指捏合（条漫跨页同样生效）、放大平移",
         "背景（黑 / 灰 / 白 / 自动）+ 画面滤镜（亮度 / 对比度 / 色温 / 饱和度 / 色相 / 反色 / 灰度）",
         "屏幕方向 7 种、点击区布局、左右留白、裁边、显示页码",
@@ -959,6 +963,7 @@ window.CONTENT = {
       "title": "📖 Novel Reader",
       "features": [
         "Adjustable font size, line height, paragraph spacing & margins, with live preview",
+        "Text purging: 12 built-in rules ship with the app as one global set, scopeable to all books / this book / this source, with old per-book rules migrated automatically",
         "11 background presets (black / dark gray / white / eye-care green / parchment / warm yellow…) plus custom background & text colors",
         "6 page animations: none / slide / scroll / fade / cover / simulated page curl",
         "Custom fonts: system / serif / monospace, and importing local .ttf / .otf",
@@ -1363,6 +1368,7 @@ window.CONTENT = {
       "title": "📚 Manga Reader",
       "features": [
         "5 reading modes: single LTR / single RTL / single vertical / webtoon / webtoon (with spacing)",
+        "Wide-screen auto spread: pages pair up automatically in landscape on wide screens (toggleable; vertical and webtoon strips excluded)",
         "Double-tap anchor zoom (2× / 3×), pinch zoom (also across webtoon pages), pan when zoomed",
         "Background (black / gray / white / auto) plus image filters (brightness / contrast / color temperature / saturation / hue / invert / grayscale)",
         "7 screen orientations, tap-zone layouts, side margins, edge cropping, page numbers",
@@ -2050,11 +2056,15 @@ window.CONTENT = {
       "id": "discovery",
       "title": "四、发现 / 分类模块（discovery / ruleExplore）",
       "group": "intermediate",
-      "body": "「首页」与「按分类浏览」使用此模块。范式A 用 latest/explore/category 路由 + categoryEntries 分类表；范式B 用 ruleExplore + exploreUrl（每行「分类名::链接」）。\n首页板块由 homeSections 定义（标题、路由、样式 grid/list、数量）。",
+      "body": "「首页」与「按分类浏览」使用此模块。范式A 用 latest/explore/category 路由 + categoryEntries 分类表；范式B 用 ruleExplore + exploreUrl（每行「分类名::链接」）。\n首页板块由 homeSections 定义（标题、路由、样式 grid/list、数量）。\n分类表也可以由源接口动态下发：声明 routes.categories 后先请求该接口拿分类列表，失败再回落到 categoryEntries。",
       "fields": [
         {
           "k": "category.categoryEntries",
           "v": "范式A：分类数组，每项 {id, title}，点击后拼接进 category 路由。"
+        },
+        {
+          "k": "routes.categories",
+          "v": "可选。动态分类路由：返回 [{id, title}] 的接口（script / jsonpath 皆可），优先于 categoryEntries，失败自动回落静态表。"
         },
         {
           "k": "homeSections",
@@ -2580,6 +2590,10 @@ window.CONTENT = {
           "v": "可选。反盗链：补 Referer / 头 / 特定 UA。"
         },
         {
+          "k": "mediaHostRewrite",
+          "v": "可选。媒体域名改写映射 {原host: 目标host}（精确匹配、大小写不敏感）：封面等媒体 URL 换域后再加载，适用于主 CDN 拒连、需切备用 CDN 的场景。"
+        },
+        {
           "k": "webviewConfig.adblock / timeoutSeconds",
           "v": "可选。WebView 广告拦截开关与超时（默认 true / 20s）。"
         },
@@ -2702,11 +2716,15 @@ window.CONTENT = {
       "id": "discovery",
       "title": "4. Discovery / Category (discovery / ruleExplore)",
       "group": "intermediate",
-      "body": "Used by the Home page and category browsing. Paradigm A uses latest/explore/category routes + categoryEntries; Paradigm B uses ruleExplore + exploreUrl (each line 'Category::URL').\nHome sections are defined by homeSections (title, route, style grid/list, limit).",
+      "body": "Used by the Home page and category browsing. Paradigm A uses latest/explore/category routes + categoryEntries; Paradigm B uses ruleExplore + exploreUrl (each line 'Category::URL').\nHome sections are defined by homeSections (title, route, style grid/list, limit).\nThe category list can also come from the source API: declare routes.categories and it is queried first, falling back to categoryEntries on failure.",
       "fields": [
         {
           "k": "category.categoryEntries",
           "v": "Paradigm A: category array, each {id, title}, plugged into the category route."
+        },
+        {
+          "k": "routes.categories",
+          "v": "Optional. Dynamic category route returning [{id, title}] (script or jsonpath); takes precedence over categoryEntries and falls back to the static list on failure."
         },
         {
           "k": "homeSections",
@@ -3215,6 +3233,10 @@ window.CONTENT = {
         {
           "k": "antiHotlinking.referer / headers / userAgent",
           "v": "Optional. Anti-hotlink: add Referer / headers / specific UA."
+        },
+        {
+          "k": "mediaHostRewrite",
+          "v": "Optional. Media host rewrite map {originalHost: targetHost} (exact match, case-insensitive): cover and media URLs are rewritten before loading — useful when the primary CDN refuses direct access and a backup CDN must be used."
         },
         {
           "k": "webviewConfig.adblock / timeoutSeconds",
