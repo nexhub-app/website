@@ -227,6 +227,8 @@ window.CONTENT = {
       { icon: "🖥️", title: "宽屏双栏", desc: "宽窗口下列表与详情同屏：宽度可拖拽、可在设置里关掉，搜索与在线列表页同样适用；鸿蒙平板原生全屏，漫画支持宽屏自动双页。" },
       { icon: "📖", title: "小说连排与朗读", desc: "滚动读到章末自动接上下一章；朗读位置单独记忆、章末续读默认开启；播放器可跟随视频自动横竖屏，竖屏也有完整底栏。" },
       { icon: "🧩", title: "书源兼容层（beta）", desc: "Legado 风格书源导入保真、java.* 规则桥与动态重放、发现页选项栏、漫画与音视频书源自动分发；站点逻辑仍在源文件里。" },
+      { icon: "🎵", title: "音频三页播放", desc: "封面 / 章节 / 歌词三页滑动，单行空间感控制栏与自动回中，支持封面取色与内嵌歌词。" },
+      { icon: "📡", title: "直播流自适应", desc: "自动识别直播、低延迟缓存配方与断流自愈；底栏改用直播徽标，不误触进度条。" },
       { icon: "🐞", title: "调试与崩溃日志", desc: "内置崩溃日志页，集中展示异常堆栈，一键复制精准上报。" },
       { icon: "🔞", title: "年龄分级体系", desc: "源可声明年龄分级；18+ 源默认隐藏，可在设置中手动开启，保护未成年人。" },
       { icon: "🧭", title: "新手引导", desc: "首次启动 6 步引导：添加源、关联 Bangumi、隐私与合规、主题与语言、授予权限。" },
@@ -253,6 +255,8 @@ window.CONTENT = {
       { icon: "🖥️", title: "Wide-Screen Split View", desc: "On wide windows the list and the detail share one screen: drag the divider to resize, turn it off in Settings, and it works on search and online-list pages too. HarmonyOS tablets run full screen, and the manga reader can auto-spread pages." },
       { icon: "📖", title: "Seamless Novel Reading", desc: "Scrolling flows into the next chapter automatically; read-aloud position is remembered separately and chapter-end auto-continue is on by default. The player can follow each video's aspect ratio, with a full control bar in portrait too." },
       { icon: "🧩", title: "Source Compatibility (beta)", desc: "Legado-style sources import without losing fields, with a java.* rule bridge, dynamic replay, discovery option bars, and automatic comic / audio / video dispatch — all site logic stays in the source file." },
+      { icon: "🎵", title: "Three-page Audio Player", desc: "Cover, chapters and lyrics across three swipeable pages, a single-row spatial control bar with auto re-centre, cover-based colouring and embedded lyrics." },
+      { icon: "📡", title: "Adaptive Live Streams", desc: "Live streams are detected automatically, with a low-latency cache profile and self-healing on drops; the control bar shows a LIVE badge instead of a seek bar." },
       { icon: "🐞", title: "Debug & Crash Logs", desc: "A built-in crash-log screen gathers runtime exception stacks so you can copy precise logs when reporting issues." },
       { icon: "🔞", title: "Age Rating System", desc: "Sources can declare an age rating; 18+ sources are hidden by default and can be enabled in Settings — protecting minors." },
       { icon: "🧭", title: "Onboarding", desc: "A 6-step first-run guide: add sources, link Bangumi, privacy & compliance, theme & language, grant permissions." },
@@ -281,7 +285,7 @@ window.CONTENT = {
     channels: {
       repo: "https://github.com/nexhub-app/nexhub",
       stableTag: "v3.6.0",
-      betaTag: "v4.0.0-beta.1",
+      betaTag: "v4.0.0-beta.2",
       mirror: "https://ghfast.top/"
     }
   },
@@ -566,6 +570,8 @@ window.CONTENT = {
       "features": [
         "media_kit 播放内核：自动 / 软解 / 硬解 / 硬解+ 解码模式",
         "音视频书源（beta）自动进入媒体栏，章节可直接播放直链",
+        "直播流自动识别：低延迟缓存与断流自愈，底栏以直播徽标替代进度条",
+        "音频模式三页界面：封面 / 章节 / 歌词，空间感缩放与停稳自动回中",
         "跟随视频自动横竖屏（默认）：按首个视频宽高判定方向，切集重判；竖屏页也有完整底栏",
         "弹幕（DandanPlay）：匹配剧集、关键词过滤、时间偏移等完整设置",
         "多线路按名称分组，一键切换备用线路",
@@ -1169,6 +1175,8 @@ window.CONTENT = {
       "features": [
         "media_kit player core: auto / software / hardware / hardware+ decode modes",
         "Audio/video sources (beta) land on the media shelf, with direct chapter playback",
+        "Live streams are detected automatically: low-latency cache, self-healing on drops, and a LIVE badge instead of a seek bar",
+        "Audio mode has three pages — cover / chapters / lyrics — with spatial scaling and auto re-centre when scrolling stops",
         "Orientation follows the video (default): decided from the first frame size and re-evaluated per episode, with a full portrait control bar",
         "Danmaku (DandanPlay): episode matching, keyword filters, time offset and a full settings panel",
         "Multiple play lines grouped by name, one tap to switch to a backup",
@@ -2533,7 +2541,7 @@ window.CONTENT = {
       "id": "shuyuan-compat",
       "title": "二十二、书源兼容（Legado 风格规则，beta）",
       "group": "advanced",
-      "body": "应用提供通用的书源兼容层：按源识别规则方言，不把站点写进引擎。导入时保留 ruleData / jsLib / 源变量；规则语法对齐 ElementsSingle / XPath / JSONPath 全集 / textNodes / replaceRegex / @js: / @put 无括号 / bookUrlPattern。\n常用能力：\n· java.ajax/get/post/head 可带自定义头与 followRedirects:false，返回 body / code / headers / cookies / url 等响应元数据；动态参数经确定性重放（记录调用→宿主求值→回填→重跑）。\n· AES/DES/3DES/SHA/HMAC/RSA 常用路径可用；OAEP/EC/CTR/GCM 等明确返回空，不伪造结果。\n· queryTTF / replaceFont 还原字体混淆字符。\n· URL 选项 webView:true 与 webJs 由无头 WebView 取数后回灌规则。\n· exploreUrl 结构化解析出 url/text/button/toggle/select 选项栏，值按源持久化。\n· bookSourceType：0 文本 / 2 漫画（images）/ 1 音频 / 4 视频（媒体栏）。\n登录支持 loginCheckJs + loginUi + WebView；cookie 按源落库回放。少量 Java API 未覆盖（约 2.6% 调用），一律明确降级。",
+      "body": "应用提供通用的书源兼容层：按源识别规则方言，不把站点写进引擎。导入时保留 ruleData / jsLib / 源变量；规则语法对齐 ElementsSingle / XPath / JSONPath 全集 / textNodes / replaceRegex / @js: / @put 无括号 / bookUrlPattern。\n常用能力：\n· java.ajax/get/post/head 可带自定义头与 followRedirects:false，返回 body / code / headers / cookies / url 等响应元数据；动态参数经确定性重放（记录调用→宿主求值→回填→重跑）。\n· AES/DES/3DES/SHA/HMAC/RSA 常用路径可用；OAEP/EC/CTR/GCM 等明确返回空，不伪造结果。\n· queryTTF / replaceFont 还原字体混淆字符。\n· URL 选项 webView:true 与 webJs 由无头 WebView 取数后回灌规则。\n· exploreUrl 结构化解析出 url/text/button/toggle/select 选项栏，值按源持久化。\n· bookSourceType：0 文本 / 2 漫画（images）/ 1 音频 / 4 视频（媒体栏）。\n登录支持 loginCheckJs + loginUi + WebView；cookie 按源落库回放。少量 Java API 未覆盖（约 2.6% 调用），一律明确降级。\n补充：文件类书源支持下载链接与本地导入（详情页改源文件列表并跟随本地进度）；章节购买 payAction、callBackJs 事件回调与事件位可用；纯 JS org.jsoup.Jsoup.parse + 最小 DOM / CSS 选择器让 jsoup 直调脚本可解析；HTTP 412 时从站点根域取会话 Cookie 重试；音频 / 视频源在阅读器渲染媒体章节播放卡片，音频源内嵌歌词交给播放器。",
       "fields": [
         {
           "k": "ruleData / jsLib / 源变量",
@@ -3215,7 +3223,7 @@ window.CONTENT = {
       "id": "shuyuan-compat",
       "title": "22. Source compatibility (Legado-style rules, beta)",
       "group": "advanced",
-      "body": "The app ships a generic source-compatibility layer: rule dialects are detected per source, and no site is hardcoded into the engine. Import preserves ruleData / jsLib / source variables; syntax aligns with ElementsSingle / XPath / full JSONPath / textNodes / replaceRegex / inline @js: / parentheseless @put / bookUrlPattern.\nCommon abilities:\n· java.ajax/get/post/head accept custom headers and followRedirects:false and return body / code / headers / cookies / url metadata; dynamic arguments go through a deterministic replay (record call → host evaluates → backfill → rerun).\n· AES/DES/3DES/SHA/HMAC and common RSA paths work; OAEP/EC/CTR/GCM explicitly return empty rather than fake results.\n· queryTTF / replaceFont restore font-obfuscated characters.\n· URL option webView:true and webJs fetch via a headless WebView and feed the rendered HTML back into rule parsing.\n· exploreUrl is parsed into url/text/button/toggle/select option bars, persisted per source.\n· bookSourceType: 0 text / 2 comic (images) / 1 audio / 4 video (media shelf).\nLogin supports loginCheckJs + loginUi + WebView; cookies are stored and replayed per source. A small set of Java APIs is uncovered (~2.6% of calls) and degrades explicitly.",
+      "body": "The app ships a generic source-compatibility layer: rule dialects are detected per source, and no site is hardcoded into the engine. Import preserves ruleData / jsLib / source variables; syntax aligns with ElementsSingle / XPath / full JSONPath / textNodes / replaceRegex / inline @js: / parentheseless @put / bookUrlPattern.\nCommon abilities:\n· java.ajax/get/post/head accept custom headers and followRedirects:false and return body / code / headers / cookies / url metadata; dynamic arguments go through a deterministic replay (record call → host evaluates → backfill → rerun).\n· AES/DES/3DES/SHA/HMAC and common RSA paths work; OAEP/EC/CTR/GCM explicitly return empty rather than fake results.\n· queryTTF / replaceFont restore font-obfuscated characters.\n· URL option webView:true and webJs fetch via a headless WebView and feed the rendered HTML back into rule parsing.\n· exploreUrl is parsed into url/text/button/toggle/select option bars, persisted per source.\n· bookSourceType: 0 text / 2 comic (images) / 1 audio / 4 video (media shelf).\nLogin supports loginCheckJs + loginUi + WebView; cookies are stored and replayed per source. A small set of Java APIs is uncovered (~2.6% of calls) and degrades explicitly.\nAlso: file sources support download links and local import (the detail page lists source files and follows local progress); chapter purchase payAction, callBackJs events and event bits are available; pure-JS org.jsoup.Jsoup.parse with a minimal DOM / CSS selector set lets jsoup-based scripts parse; on HTTP 412 the session cookie is fetched from the site root and the request retried; audio/video sources render media chapter cards in the reader, and embedded lyrics from audio sources reach the player.",
       "fields": [
         {
           "k": "ruleData / jsLib / source vars",
