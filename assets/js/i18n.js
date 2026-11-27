@@ -229,6 +229,7 @@ window.CONTENT = {
       { icon: "🧩", title: "书源兼容层（beta）", desc: "Legado 风格书源导入保真、java.* 规则桥与动态重放、发现页选项栏、漫画与音视频书源自动分发；站点逻辑仍在源文件里。" },
       { icon: "🎵", title: "音频三页播放", desc: "封面 / 章节 / 歌词三页滑动，单行空间感控制栏与自动回中，支持封面取色与内嵌歌词。" },
       { icon: "📡", title: "直播流自适应", desc: "自动识别直播、低延迟缓存配方与断流自愈；底栏改用直播徽标，不误触进度条。" },
+      { icon: "💬", title: "段评与内嵌图标（beta）", desc: "书源正文支持段落评论与规则位置的内嵌图标，点开即可看对应讨论。" },
       { icon: "🐞", title: "调试与崩溃日志", desc: "内置崩溃日志页，集中展示异常堆栈，一键复制精准上报。" },
       { icon: "🔞", title: "年龄分级体系", desc: "源可声明年龄分级；18+ 源默认隐藏，可在设置中手动开启，保护未成年人。" },
       { icon: "🧭", title: "新手引导", desc: "首次启动 6 步引导：添加源、关联 Bangumi、隐私与合规、主题与语言、授予权限。" },
@@ -257,6 +258,7 @@ window.CONTENT = {
       { icon: "🧩", title: "Source Compatibility (beta)", desc: "Legado-style sources import without losing fields, with a java.* rule bridge, dynamic replay, discovery option bars, and automatic comic / audio / video dispatch — all site logic stays in the source file." },
       { icon: "🎵", title: "Three-page Audio Player", desc: "Cover, chapters and lyrics across three swipeable pages, a single-row spatial control bar with auto re-centre, cover-based colouring and embedded lyrics." },
       { icon: "📡", title: "Adaptive Live Streams", desc: "Live streams are detected automatically, with a low-latency cache profile and self-healing on drops; the control bar shows a LIVE badge instead of a seek bar." },
+      { icon: "💬", title: "Paragraph Comments (beta)", desc: "Book-source content supports per-paragraph comments plus inline icons placed by the rules — tap to open the matching discussion." },
       { icon: "🐞", title: "Debug & Crash Logs", desc: "A built-in crash-log screen gathers runtime exception stacks so you can copy precise logs when reporting issues." },
       { icon: "🔞", title: "Age Rating System", desc: "Sources can declare an age rating; 18+ sources are hidden by default and can be enabled in Settings — protecting minors." },
       { icon: "🧭", title: "Onboarding", desc: "A 6-step first-run guide: add sources, link Bangumi, privacy & compliance, theme & language, grant permissions." },
@@ -285,7 +287,7 @@ window.CONTENT = {
     channels: {
       repo: "https://github.com/nexhub-app/nexhub",
       stableTag: "v3.6.0",
-      betaTag: "v4.0.0-beta.2",
+      betaTag: "v4.0.0-beta.3",
       mirror: "https://ghfast.top/"
     }
   },
@@ -374,6 +376,8 @@ window.CONTENT = {
       "features": [
         "字号 / 行距 / 段距 / 边距自由调节，实时预览",
         "书源兼容（beta）：支持 Legado 风格规则与 java.* 桥，漫画 / 音视频书源自动分发到对应模块",
+        "段评与内嵌图标：正文按规则展示段落评论入口，点开即可查看讨论",
+        "目录定位按条目下标精确对位，长目录与分节标题不再跳错；收藏改为备份 + 拒写保护，不再重启丢失",
         "滚动章末无缝连排：读到章末自动续上下一章（可关），跨章按视口结算主导章，进度不归零",
         "朗读位置单独记忆（章 + 段），与翻页进度互不覆盖；章末续读默认开启",
         "正文净化：随包 12 条内置规则，全局一套生效，可按全部 / 仅本书 / 仅本源限定，旧书籍级规则自动迁移",
@@ -979,6 +983,8 @@ window.CONTENT = {
       "features": [
         "Adjustable font size, line height, paragraph spacing & margins, with live preview",
         "Source compatibility (beta): Legado-style rules and the java.* bridge; comic and audio/video sources dispatch to the matching modules",
+        "Paragraph comments and inline icons: the body shows comment entry points placed by the rules — tap to read the discussion",
+        "TOC positioning uses item indices, so long or sectioned TOCs land correctly; favorites now back up and refuse unsafe writes instead of vanishing on restart",
         "Seamless chapter flow: the next chapter is appended at the end of scrolling (toggleable); the dominant chapter follows the viewport so progress never resets to zero",
         "Read-aloud position is stored separately (chapter + paragraph) from reading progress; chapter-end auto-continue is on by default",
         "Text purging: 12 built-in rules ship with the app as one global set, scopeable to all books / this book / this source, with old per-book rules migrated automatically",
@@ -2541,7 +2547,7 @@ window.CONTENT = {
       "id": "shuyuan-compat",
       "title": "二十二、书源兼容（Legado 风格规则，beta）",
       "group": "advanced",
-      "body": "应用提供通用的书源兼容层：按源识别规则方言，不把站点写进引擎。导入时保留 ruleData / jsLib / 源变量；规则语法对齐 ElementsSingle / XPath / JSONPath 全集 / textNodes / replaceRegex / @js: / @put 无括号 / bookUrlPattern。\n常用能力：\n· java.ajax/get/post/head 可带自定义头与 followRedirects:false，返回 body / code / headers / cookies / url 等响应元数据；动态参数经确定性重放（记录调用→宿主求值→回填→重跑）。\n· AES/DES/3DES/SHA/HMAC/RSA 常用路径可用；OAEP/EC/CTR/GCM 等明确返回空，不伪造结果。\n· queryTTF / replaceFont 还原字体混淆字符。\n· URL 选项 webView:true 与 webJs 由无头 WebView 取数后回灌规则。\n· exploreUrl 结构化解析出 url/text/button/toggle/select 选项栏，值按源持久化。\n· bookSourceType：0 文本 / 2 漫画（images）/ 1 音频 / 4 视频（媒体栏）。\n登录支持 loginCheckJs + loginUi + WebView；cookie 按源落库回放。少量 Java API 未覆盖（约 2.6% 调用），一律明确降级。\n补充：文件类书源支持下载链接与本地导入（详情页改源文件列表并跟随本地进度）；章节购买 payAction、callBackJs 事件回调与事件位可用；纯 JS org.jsoup.Jsoup.parse + 最小 DOM / CSS 选择器让 jsoup 直调脚本可解析；HTTP 412 时从站点根域取会话 Cookie 重试；音频 / 视频源在阅读器渲染媒体章节播放卡片，音频源内嵌歌词交给播放器。",
+      "body": "应用提供通用的书源兼容层：按源识别规则方言，不把站点写进引擎。导入时保留 ruleData / jsLib / 源变量；规则语法对齐 ElementsSingle / XPath / JSONPath 全集 / textNodes / replaceRegex / @js: / @put 无括号 / bookUrlPattern。\n常用能力：\n· java.ajax/get/post/head 可带自定义头与 followRedirects:false，返回 body / code / headers / cookies / url 等响应元数据；动态参数经确定性重放（记录调用→宿主求值→回填→重跑）。\n· AES/DES/3DES/SHA/HMAC/RSA 常用路径可用；OAEP/EC/CTR/GCM 等明确返回空，不伪造结果。\n· queryTTF / replaceFont 还原字体混淆字符。\n· URL 选项 webView:true 与 webJs 由无头 WebView 取数后回灌规则。\n· exploreUrl 结构化解析出 url/text/button/toggle/select 选项栏，值按源持久化。\n· bookSourceType：0 文本 / 2 漫画（images）/ 1 音频 / 4 视频（媒体栏）。\n登录支持 loginCheckJs + loginUi + WebView；cookie 按源落库回放。少量 Java API 未覆盖（约 2.6% 调用），一律明确降级。\n补充：文件类书源支持下载链接与本地导入（详情页改源文件列表并跟随本地进度）；章节购买 payAction、callBackJs 事件回调与事件位可用；纯 JS org.jsoup.Jsoup.parse + 最小 DOM / CSS 选择器让 jsoup 直调脚本可解析；HTTP 412 时从站点根域取会话 Cookie 重试；音频 / 视频源在阅读器渲染媒体章节播放卡片，音频源内嵌歌词交给播放器。\n再补充：正文支持段评与按规则位置渲染的内嵌图标；源 / 书 / 章节三级 putVariable(key,null) 即删除、整段替换先删后加；cacheBytes 提供二进制缓存；支持 PUT/DELETE/PATCH 与二进制请求体；Java charset 别名表覆盖 GBK / GB18030 / Big5 等；jsoup 补齐 Elements / Element 集合与遍历面；WebView 支持 POST 预取后再渲染回灌。",
       "fields": [
         {
           "k": "ruleData / jsLib / 源变量",
@@ -3223,7 +3229,7 @@ window.CONTENT = {
       "id": "shuyuan-compat",
       "title": "22. Source compatibility (Legado-style rules, beta)",
       "group": "advanced",
-      "body": "The app ships a generic source-compatibility layer: rule dialects are detected per source, and no site is hardcoded into the engine. Import preserves ruleData / jsLib / source variables; syntax aligns with ElementsSingle / XPath / full JSONPath / textNodes / replaceRegex / inline @js: / parentheseless @put / bookUrlPattern.\nCommon abilities:\n· java.ajax/get/post/head accept custom headers and followRedirects:false and return body / code / headers / cookies / url metadata; dynamic arguments go through a deterministic replay (record call → host evaluates → backfill → rerun).\n· AES/DES/3DES/SHA/HMAC and common RSA paths work; OAEP/EC/CTR/GCM explicitly return empty rather than fake results.\n· queryTTF / replaceFont restore font-obfuscated characters.\n· URL option webView:true and webJs fetch via a headless WebView and feed the rendered HTML back into rule parsing.\n· exploreUrl is parsed into url/text/button/toggle/select option bars, persisted per source.\n· bookSourceType: 0 text / 2 comic (images) / 1 audio / 4 video (media shelf).\nLogin supports loginCheckJs + loginUi + WebView; cookies are stored and replayed per source. A small set of Java APIs is uncovered (~2.6% of calls) and degrades explicitly.\nAlso: file sources support download links and local import (the detail page lists source files and follows local progress); chapter purchase payAction, callBackJs events and event bits are available; pure-JS org.jsoup.Jsoup.parse with a minimal DOM / CSS selector set lets jsoup-based scripts parse; on HTTP 412 the session cookie is fetched from the site root and the request retried; audio/video sources render media chapter cards in the reader, and embedded lyrics from audio sources reach the player.",
+      "body": "The app ships a generic source-compatibility layer: rule dialects are detected per source, and no site is hardcoded into the engine. Import preserves ruleData / jsLib / source variables; syntax aligns with ElementsSingle / XPath / full JSONPath / textNodes / replaceRegex / inline @js: / parentheseless @put / bookUrlPattern.\nCommon abilities:\n· java.ajax/get/post/head accept custom headers and followRedirects:false and return body / code / headers / cookies / url metadata; dynamic arguments go through a deterministic replay (record call → host evaluates → backfill → rerun).\n· AES/DES/3DES/SHA/HMAC and common RSA paths work; OAEP/EC/CTR/GCM explicitly return empty rather than fake results.\n· queryTTF / replaceFont restore font-obfuscated characters.\n· URL option webView:true and webJs fetch via a headless WebView and feed the rendered HTML back into rule parsing.\n· exploreUrl is parsed into url/text/button/toggle/select option bars, persisted per source.\n· bookSourceType: 0 text / 2 comic (images) / 1 audio / 4 video (media shelf).\nLogin supports loginCheckJs + loginUi + WebView; cookies are stored and replayed per source. A small set of Java APIs is uncovered (~2.6% of calls) and degrades explicitly.\nAlso: file sources support download links and local import (the detail page lists source files and follows local progress); chapter purchase payAction, callBackJs events and event bits are available; pure-JS org.jsoup.Jsoup.parse with a minimal DOM / CSS selector set lets jsoup-based scripts parse; on HTTP 412 the session cookie is fetched from the site root and the request retried; audio/video sources render media chapter cards in the reader, and embedded lyrics from audio sources reach the player.\nAlso: the body supports paragraph comments and inline icons placed by rules; putVariable(key,null) deletes at source / book / chapter levels and whole-block replacement deletes before adding; cacheBytes provides a binary cache; PUT/DELETE/PATCH with binary bodies are supported; a Java charset alias table covers GBK / GB18030 / Big5 etc.; jsoup gains the Elements / Element collection and traversal surface; WebView supports POST prefetch before rendering.",
       "fields": [
         {
           "k": "ruleData / jsLib / source vars",
