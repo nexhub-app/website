@@ -287,7 +287,7 @@ window.CONTENT = {
     channels: {
       repo: "https://github.com/nexhub-app/nexhub",
       stableTag: "v3.6.0",
-      betaTag: "v4.0.0-beta.3",
+      betaTag: "v4.0.0-beta.4",
       mirror: "https://ghfast.top/"
     }
   },
